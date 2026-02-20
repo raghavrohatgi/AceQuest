@@ -1,0 +1,18 @@
+# Exclude everything except what's needed for the API
+*
+
+# Include only these directories/files
+!ari/
+!README.md
+
+# But exclude from ari/:
+ari/augmentation/
+ari/data/*.csv
+ari/data/*.jsonl
+ari/scripts/
+
+# Keep only what's needed
+!ari/features.py
+!ari/models/
+!ari/api/
+!ari/__init__.py
