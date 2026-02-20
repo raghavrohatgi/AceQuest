@@ -2,7 +2,12 @@
 Books/
 Books-MD/
 ari/augmentation/
-ari/data/
+
+# Exclude from ari/data/ but keep required JSON files
+ari/data/*.csv
+ari/data/*.jsonl
+
+# Exclude scripts (not needed at runtime)
 ari/scripts/
 
 # Exclude development/planning directories
@@ -24,4 +29,5 @@ docs/
 # - ari/api/ (FastAPI application)
 # - ari/features.py (feature extraction)
 # - ari/models/ (trained model)
+# - ari/data/*.json (word frequency lists)
 # - ari/__init__.py (package marker)
