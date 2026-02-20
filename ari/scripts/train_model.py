@@ -50,7 +50,6 @@ FEATURE_COLS = [
 ]
 
 MAE_GATE = 0.8   # success threshold
-RANDOM_STATE = 42
 
 
 def load_data() -> tuple[pd.DataFrame, pd.Series]:
@@ -84,7 +83,6 @@ def train_and_evaluate(X_train, X_test, y_train, y_test):
                 max_depth=4,
                 learning_rate=0.05,
                 subsample=0.8,
-                random_state=RANDOM_STATE,
             )),
         ]),
     }
@@ -151,7 +149,7 @@ def main():
 
     # Stratified train/test split (80/20) by grade
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=RANDOM_STATE, stratify=y
+        X, y, test_size=0.2, stratify=y
     )
     print(f"\nTrain: {len(X_train):,} | Test: {len(X_test):,}")
 

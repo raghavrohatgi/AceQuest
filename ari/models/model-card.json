@@ -1,7 +1,7 @@
 {
   "model_name": "ari-model-v1",
   "model_type": "GradientBoosting",
-  "trained_at": "2026-02-20T00:59:20.801943+00:00",
+  "trained_at": "2026-02-20T13:13:15.853485+00:00",
   "corpus_size": 15480,
   "train_size": 12384,
   "test_size": 3096,
@@ -21,29 +21,29 @@
   ],
   "target": "CBSE grade level (1.0\u201310.0)",
   "metrics": {
-    "cv_mae": 1.6617,
-    "test_mae": 1.6275,
-    "test_r2": 0.4357,
-    "within_1_grade_pct": 37.31
+    "cv_mae": 1.6531,
+    "test_mae": 1.6546,
+    "test_r2": 0.4097,
+    "within_1_grade_pct": 37.44
   },
   "per_grade_mae": {
-    "1": 2.414,
-    "2": 2.15,
-    "3": 1.899,
-    "4": 2.268,
-    "5": 1.392,
-    "6": 1.135,
-    "7": 0.714,
-    "8": 1.027,
-    "9": 1.718,
-    "10": 2.761
+    "1": 2.445,
+    "2": 2.515,
+    "3": 1.835,
+    "4": 2.347,
+    "5": 1.384,
+    "6": 1.12,
+    "7": 0.773,
+    "8": 1.018,
+    "9": 1.672,
+    "10": 2.799
   },
   "mae_gate": 0.8,
   "mae_gate_passed": false,
   "compared_against": {
     "Ridge": {
-      "test_mae": 1.9332,
-      "test_r2": 0.2233
+      "test_mae": 1.9331,
+      "test_r2": 0.2173
     }
   }
 }
