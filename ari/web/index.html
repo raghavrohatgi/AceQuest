@@ -6,8 +6,16 @@
   <title>ARI — Indian Reading Level Checker</title>
   <meta name="description" content="Free readability checker for CBSE/ICSE teachers. Find the right grade level for any passage." />
 
-  <!-- Cloudflare Turnstile -->
-  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <!-- Cloudflare Turnstile (only in production) -->
+  <script>
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      const script = document.createElement('script');
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+  </script>
 
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -236,10 +244,10 @@
     <div class="pills" id="pills"></div>
     <p class="pill-hint">Tap a grade, then submit — you'll see ARI's answer after.</p>
 
-    <!-- Cloudflare Turnstile CAPTCHA -->
-    <div class="captcha-wrap">
+    <!-- Cloudflare Turnstile CAPTCHA (only in production) -->
+    <div class="captcha-wrap" id="captcha-wrap">
       <div class="cf-turnstile"
-           data-sitekey="0x4AAAAAABxxxxxxxxxxxxxxxxx"
+           data-sitekey="0x4AAAAAACfwc5dvbP3OGmXs"
            data-callback="onTurnstileSuccess"
            data-expired-callback="onTurnstileExpired"
            data-theme="light">
@@ -308,6 +316,9 @@
     ? 'http://localhost:8080'
     : 'https://ari-acequest.fly.dev';   // update after fly deploy
 
+  const IS_LOCALHOST = window.location.hostname === 'localhost' ||
+                       window.location.hostname === '127.0.0.1';
+
   // ── State ──
   let state = {
     text: '',
@@ -356,7 +367,10 @@
   }
 
   function updateSubmitBtn() {
-    const ready = state.teacherGrade !== null && state.turnstileToken !== null;
+    // On localhost, skip Turnstile requirement
+    const ready = IS_LOCALHOST
+      ? state.teacherGrade !== null
+      : state.teacherGrade !== null && state.turnstileToken !== null;
     document.getElementById('btn-submit').disabled = !ready;
   }
 
@@ -401,7 +415,9 @@
 
   // ── Step 2 → 3: Submit rating, reveal ARI ──
   async function submitRating() {
-    if (!state.teacherGrade || !state.turnstileToken) return;
+    // On localhost, skip turnstile requirement
+    const needsTurnstile = !IS_LOCALHOST && !state.turnstileToken;
+    if (!state.teacherGrade || needsTurnstile) return;
 
     document.getElementById('btn-submit').disabled = true;
     document.getElementById('btn-submit').textContent = 'Submitting…';
@@ -417,7 +433,7 @@
           teacher_grade: state.teacherGrade,
           teacher_board: 'CBSE',
           reason: '',
-          turnstile_token: state.turnstileToken,
+          turnstile_token: state.turnstileToken || 'dev-mode-bypass',
         }),
       });
 
@@ -473,11 +489,18 @@
   // ── Submit disagree reason ──
   async function submitReason() {
     const reason = document.getElementById('disagree-input').value.trim();
-    if (!reason) return;
+    if (!reason) {
+      showMsg('msg-reason', 'error', 'Please enter a reason before submitting.');
+      return;
+    }
+
+    const btn = document.querySelector('#disagree-section .btn-secondary');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
 
     try {
       // Re-use feedback endpoint with reason — send a fresh request
-      await fetch(`${API_BASE}/feedback`, {
+      const resp = await fetch(`${API_BASE}/feedback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -487,13 +510,26 @@
           teacher_grade: state.teacherGrade,
           teacher_board: 'CBSE',
           reason: reason,
-          turnstile_token: state.turnstileToken || 'reason-only',
+          turnstile_token: state.turnstileToken || 'dev-mode-bypass',
         }),
       });
-    } catch (_) { /* best-effort */ }
 
-    showMsg('msg-reason', 'success', 'Thank you — your feedback helps improve ARI!');
-    document.querySelector('#disagree-section .btn-secondary').disabled = true;
+      if (resp.ok) {
+        showMsg('msg-reason', 'success', 'Thank you — your feedback helps improve ARI!');
+        btn.textContent = 'Sent ✓';
+        // Disable textarea to prevent further changes
+        document.getElementById('disagree-input').disabled = true;
+      } else {
+        const err = await resp.json();
+        showMsg('msg-reason', 'error', err.detail || 'Failed to send feedback. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Send feedback';
+      }
+    } catch (e) {
+      showMsg('msg-reason', 'error', 'Network error. Please check your connection and try again.');
+      btn.disabled = false;
+      btn.textContent = 'Send feedback';
+    }
   }
 
   // ── Reset ──
@@ -502,7 +538,9 @@
     document.getElementById('passage').value = '';
     document.getElementById('word-count').textContent = '0 words';
     document.getElementById('btn-check').disabled = true;
-    document.getElementById('disagree-input').value = '';
+    const disagreeInput = document.getElementById('disagree-input');
+    disagreeInput.value = '';
+    disagreeInput.disabled = false; // Re-enable for next use
     hide('card-rate'); hide('card-result'); hide('disagree-section');
     show('card-input');
     // Reset Turnstile
@@ -518,6 +556,13 @@
     el.className = 'msg msg-' + type;
     el.textContent = text;
     el.classList.remove('hidden');
+  }
+
+  // ── Initialize ──
+  // Hide Turnstile on localhost (dev mode)
+  if (IS_LOCALHOST) {
+    const captchaWrap = document.getElementById('captcha-wrap');
+    if (captchaWrap) captchaWrap.style.display = 'none';
   }
 </script>
 
