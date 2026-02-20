@@ -9,6 +9,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Download NLTK data at build time (so container starts fast)
 RUN python -c "import nltk; nltk.download('punkt_tab', quiet=True); nltk.download('punkt', quiet=True)"
 
+# Cache-busting arg (pass --build-arg CACHE_BUST=$(date +%s) to force rebuild)
+ARG CACHE_BUST=1
+
 # Copy project
 COPY . /app
 
