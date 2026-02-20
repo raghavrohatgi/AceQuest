@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - Match Sound to Text</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 88%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 14px 14px 10px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .topic-badge { background: #F0FDF4; color: #166534; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .voice-btn { width: 30px; height: 30px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; cursor: pointer; flex-shrink: 0; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; flex-shrink: 0; }
+    .q-text { font-size: 14px; font-weight: 600; color: #111827; flex-shrink: 0; }
+    .match-progress { display: flex; gap: 5px; align-items: center; flex-shrink: 0; }
+    .mp-label { font-size: 11px; color: #9CA3AF; font-weight: 600; }
+    .mp-dot { width: 9px; height: 9px; border-radius: 50%; background: #E5E7EB; transition: background 0.3s; }
+
+    .match-board { flex: 1; display: grid; grid-template-columns: 1fr 48px 1fr; min-height: 0; position: relative; }
+    .match-col { display: flex; flex-direction: column; gap: 5px; }
+    .col-header { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #9CA3AF; text-align: center; padding-bottom: 3px; border-bottom: 1px solid #F3F4F6; flex-shrink: 0; }
+    .svg-col { display: flex; }
+    #svg-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; z-index: 1; }
+
+    .sound-item { background: #F9FAFB; border: 2px solid #D1D5DB; border-radius: 8px; padding: 6px 8px; cursor: pointer; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; flex: 1; display: flex; align-items: center; gap: 6px; position: relative; z-index: 2; }
+    .sound-item:hover:not(.matched):not(.wrong) { border-color: #9CA3AF; }
+    .sound-item.selected { border-color: #6366F1; background: #EEF2FF; box-shadow: 0 0 0 3px rgba(99,102,241,0.18); }
+    .sound-item.pending { border: 2px solid #6366F1; background: #EEF2FF; }
+    .sound-item.matched { border: 2.5px solid #22C55E; background: #F0FDF4; cursor: default; }
+    .sound-item.wrong { border: 2px dashed #EF4444; background: #FEF2F2; cursor: default; }
+    .play-btn { width: 26px; height: 26px; border-radius: 50%; background: #6366F1; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; flex-shrink: 0; cursor: pointer; pointer-events: all; }
+    .play-btn.playing { background: #F59E0B; }
+    .sound-waves { display: flex; align-items: center; gap: 2px; height: 18px; flex: 1; }
+    .wave-bar { width: 3px; border-radius: 2px; background: #D1D5DB; }
+    @keyframes wavePulse { 0%,100%{height:4px} 50%{height:14px} }
+
+    .match-item { background: #F9FAFB; border: 2px solid #D1D5DB; border-radius: 8px; padding: 7px 8px; font-size: 12px; font-weight: 600; color: #374151; cursor: pointer; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; text-align: center; flex: 1; display: flex; align-items: center; justify-content: center; user-select: none; position: relative; z-index: 2; }
+    .match-item:hover:not(.matched):not(.wrong) { border-color: #9CA3AF; }
+    .match-item.pending { border: 2px solid #6366F1; background: #EEF2FF; color: #4338CA; }
+    .match-item.matched { border: 2.5px solid #22C55E; background: #F0FDF4; color: #16A34A; cursor: default; }
+    .match-item.wrong { border: 2px dashed #EF4444; background: #FEF2F2; cursor: default; }
+
+    .results-panel { display: none; flex: 1; overflow-y: auto; flex-direction: column; gap: 6px; }
+    .result-row { display: flex; align-items: center; gap: 8px; background: #F9FAFB; border-radius: 10px; padding: 8px 10px; border: 1.5px solid #E5E7EB; }
+    .result-row.ok { border-color: #86EFAC; background: #F0FDF4; }
+    .result-row.bad { border-color: #FCA5A5; background: #FEF2F2; }
+    .result-icon { font-size: 16px; flex-shrink: 0; }
+    .result-pair { flex: 1; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; }
+    .result-left { color: #374151; }
+    .result-arrow { color: #9CA3AF; }
+    .result-right.correct-ans { color: #16A34A; }
+    .result-right.wrong-ans { color: #DC2626; text-decoration: line-through; }
+
+    .feedback-banner { border-radius: 12px; padding: 10px 14px; display: none; flex-shrink: 0; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.4; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause" onclick="window.location.href='game-pre-game.mockup.html'">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 34 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 425 XP</div>
+  </div>
+  <div class="streak">&#128293; 4x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#128483; Language</div>
+      <div class="voice-btn">&#128266;</div>
+    </div>
+    <div class="q-label">Match the following</div>
+    <div class="q-text">Match each word sound to its correct spelling.</div>
+
+    <div class="match-progress">
+      <span class="mp-label">Matched:</span>
+      <div class="mp-dot" id="mp1"></div>
+      <div class="mp-dot" id="mp2"></div>
+      <div class="mp-dot" id="mp3"></div>
+      <div class="mp-dot" id="mp4"></div>
+    </div>
+
+    <div class="match-board" id="board">
+      <svg id="svg-lines" xmlns="http://www.w3.org/2000/svg"></svg>
+      <div class="match-col" id="left-col">
+        <div class="col-header">Sound</div>
+        <div class="sound-item" id="l1" onclick="selectLeft('l1')">
+          <div class="play-btn" id="pb1" onclick="togglePlay(event,'pb1','wb1')">&#9654;</div>
+          <div class="sound-waves" id="wb1">
+            <div class="wave-bar" style="height:8px"></div><div class="wave-bar" style="height:14px"></div><div class="wave-bar" style="height:6px"></div><div class="wave-bar" style="height:16px"></div><div class="wave-bar" style="height:10px"></div><div class="wave-bar" style="height:12px"></div><div class="wave-bar" style="height:4px"></div>
+          </div>
+        </div>
+        <div class="sound-item" id="l2" onclick="selectLeft('l2')">
+          <div class="play-btn" id="pb2" onclick="togglePlay(event,'pb2','wb2')">&#9654;</div>
+          <div class="sound-waves" id="wb2">
+            <div class="wave-bar" style="height:12px"></div><div class="wave-bar" style="height:6px"></div><div class="wave-bar" style="height:16px"></div><div class="wave-bar" style="height:4px"></div><div class="wave-bar" style="height:14px"></div><div class="wave-bar" style="height:8px"></div><div class="wave-bar" style="height:10px"></div>
+          </div>
+        </div>
+        <div class="sound-item" id="l3" onclick="selectLeft('l3')">
+          <div class="play-btn" id="pb3" onclick="togglePlay(event,'pb3','wb3')">&#9654;</div>
+          <div class="sound-waves" id="wb3">
+            <div class="wave-bar" style="height:4px"></div><div class="wave-bar" style="height:16px"></div><div class="wave-bar" style="height:8px"></div><div class="wave-bar" style="height:12px"></div><div class="wave-bar" style="height:6px"></div><div class="wave-bar" style="height:14px"></div><div class="wave-bar" style="height:10px"></div>
+          </div>
+        </div>
+        <div class="sound-item" id="l4" onclick="selectLeft('l4')">
+          <div class="play-btn" id="pb4" onclick="togglePlay(event,'pb4','wb4')">&#9654;</div>
+          <div class="sound-waves" id="wb4">
+            <div class="wave-bar" style="height:14px"></div><div class="wave-bar" style="height:8px"></div><div class="wave-bar" style="height:4px"></div><div class="wave-bar" style="height:16px"></div><div class="wave-bar" style="height:6px"></div><div class="wave-bar" style="height:12px"></div><div class="wave-bar" style="height:10px"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="svg-col"></div>
+
+      <div class="match-col" id="right-col">
+        <div class="col-header">Spelling</div>
+        <div class="match-item" id="r1" onclick="selectRight('r1')" data-val="Sound 3">Necessary</div>
+        <div class="match-item" id="r2" onclick="selectRight('r2')" data-val="Sound 1">Beautiful</div>
+        <div class="match-item" id="r3" onclick="selectRight('r3')" data-val="Sound 4">Knowledge</div>
+        <div class="match-item" id="r4" onclick="selectRight('r4')" data-val="Sound 2">Rhythm</div>
+      </div>
+    </div>
+
+    <div class="results-panel" id="results-panel"></div>
+
+    <div class="feedback-banner" id="fb">
+      <div class="fb-top">
+        <div class="fb-label c" id="fbl">&#10003; All matched!</div>
+        <div class="xp-badge" id="xpb">+20 XP</div>
+      </div>
+      <div class="fb-exp" id="fb-exp"></div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="checkAll()">Check Answers &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-results.mockup.html'">See Results &#8594;</button>
+  </div>
+  <script>
+    const N = 4;
+    const correctMap = { l1:'Sound 1', l2:'Sound 2', l3:'Sound 3', l4:'Sound 4' };
+    const correctLabels = { 'Sound 1':'Beautiful', 'Sound 2':'Rhythm', 'Sound 3':'Necessary', 'Sound 4':'Knowledge' };
+    const userMap = {}, lineMap = {};
+    let selectedLeft = null, playingId = null, playTimer = null;
+    const svg = document.getElementById('svg-lines');
+    const board = document.getElementById('board');
+
+    function togglePlay(e, btnId, wbId) {
+      e.stopPropagation();
+      const btn = document.getElementById(btnId);
+      const wb = document.getElementById(wbId);
+      if (playingId === btnId) {
+        btn.textContent = '▶'; btn.classList.remove('playing');
+        wb.querySelectorAll('.wave-bar').forEach(b => { b.style.animation=''; b.style.background='#D1D5DB'; });
+        clearTimeout(playTimer); playingId = null; return;
+      }
+      if (playingId) {
+        const prev = document.getElementById(playingId);
+        if (prev) { prev.textContent='▶'; prev.classList.remove('playing'); }
+        const prevWb = document.getElementById(playingId.replace('pb','wb'));
+        if (prevWb) prevWb.querySelectorAll('.wave-bar').forEach(b => { b.style.animation=''; b.style.background='#D1D5DB'; });
+        clearTimeout(playTimer);
+      }
+      btn.textContent = '⏹'; btn.classList.add('playing'); playingId = btnId;
+      const bars = wb.querySelectorAll('.wave-bar');
+      bars.forEach((b, i) => { b.style.background='#6366F1'; b.style.animation=`wavePulse ${0.4+i*0.07}s ease-in-out infinite`; });
+      playTimer = setTimeout(() => {
+        btn.textContent='▶'; btn.classList.remove('playing');
+        bars.forEach(b => { b.style.animation=''; b.style.background='#D1D5DB'; });
+        playingId = null;
+      }, 2500);
+    }
+
+    function setLineStyle(line, type) {
+      const cfg = { pending:{stroke:'#6366F1',width:'2.5',dash:''}, correct:{stroke:'#22C55E',width:'3',dash:''}, wrong:{stroke:'#EF4444',width:'2',dash:'6,4'} }[type];
+      line.setAttribute('stroke', cfg.stroke); line.setAttribute('stroke-width', cfg.width);
+      line.setAttribute('stroke-dasharray', cfg.dash); line.setAttribute('stroke-linecap', 'round');
+    }
+    function drawLine(leftId, rightEl, type) {
+      removeLine(leftId);
+      const lEl = document.getElementById(leftId);
+      const bRect = board.getBoundingClientRect();
+      const lRect = lEl.getBoundingClientRect(), rRect = rightEl.getBoundingClientRect();
+      const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      setLineStyle(line, type);
+      line.setAttribute('x1', lRect.right - bRect.left); line.setAttribute('y1', lRect.top - bRect.top + lRect.height/2);
+      line.setAttribute('x2', rRect.left - bRect.left); line.setAttribute('y2', rRect.top - bRect.top + rRect.height/2);
+      svg.appendChild(line); lineMap[leftId] = { line, rightEl };
+    }
+    function removeLine(leftId) {
+      if (lineMap[leftId]) { try { svg.removeChild(lineMap[leftId].line); } catch(e){} delete lineMap[leftId]; }
+    }
+    function selectLeft(id) {
+      const el = document.getElementById(id);
+      if (selectedLeft === id) { el.classList.remove('selected'); selectedLeft = null; return; }
+      if (el.classList.contains('pending')) {
+        const prevVal = userMap[id]; delete userMap[id];
+        el.classList.remove('pending');
+        const prevRight = document.querySelector(`#right-col [data-val="${prevVal}"]`);
+        if (prevRight) prevRight.classList.remove('pending');
+        removeLine(id); updateProgress();
+        document.getElementById('sub').classList.remove('active');
+      }
+      if (el.classList.contains('matched')) return;
+      if (selectedLeft) document.getElementById(selectedLeft).classList.remove('selected');
+      selectedLeft = id; el.classList.add('selected');
+    }
+    function selectRight(id) {
+      if (!selectedLeft) return;
+      const rEl = document.getElementById(id);
+      if (rEl.classList.contains('matched') || rEl.classList.contains('pending')) return;
+      const lEl = document.getElementById(selectedLeft);
+      userMap[selectedLeft] = rEl.dataset.val;
+      lEl.classList.remove('selected'); lEl.classList.add('pending');
+      rEl.classList.add('pending');
+      drawLine(selectedLeft, rEl, 'pending');
+      selectedLeft = null; updateProgress();
+      if (Object.keys(userMap).length === N) document.getElementById('sub').classList.add('active');
+    }
+    function updateProgress() {
+      for (let i=1;i<=N;i++) document.getElementById('mp'+i).style.background = userMap['l'+i] ? '#6366F1' : '#E5E7EB';
+    }
+    function checkAll() {
+      if (Object.keys(userMap).length < N) return;
+      let allOk = true; const results = [];
+      for (let i=1;i<=N;i++) {
+        const lid='l'+i, ok = userMap[lid]===correctMap[lid];
+        if (!ok) allOk = false;
+        if (lineMap[lid]) setLineStyle(lineMap[lid].line, ok?'correct':'wrong');
+        results.push({lid, ok, userAns:userMap[lid], correctAns:correctMap[lid]});
+        document.getElementById('mp'+i).style.background = ok?'#22C55E':'#EF4444';
+      }
+      document.getElementById('board').style.display = 'none';
+      const panel = document.getElementById('results-panel');
+      panel.style.display = 'flex'; panel.innerHTML = '';
+      results.forEach(({lid, ok, userAns, correctAns}) => {
+        const row = document.createElement('div'); row.className = 'result-row '+(ok?'ok':'bad');
+        const uLabel = correctLabels[userAns] || userAns;
+        const cLabel = correctLabels[correctAns] || correctAns;
+        if (ok) {
+          row.innerHTML = '<span class="result-icon">&#10003;</span><div class="result-pair"><span class="result-left">&#127925; '+lid.replace('l','Sound ')+'</span><span class="result-arrow">&#8594;</span><span class="result-right correct-ans">'+uLabel+'</span></div>';
+        } else {
+          row.innerHTML = '<span class="result-icon" style="color:#EF4444">&#10007;</span><div style="flex:1"><div class="result-pair"><span class="result-left">&#127925; '+lid.replace('l','Sound ')+'</span><span class="result-arrow">&#8594;</span><span class="result-right wrong-ans">'+uLabel+'</span></div><div style="display:flex;align-items:center;gap:5px;margin-top:3px"><span style="font-size:11px;color:#9CA3AF">Should be:</span><span style="font-size:12px;font-weight:700;color:#16A34A">&#10003; '+cLabel+'</span></div></div>';
+        }
+        panel.appendChild(row);
+      });
+      const fb = document.getElementById('fb');
+      fb.style.display = 'block'; fb.className = 'feedback-banner '+(allOk?'ok':'err');
+      document.getElementById('fbl').className = 'fb-label '+(allOk?'c':'w');
+      document.getElementById('fbl').textContent = allOk ? '\u2713 All matched correctly!' : '\u2717 '+results.filter(r=>!r.ok).length+' match'+(results.filter(r=>!r.ok).length>1?'es':'')+' were wrong — see corrections below';
+      document.getElementById('xpb').style.display = allOk?'inline-block':'none';
+      document.getElementById('fb-exp').style.display = 'none';
+      document.getElementById('sub').style.display = 'none'; document.getElementById('nxt').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

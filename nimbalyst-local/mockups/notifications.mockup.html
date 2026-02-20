@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Notifications</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F9FAFB;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: #F3F4F6;
+    border: none; border-radius: 50%;
+    color: #374151; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-title { flex: 1; text-align: center; font-size: 16px; font-weight: 800; color: #111827; }
+  .mark-all {
+    font-size: 12px;
+    font-weight: 700;
+    color: #6366F1;
+    background: none;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  /* Scroll body */
+  .body-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px 6px;
+  }
+
+  /* Notification row */
+  .notif-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 16px;
+    background: #fff;
+    border-bottom: 1px solid #F9FAFB;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .notif-row:hover { background: #F9FAFB; }
+  .notif-row.unread { background: #F5F3FF; }
+  .notif-row.unread:hover { background: #EDE9FE; }
+
+  /* Unread dot */
+  .unread-dot {
+    position: absolute;
+    top: 16px; right: 14px;
+    width: 8px; height: 8px;
+    background: #6366F1;
+    border-radius: 50%;
+  }
+
+  .notif-icon {
+    width: 44px; height: 44px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .notif-icon.streak  { background: #FEF3C7; }
+  .notif-icon.trophy  { background: #EEF2FF; }
+  .notif-icon.friend  { background: #D1FAE5; }
+  .notif-icon.promo   { background: #FCE7F3; }
+  .notif-icon.result  { background: #E0F2FE; }
+  .notif-icon.system  { background: #F3F4F6; }
+
+  .notif-body { flex: 1; min-width: 0; }
+  .notif-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.4;
+    margin-bottom: 2px;
+  }
+  .notif-desc {
+    font-size: 12px;
+    color: #6B7280;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .notif-time {
+    font-size: 11px;
+    color: #9CA3AF;
+    font-weight: 600;
+  }
+
+  /* CTA inline button */
+  .notif-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #EEF2FF;
+    border-radius: 8px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #4F46E5;
+    margin-top: 4px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .notif-cta.green { background: #D1FAE5; color: #065F46; }
+  .notif-cta.orange { background: #FEF3C7; color: #92400E; }
+
+  /* Empty state */
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 60px 24px;
+    color: #9CA3AF;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+  }
+  .empty-icon { font-size: 48px; }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="student-home-dashboard.mockup.html">←</a>
+  <div class="nav-title">Notifications</div>
+  <button class="mark-all">Mark all read</button>
+</div>
+
+<div class="body-scroll">
+
+  <!-- Today -->
+  <div class="section-label">Today</div>
+
+  <!-- Streak reminder -->
+  <div class="notif-row unread">
+    <div class="notif-icon streak">🔥</div>
+    <div class="notif-body">
+      <div class="notif-title">Don't break your streak, Arjun!</div>
+      <div class="notif-desc">You're on a 6-day streak 🔥 Play one game today to keep it going.</div>
+      <a class="notif-cta orange" href="student-home-dashboard.mockup.html">Play Now →</a>
+      <div class="notif-time">2 hours ago</div>
+    </div>
+    <div class="unread-dot"></div>
+  </div>
+
+  <!-- Challenge invite -->
+  <div class="notif-row unread">
+    <div class="notif-icon friend">👥</div>
+    <div class="notif-body">
+      <div class="notif-title">Priya challenged you!</div>
+      <div class="notif-desc">Priya 🦄 sent you a Math challenge. Can you beat her score of 850?</div>
+      <a class="notif-cta green" href="game-pre-game.mockup.html">Accept Challenge →</a>
+      <div class="notif-time">4 hours ago</div>
+    </div>
+    <div class="unread-dot"></div>
+  </div>
+
+  <!-- Achievement unlocked -->
+  <div class="notif-row unread">
+    <div class="notif-icon trophy">🏆</div>
+    <div class="notif-body">
+      <div class="notif-title">New badge unlocked! 🏆</div>
+      <div class="notif-desc">You earned the "7-Day Streak" badge and +100 XP. Keep it up!</div>
+      <a class="notif-cta" href="achievements.mockup.html">View Badge →</a>
+      <div class="notif-time">6 hours ago</div>
+    </div>
+    <div class="unread-dot"></div>
+  </div>
+
+  <!-- Yesterday -->
+  <div class="section-label">Yesterday</div>
+
+  <!-- Leaderboard move -->
+  <div class="notif-row">
+    <div class="notif-icon trophy">📈</div>
+    <div class="notif-body">
+      <div class="notif-title">You moved up to #6 on the leaderboard!</div>
+      <div class="notif-desc">Great job! You're just 340 XP away from #5. Keep playing to climb higher.</div>
+      <a class="notif-cta" href="leaderboard.mockup.html">See Leaderboard →</a>
+      <div class="notif-time">Yesterday · 8:30 PM</div>
+    </div>
+  </div>
+
+  <!-- Game result -->
+  <div class="notif-row">
+    <div class="notif-icon result">📊</div>
+    <div class="notif-body">
+      <div class="notif-title">Your game results are ready</div>
+      <div class="notif-desc">You scored 18/20 in Fractions — Grade 5. Your best performance yet!</div>
+      <div class="notif-time">Yesterday · 5:12 PM</div>
+    </div>
+  </div>
+
+  <!-- Earlier -->
+  <div class="section-label">Earlier this week</div>
+
+  <!-- Promo / subscription -->
+  <div class="notif-row">
+    <div class="notif-icon promo">⭐</div>
+    <div class="notif-body">
+      <div class="notif-title">2 free games left this week</div>
+      <div class="notif-desc">Upgrade to Pro and get unlimited games, no ads, and priority support.</div>
+      <a class="notif-cta" href="paywall.mockup.html">Upgrade to Pro →</a>
+      <div class="notif-time">Monday · 9:00 AM</div>
+    </div>
+  </div>
+
+  <!-- Weekly summary -->
+  <div class="notif-row">
+    <div class="notif-icon result">📝</div>
+    <div class="notif-body">
+      <div class="notif-title">Weekly summary — Week 6</div>
+      <div class="notif-desc">You played 9 games, earned 1,860 XP, and your accuracy improved to 87%!</div>
+      <div class="notif-time">Sunday · 6:00 PM</div>
+    </div>
+  </div>
+
+  <!-- Friend joined -->
+  <div class="notif-row">
+    <div class="notif-icon friend">🎉</div>
+    <div class="notif-body">
+      <div class="notif-title">Rohan joined AceQuest!</div>
+      <div class="notif-desc">Your friend Rohan 🐼 just started playing. Challenge him to a game!</div>
+      <div class="notif-time">Saturday · 3:45 PM</div>
+    </div>
+  </div>
+
+  <!-- System: new content -->
+  <div class="notif-row">
+    <div class="notif-icon system">🆕</div>
+    <div class="notif-body">
+      <div class="notif-title">New Science games are here!</div>
+      <div class="notif-desc">We've added 20 new games for Grade 5 Science — Ecosystems and Food Chains.</div>
+      <div class="notif-time">Friday · 10:00 AM</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

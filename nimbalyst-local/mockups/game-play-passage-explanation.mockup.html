@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Passage Explanation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Gurmukhi', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HUD */
+  .hud {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    flex-shrink: 0;
+  }
+  .pause-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .progress-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    text-align: center;
+  }
+  .progress-track {
+    height: 7px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 65.8%;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .xp-badge {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* White card — scrollable */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    margin: 0 16px 0;
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+  }
+  .card::-webkit-scrollbar { width: 4px; }
+  .card::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 2px; }
+
+  /* Completion block */
+  .completion-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 0;
+    flex-shrink: 0;
+  }
+  .check-circle {
+    width: 48px; height: 48px;
+    background: #22C55E;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    color: #fff;
+  }
+  .complete-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+  }
+  .complete-sub {
+    font-size: 13px;
+    color: #6B7280;
+  }
+  .score-bar {
+    width: 100%;
+    height: 8px;
+    background: #E5E7EB;
+    border-radius: 999px;
+    overflow: hidden;
+    max-width: 200px;
+  }
+  .score-bar-fill {
+    height: 100%;
+    width: 75%;
+    background: #22C55E;
+    border-radius: 999px;
+  }
+  .xp-pill {
+    background: #F59E0B;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 12px;
+    border-radius: 999px;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* Explanation cards */
+  .explanation-card {
+    border-radius: 14px;
+    padding: 12px 14px;
+    border: 1.5px solid #E5E7EB;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: #F9FAFB;
+    flex-shrink: 0;
+  }
+  .explanation-card.wrong-card {
+    border-color: #FCA5A5;
+    background: #FEF2F2;
+  }
+  .explanation-card.correct-card {
+    border-color: #86EFAC;
+    background: #F0FDF4;
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .card-header-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #374151;
+  }
+  .badge-wrong {
+    background: #FEF2F2;
+    border: 1.5px solid #FCA5A5;
+    color: #DC2626;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+  }
+  .badge-correct {
+    background: #F0FDF4;
+    border: 1.5px solid #86EFAC;
+    color: #16A34A;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+  }
+  .card-question { font-size: 13px; color: #374151; line-height: 1.4; }
+  .answer-wrong { font-size: 12px; color: #DC2626; text-decoration: line-through; }
+  .answer-correct { font-size: 12px; font-weight: 700; color: #16A34A; }
+  .explanation-text { font-size: 12px; color: #6B7280; line-height: 1.5; }
+
+  .did-you-know {
+    background: #EEF2FF;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    color: #374151;
+    line-height: 1.5;
+  }
+
+  /* Source credit */
+  .source-credit {
+    margin-top: 4px;
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 10px 14px;
+    border: 1.5px solid #E5E7EB;
+    flex-shrink: 0;
+  }
+  .source-credit-label { font-size: 11px; color: #9CA3AF; margin-bottom: 6px; }
+  .source-credit-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .source-logo {
+    width: 60px; height: 20px;
+    background: #E5E7EB;
+    border-radius: 4px;
+    flex-shrink: 0;
+  }
+  .source-name { font-size: 12px; font-weight: 700; color: #374151; }
+  .source-copyright { font-size: 10px; color: #9CA3AF; }
+
+  /* Bottom section */
+  .bottom {
+    background: transparent;
+    padding: 10px 32px 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: block;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div class="hud">
+  <button class="pause-btn">⏸</button>
+  <div class="progress-wrap">
+    <div class="progress-label">Q 25 / 38</div>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+  </div>
+  <div class="xp-badge">⚡ 310 XP</div>
+</div>
+
+<!-- White Card (scrollable, no streak banner) -->
+<div class="card">
+
+  <!-- Completion block -->
+  <div class="completion-block">
+    <div class="check-circle">✓</div>
+    <div class="complete-title">Passage Complete!</div>
+    <div class="complete-sub">3 out of 4 correct</div>
+    <div class="score-bar"><div class="score-bar-fill"></div></div>
+    <div class="xp-pill">+45 XP</div>
+  </div>
+
+  <hr style="border:none;border-top:1px solid #F3F4F6">
+
+  <div class="section-label">REVIEW &amp; EXPLANATIONS</div>
+
+  <!-- Card 1 — wrong -->
+  <div class="explanation-card wrong-card">
+    <div class="card-header">
+      <span class="card-header-label">Q2 — Fill in the Blank</span>
+      <span class="badge-wrong">✗ Wrong</span>
+    </div>
+    <div class="card-question">The Amazon covers ___% of South America.</div>
+    <div class="answer-wrong">Your answer: 15%</div>
+    <div class="answer-correct">Correct: 40%</div>
+    <div class="explanation-text">The Amazon Rainforest covers approximately 40% of South America's total land area, spanning across 9 countries. It is by far the largest tropical forest on any continent.</div>
+  </div>
+
+  <!-- Card 2 — correct -->
+  <div class="explanation-card correct-card">
+    <div class="card-header">
+      <span class="card-header-label">Q3 — True or False</span>
+      <span class="badge-correct">✓ Correct</span>
+    </div>
+    <div class="card-question">The Amazon produces 20% of the world's oxygen. True or False?</div>
+    <div class="answer-correct">Your answer: True ✓</div>
+    <div class="did-you-know">💡 Did you know? The Amazon is sometimes called a 'carbon sink' — it absorbs more CO₂ than it releases, making it critical in fighting climate change!</div>
+  </div>
+
+  <!-- Source credit -->
+  <div class="source-credit">
+    <div class="source-credit-label">Content sourced from:</div>
+    <div class="source-credit-row">
+      <div class="source-logo"></div>
+      <span class="source-name">National Geographic for Kids</span>
+    </div>
+    <div class="source-copyright">© 2025 National Geographic Partners. Used with permission.</div>
+  </div>
+
+</div>
+
+<!-- Bottom Section -->
+<div class="bottom">
+  <a class="btn-primary" href="game-play-match-text.mockup.html">Continue Playing →</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Wrong Answer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+    gap: 10px;
+  }
+  .progress-bar {
+    flex: 1; height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px; overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%; width: 60%;
+    background: linear-gradient(90deg, #FDE68A, #F59E0B);
+    border-radius: 4px;
+  }
+  .q-counter { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); white-space: nowrap; }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Wrong banner */
+  .wrong-banner {
+    background: #FEE2E2;
+    border-bottom: 2px solid #FECACA;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .wrong-icon { font-size: 22px; }
+  .wrong-text { flex: 1; }
+  .wrong-title { font-size: 15px; font-weight: 800; color: #991B1B; }
+  .wrong-sub { font-size: 12px; color: #B91C1C; margin-top: 1px; }
+  .xp-lost { font-size: 13px; font-weight: 800; color: #EF4444; white-space: nowrap; }
+
+  /* Question recap */
+  .q-recap {
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    flex-shrink: 0;
+  }
+  .q-label { font-size: 10px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .q-text { font-size: 15px; font-weight: 700; color: #111827; line-height: 1.4; }
+
+  /* Options recap */
+  .options-recap {
+    padding: 0 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex-shrink: 0;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .opt-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+  }
+  .opt-row.yours { background: #FEE2E2; border-color: #FECACA; }
+  .opt-row.correct { background: #D1FAE5; border-color: #6EE7B7; }
+  .opt-row.neutral { background: #F9FAFB; border-color: #F3F4F6; }
+
+  .opt-badge {
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800;
+    flex-shrink: 0;
+    background: #E5E7EB; color: #6B7280;
+  }
+  .opt-row.yours .opt-badge  { background: #EF4444; color: #fff; }
+  .opt-row.correct .opt-badge { background: #10B981; color: #fff; }
+
+  .opt-text { flex: 1; font-size: 13px; font-weight: 600; color: #374151; }
+  .opt-row.yours .opt-text { color: #991B1B; }
+  .opt-row.correct .opt-text { color: #065F46; font-weight: 700; }
+  .opt-tag { font-size: 10px; font-weight: 800; white-space: nowrap; }
+  .opt-tag.yours { color: #EF4444; }
+  .opt-tag.correct { color: #10B981; }
+
+  /* Explanation */
+  .explanation {
+    padding: 16px 20px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .exp-label { font-size: 11px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .exp-box {
+    background: #EEF2FF;
+    border: 1px solid #C7D2FE;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .exp-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .exp-text { font-size: 13px; color: #374151; line-height: 1.6; }
+  .exp-text strong { color: #4F46E5; }
+
+  /* Tips */
+  .tip-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .tip-bullet { font-size: 12px; color: #6366F1; font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+  .tip-text { font-size: 12px; color: #6B7280; line-height: 1.5; }
+
+  /* Bottom */
+  .bottom {
+    background: #fff;
+    padding: 12px 20px 36px;
+    flex-shrink: 0;
+    border-top: 1px solid #F3F4F6;
+    display: flex;
+    gap: 10px;
+  }
+  .btn-secondary {
+    flex: 0 0 auto;
+    height: 52px; padding: 0 16px;
+    background: #F3F4F6;
+    color: #374151; font-size: 13px; font-weight: 700;
+    border: none; border-radius: 13px; cursor: pointer;
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn-primary {
+    flex: 1; height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff; font-size: 15px; font-weight: 800;
+    border: none; border-radius: 13px; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <div class="q-counter">12 / 20</div>
+</div>
+
+<!-- White card -->
+<div class="card">
+
+  <!-- Wrong banner -->
+  <div class="wrong-banner">
+    <div class="wrong-icon">❌</div>
+    <div class="wrong-text">
+      <div class="wrong-title">Not quite right</div>
+      <div class="wrong-sub">Streak ended — but you'll get the next one!</div>
+    </div>
+    <div class="xp-lost">−10 XP</div>
+  </div>
+
+  <!-- Question recap -->
+  <div class="q-recap">
+    <div class="q-label">📐 The question was</div>
+    <div class="q-text">What is 3/4 + 1/4?</div>
+  </div>
+
+  <!-- Options -->
+  <div class="options-recap">
+    <div class="opt-row yours">
+      <div class="opt-badge">A</div>
+      <div class="opt-text">4/8</div>
+      <div class="opt-tag yours">Your answer ✗</div>
+    </div>
+    <div class="opt-row correct">
+      <div class="opt-badge">B</div>
+      <div class="opt-text">1 (one whole)</div>
+      <div class="opt-tag correct">Correct ✓</div>
+    </div>
+    <div class="opt-row neutral">
+      <div class="opt-badge">C</div>
+      <div class="opt-text">3/8</div>
+      <div class="opt-tag"></div>
+    </div>
+    <div class="opt-row neutral">
+      <div class="opt-badge">D</div>
+      <div class="opt-text">2/4</div>
+      <div class="opt-tag"></div>
+    </div>
+  </div>
+
+  <!-- Explanation -->
+  <div class="explanation">
+    <div class="exp-label">💡 Why is it 1?</div>
+
+    <div class="exp-box">
+      <div class="exp-icon">📐</div>
+      <div class="exp-text">
+        When the denominators are the <strong>same</strong>, just add the numerators:<br><br>
+        <strong>3/4 + 1/4 = (3+1)/4 = 4/4 = 1</strong><br><br>
+        A fraction where numerator equals denominator is always <strong>1 whole</strong>.
+      </div>
+    </div>
+
+    <div class="exp-label">🧠 Remember for next time</div>
+    <div class="tip-row">
+      <div class="tip-bullet">→</div>
+      <div class="tip-text">Same denominator? Just add the top numbers.</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-bullet">→</div>
+      <div class="tip-text">4/8 would be the answer if you combined a different pair.</div>
+    </div>
+    <div class="tip-row">
+      <div class="tip-bullet">→</div>
+      <div class="tip-text">Always simplify at the end — 4/4 simplifies to 1.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom -->
+<div class="bottom">
+  <a class="btn-secondary" href="game-pause.mockup.html">⏸ Pause</a>
+  <a class="btn-primary" href="game-play.mockup.html">Next Question →</a>
+</div>
+
+</body>
+</html>

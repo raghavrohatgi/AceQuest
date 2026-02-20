@@ -1,0 +1,49 @@
+{
+  "model_name": "ari-model-v1",
+  "model_type": "GradientBoosting",
+  "trained_at": "2026-02-20T00:59:20.801943+00:00",
+  "corpus_size": 15480,
+  "train_size": 12384,
+  "test_size": 3096,
+  "features": [
+    "mean_word_frequency_rank",
+    "mean_sentence_length",
+    "type_token_ratio",
+    "avg_syllables_per_word",
+    "pct_rare_words",
+    "mean_log_freq_rank",
+    "lexical_density",
+    "flesch_kincaid_grade",
+    "gunning_fog",
+    "sentence_length_variance",
+    "subordinate_clause_ratio",
+    "long_word_ratio"
+  ],
+  "target": "CBSE grade level (1.0\u201310.0)",
+  "metrics": {
+    "cv_mae": 1.6617,
+    "test_mae": 1.6275,
+    "test_r2": 0.4357,
+    "within_1_grade_pct": 37.31
+  },
+  "per_grade_mae": {
+    "1": 2.414,
+    "2": 2.15,
+    "3": 1.899,
+    "4": 2.268,
+    "5": 1.392,
+    "6": 1.135,
+    "7": 0.714,
+    "8": 1.027,
+    "9": 1.718,
+    "10": 2.761
+  },
+  "mae_gate": 0.8,
+  "mae_gate_passed": false,
+  "compared_against": {
+    "Ridge": {
+      "test_mae": 1.9332,
+      "test_r2": 0.2233
+    }
+  }
+}

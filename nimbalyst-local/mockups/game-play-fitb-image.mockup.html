@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - FITB: Identify from Image</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 58%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 18px 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .topic-badge { background: #EEF2FF; color: #4338CA; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .voice-btn { width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .q-text { font-size: 20px; font-weight: 700; color: #111827; line-height: 1.3; }
+    /* Image box */
+    .img-box { background: #F3F4F6; border: 2px solid #E5E7EB; border-radius: 16px; height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; flex-shrink: 0; }
+    .img-emoji { font-size: 72px; line-height: 1; }
+    .img-caption { font-size: 11px; color: #9CA3AF; font-weight: 600; }
+    /* Answer blank */
+    .answer-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .answer-label { font-size: 14px; color: #6B7280; font-weight: 600; }
+    .blank { display: inline-flex; align-items: center; justify-content: center; min-width: 120px; height: 40px; border-bottom: 2.5px solid #9CA3AF; background: #F9FAFB; border-radius: 6px 6px 0 0; padding: 0 16px; font-size: 17px; font-weight: 700; color: #9CA3AF; cursor: pointer; transition: all 0.15s; }
+    .blank.filled { border-bottom-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .blank.correct { border-bottom-color: #22C55E; background: #F0FDF4; color: #16A34A; }
+    .blank.wrong { border-bottom-color: #EF4444; background: #FEF2F2; color: #DC2626; text-decoration: line-through; }
+    .wb-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .word-bank { display: flex; flex-wrap: wrap; gap: 8px; }
+    .word-chip { background: #F3F4F6; border: 2px solid #D1D5DB; border-radius: 8px; padding: 8px 16px; font-size: 15px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .word-chip:hover:not(.used) { border-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .word-chip.used { background: #F9FAFB; border-color: #E5E7EB; color: #D1D5DB; cursor: default; text-decoration: line-through; pointer-events: none; }
+    .feedback-banner { border-radius: 12px; padding: 12px 14px; display: none; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.5; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 22 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 260 XP</div>
+  </div>
+  <div class="streak">&#128293; 4x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#127758; Science</div>
+      <div class="voice-btn">&#128266;</div>
+    </div>
+    <div class="q-label">Look at the image and identify</div>
+    <div class="q-text">What animal is shown below?</div>
+    <div class="img-box">
+      <div class="img-emoji">&#128040;</div>
+      <div class="img-caption">Image: Animal</div>
+    </div>
+    <div class="answer-row">
+      <div class="answer-label">This is a</div>
+      <div class="blank" id="b1">&#95;&#95;&#95;&#95;</div>
+    </div>
+    <div class="wb-label">Word Bank</div>
+    <div class="word-bank">
+      <div class="word-chip" onclick="fill(this,'Monkey')">Monkey</div>
+      <div class="word-chip" onclick="fill(this,'Bear')">Bear</div>
+      <div class="word-chip" onclick="fill(this,'Tiger')">Tiger</div>
+      <div class="word-chip" onclick="fill(this,'Elephant')">Elephant</div>
+    </div>
+    <div class="feedback-banner" id="fb">
+      <div class="fb-top">
+        <div class="fb-label c" id="fbl">&#10003; Correct!</div>
+        <div class="xp-badge" id="xpb">+15 XP</div>
+      </div>
+      <div class="fb-exp">The image shows a monkey. Monkeys are primates found in tropical and subtropical regions.</div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="check()">Check Answer &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-play-fitb-audio.mockup.html'">Next Question &#8594;</button>
+  </div>
+  <script>
+    let filled = null;
+    function fill(chip, word) {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('used'));
+      chip.classList.add('used');
+      const b = document.getElementById('b1');
+      b.textContent = word; b.classList.add('filled'); filled = word;
+      document.getElementById('sub').classList.add('active');
+    }
+    function check() {
+      if (!filled) return;
+      const b = document.getElementById('b1');
+      const ok = filled === 'Monkey';
+      b.classList.remove('filled'); b.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('fb');
+      fb.style.display = 'block'; fb.className = 'feedback-banner ' + (ok ? 'ok' : 'err');
+      document.getElementById('fbl').className = 'fb-label ' + (ok ? 'c' : 'w');
+      document.getElementById('fbl').textContent = ok ? '✓ Correct! That\'s a Monkey!' : '✗ That\'s a Monkey, not ' + filled;
+      document.getElementById('xpb').style.display = ok ? 'inline-block' : 'none';
+      document.getElementById('sub').style.display = 'none';
+      document.getElementById('nxt').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

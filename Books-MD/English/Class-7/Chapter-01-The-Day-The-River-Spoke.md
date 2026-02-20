@@ -1,0 +1,1345 @@
+---
+subject: "English"
+grade: 7
+chapter_number: 1
+chapter_title: "The Day The River Spoke"
+source_pdf: "CBSE Books English/Class 7/Chapter 01 - The Day The River Spoke.pdf"
+ocr_tool: "mistral-ocr-latest"
+---
+
+# UNIT 1
+
+## LEARNING TOGETHER
+
+### THE DAY THE RIVER SPOKE
+
+Let us do these activities before we read.
+
+![img-0.jpeg](img-0.jpeg)
+
+I Close your eyes and quietly listen to the sounds around you for a minute.
+
+1. Are they trying to tell you something?
+2. Do you think the things around you also listen to you all day long?
+
+Share your answers with your classmates and the teacher.
+
+II Jahnavi was a bright young girl who lived with her parents and three brothers in a coastal village in India. Her parents worked on the farm. She had a dream.
+
+1. What could that dream be?
+2. How could she make her dream come true?
+3. What is your dream? What can you do to make your dream come true?
+
+Share your answers with your classmates and the teacher.
+
+POORVI
+
+Let us read
+
+![img-1.jpeg](img-1.jpeg)
+
+splashed: fell in drops, making a sound
+
+slithered: moved by sliding from side to side
+
+murmuring: speaking in a low voice
+
+startled: surprised
+
+thicket: a dense group of bushes and trees
+
+shrieked: made a high-pitched sound
+
+# I
+
+A big bright tear splashed down her nose. And another. A kingfisher swept down, its wings an arrow of blue in the sunlight. And a green lizard slithered down to the river's edge to bask in the sun.
+
+"Dear, dear!" said a sleepy, murmuring voice, "What's the matter?"
+
+Jahnavi was startled, because she was sure she had been quite alone. It couldn't have been the lizard. And the kingfisher was up in the thicket of bamboo eating the fish it had caught. It couldn't be the parrots, because parrots shrieked and this was such a sleepy voice. She looked around her. There wasn't a soul in sight. She was rather scared and wanted to run away.
+
+"You shouldn't cry, you know," the voice went on. "And you really shouldn't be scared, when you have been coming here to see me every day, well, almost every day."
+
+#
+
+LEARNING TOGETHER
+
+She was puzzled. It was such a voice, like the river. It couldn't be the river!
+
+"Well, tell me all about it," said the River, for it was the River. "I've got to hurry to reach the sea, you know."
+
+"They won't let me go to school," said Jahnavi. "I asked my mother, 'Why can't I go to school like Ettan and Meena?' And Mother had replied, 'You are too small, baby. Maybe later.'" But when she was five, little Ramu was born and Mother still said, "Maybe next year. Jahnavi, mind your little brother while I go to the fields." Now, she was nearly ten and minding Little Appu, who was the smallest. "They don't want me. They only..."—she stopped with a sob...
+
+"I am scared to go to school. And I'm so old now, they'll never let me go. But I want to go. I want to learn to read like Ettan and Meena." Jahnavi called her brother 'Ettan'. Ettan means 'Elder brother', but his real name was Gopi. "I want to know why spiders are yellow in yellow flowers, why bamboo trees rustle, why the moon always comes from behind the hills, never the other way, why the baby fish in the field water become frogs, why..."
+
+"Stop!" said the River. "You make me breathless. So many whys! I can tell you where the moon goes," the River said conspiratorially. "It goes down towards the sea. I've seen; it always takes the same way—over the mountains and down to the sea, like me!"
+
+![img-2.jpeg](img-2.jpeg)
+
+rustle: light sound made by leaves rubbing against each other
+
+conspiratorially: secretly
+
+## Let us discuss
+
+1. What was Jahnavi's dream? Was it important to her? Why?
+2. Do you think the river can help her in fulfilling her dream? How?
+
+3
+
+POORVI
+
+# II
+
+clump:
+a small group of trees growing together
+
+rattling: noise made by shaking things
+
+catamaran: a kind of boat
+
+wailed: (here) complained in a loud voice
+
+"Even little Ramu goes to school," said Jahnavi, "pity, the school isn't by the sea," said the River. "Then I could take you along, you know. But, I suppose I couldn't really. You'd get your feet wet. And that would never do! I'm afraid there's only one thing you can do."
+
+"Can I do something?" asked Jahnavi. "Well, it's up to you," said the River. "Seems to me little girls can do as much as little boys—they swim as fast as little boys. You just slip along one morning and sit there in the school and listen to what's going on, and maybe the teacher will let you stay."
+
+"I couldn't," gasped Jahnavi. "I couldn't! They'd scare me! They'd chase me out."
+
+The River laughed. "You? Scared?" the River said, "when you're not afraid of the green lizard, or of the snake in the bamboo clump, (Jahnavi startled) or the big trains rattling past that bridge." "Trains are noisy; I prefer ships," said the River.
+
+Jahnavi never knew the snake lived in the bamboo clump.
+
+"What are ships?" she asked.
+
+"Big boats," said the River, "so big that they can take hundreds of people, and they sail along the sea with lights that shine all night."
+
+Jahnavi held her breath. "Will they come here?" she asked.
+
+"I'm afraid not," said the River. "Too large, you know. Chandu's catamaran is good enough for me. Chandu can take you to see a ship, someday."
+
+"They'd never let me!" wailed Jahnavi.
+
+"Try going to school first," said the River. "Remember—it's up to you!"
+
+![img-3.jpeg](img-3.jpeg)
+
+LEARNING TOGETHER
+
+Jahnavi gathered courage. The next day she reached the school, panting and out of breath and stood by the door listening while the teacher read out the lesson. It was a story about a prince called Ashoka, who became a great king. Little Appu had fallen asleep on her shoulder. She crept nearer and nearer till she was in the back row, squatting with the others on the earthen floor. Little Appu made no noise and she listened.
+
+“Where did you spring from, little girl?” asked the teacher. “And what is your name? You’re new in my class.”
+
+“She’s Gopi’s sister, Gopi is in the next class,” said one of the boys. “It’s Jahnavi,” said another. “So, you’re Gopi’s little sister? Nice lad, Gopi.”
+
+“If you really, really want to come to my school, Jahnavi,” the teacher had said, “we’ll talk to your father about it. Don’t you worry. We’ll find a way.”
+
+![img-4.jpeg](img-4.jpeg)
+
+Jahnavi saw the teacher walking up the steps to their gate the next evening when she was lighting the lamp. She could see her father scratching his cheek the way he did when he was worried and the teacher was nodding and saying something she couldn’t make out. And Mother said, “Little Jahnavi, I shall miss you when you go to school. Girls should learn as much as they want. When I was your age, I wanted to go to school, but your grandmother said ‘No’, but now, I am glad the teacher came to talk to your father.”
+
+5
+
+POORVI
+
+![img-5.jpeg](img-5.jpeg)
+
+And Jahnavi said, “Mother, when I grow up, I’ll be a teacher and I’ll go from house to house in our village and ask all the little girls to come to my school. And I’ll teach them all that I’m going to learn.”
+
+And she went down the path between the fields the next morning before school began, to meet the River. “I did it!” she told the River. “I was scared, but I did it! And they’re letting me go. I’m going to learn to write my name and do sums and find out why our little fishes in the rice fields turn into frogs.” She heard the river’s sleepy chuckle, “Come again, little girl, and I’ll tell you all about the ships that sail the sea.”
+
+KAMALA NAIR
+
+(An extract adapted from The Day the River Spoke)
+
+## Let us discuss
+
+Complete the table given below with Jahnavi’s questions in Column 1 and the River’s answers in Column 2. Check your answers with the teacher.
+
+|  Column 1 | Column 2  |
+| --- | --- |
+|  ...why the moon always comes from behind the hills...? |   |
+|   | ... little girls can do as much as little boys.  |
+|   | Big boats, so big that they can take hundreds of people, and they sail along the sea with lights that shine all night.  |
+|  Will they come here? |   |
+
+LEARNING TOGETHER
+
+# Let us think and reflect
+
+I Read the extracts given below and answer the questions that follow.
+
+1. "You shouldn't cry, you know," the voice went on. "And you really shouldn't be scared, when you have been coming here to see me every day, well, almost every day." She was puzzled. It was such a voice, like the river. It couldn't be the river! "Well, tell me all about it," said the River, for it was the River. "I've got to hurry to reach the sea, you know."
+
+(i) Complete the sentence with the correct option from those given in the brackets.
+
+The tone of the River in the given extract is _______________.
+
+(assuring/sympathising)
+
+(ii) Select a phrase from the extract which shows that Jahnavi was a frequent visitor to the spot.
+
+(iii) Choose the correct option to complete the sentence.
+
+The use of an exclamation mark at the end of the line, 'It couldn't be the river!' expresses _______________.
+
+A. excitement  B. hesitation  C. irritation  D. disbelief
+
+(iv) Choose three qualities of the River highlighted in the extract from the words in the box given below.
+
+affectionate forgiving thoughtful impatient kind-hearted
+
+2. "Can I do something?" asked Jahnavi. "Well, it's up to you," said the River. "Seems to me little girls can do as much as little boys—they swim as fast as little boys. You just slip along one morning and sit there in the school and listen to what's going on, and maybe the teacher will let you stay."
+
+"I couldn't," gasped Jahnavi. "I couldn't! They'd scare me! They'd chase me out."
+
+(i) Complete the sentence with an appropriate reason.
+
+According to the River, there was no difference between girls and boys because _______________.
+
+(ii) Identify whether the following statement is true or false.
+
+The River encourages Jahnavi to have faith in herself and fulfill her desire to go to school.
+
+![img-6.jpeg](img-6.jpeg)
+
+POORVI
+
+(iii) Choose the correct option to complete the sentence.
+
+When the River suggests that Jahnavi should ‘slip along’, it means that she should move _______________.
+
+A. quickly    B. casually    C. quietly    D. confidently
+
+(iv) What does the repetition of the phrase *I couldn’t*, tell us?
+
+II Answer the following questions.
+
+1. Why does the writer describe different aspects of nature in great detail at the beginning of the story? Why do you think the writer does this?
+2. How did the River know so much about Jahnavi?
+3. Jahnavi says, “And I’m so old now, they’ll never let me go.” What can you infer about Jahnavi and the school from this line?
+4. Why did the River laugh when Jahnavi said she would be scared at school?
+5. Why should Jahnavi follow the River’s advice?
+6. How does the conversation between Jahnavi and the River make the story more appealing?
+7. What is the main message that the writer intends to convey?
+
+![img-7.jpeg](img-7.jpeg)
+
+## Let us learn
+
+I You have learnt that naming words are called nouns and only proper nouns begin with a capital letter. Why has the author used a capital letter for the ‘River’ even when it is a common noun? (Clue: Has the River been given qualities of a human being?)
+
+II There are a few words related to sound in the text. Pick the words from the text and write them next to the correct definition.
+
+1. made a high-pitched piercing sound
+2. to cause liquid to strike or fall on something
+3. a low continuous background noise
+4. cry with loud uncontrollable gasps
+5. to make a soft dry sound, like paper or leaves moving
+6. took a short quick breath through the mouth due to surprise, pain or shock
+7. shaking rapidly to make continuous short, sharp sounds
+
+LEARNING TOGETHER
+
+8. making a lot of noise
+9. made a long, high cry, usually because of pain or sadness
+
+Now, fill in the blanks with suitable sound words from exercise (II).
+
+The classroom grew (i) ______ as the students noticed the teacher carrying the answer papers. As the teacher turned the pages with a (ii) ______, the children (iii) ______, wondering what comments awaited. Someone (iv) ______ in frustration, and the (v) ______ of the students steadily increased. Finally, when the teacher praised the students for their excellent performance, the students (vi) ______ with excitement.
+
+III The word 'catamaran' is used in the text. The word originates from Tamil language 'kattu maram' meaning 'tied wood'.
+
+Find out the meanings of these words. From which Indian language these words were borrowed. An example has been given.
+
+1. karma (Sanskrit)
+2. sahib
+3. chutney
+4. guru
+5. verandah
+6. jungle
+7. areca
+8. palanquin
+
+IV Chandu, the fisherman, has a catamaran that the River preferred to a ship. Given below are some boats that are used in different parts of our country.
+
+![img-8.jpeg](img-8.jpeg)
+1. canoe
+
+![img-9.jpeg](img-9.jpeg)
+2. catamaran
+
+![img-10.jpeg](img-10.jpeg)
+3. coracle
+
+![img-11.jpeg](img-11.jpeg)
+4. shikara
+
+(i) Which one would you like to travel in?
+(ii) Make a colourful drawing of a boat that you would like to travel in.
+
+Poorly
+
+V Solve the crossword puzzle based on words related to water transport.
+
+|   |  |  |  |  |  | 5. C |  |  |  | 6. T  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  1. S |  |  |  |  |  |  |  |  |  | U  |
+|   |  |  |  |  |  |  |  |  |  | G  |
+|   | 7. Y |  |  |  | 2. | O |  | T |  | B  |
+|  3. R |  |  |  |  |  |  |  |  |  |   |
+|  |   |   |   |   |   |   |   |   |   |   |
+|   | H |  |  |  |  |  |  |  |  | T  |
+|   | T |  | 4. |  |  |  | M | E | R |   |
+
+## Across
+
+1. a large vessel used for transporting goods or passengers by sea
+2. a small vessel for travelling on water, typically propelled by oars, sails, or an engine
+3. a flat floating structure for travelling across water
+4. a boat or ship driven by steam
+
+## Down
+
+5. a small, light, narrow boat, pointed at both ends and moved using a paddle
+6. a boat with a powerful engine which can change direction easily and is used to pull large ships into and out of port
+7. a boat with sails and sometimes an engine, used for either racing or travelling for pleasure, rhymes with 'cot'
+
+VI Read the highlighted words in the following lines from the text.
+
+“She goes down **towards** the sea. I’ve seen her; she always takes the same way—**over** the mountains and **down** to the sea, like me!”
+
+**Prepositions** are words that indicate the relationship between nouns or pronouns and other elements in a sentence. They show direction, location, time or logical relationships between ideas.
+
+LEARNING TOGETHER
+
+Now, fill in the blanks with suitable prepositions given within the brackets.
+
+Jahnavi takes the River’s advice and goes to school. On her first day 1. ______ (at/in/on) school, Jahnavi stood nervously 2. ______ (in/outside/above) the gate, clutching her bag close to her. The bell rang and she hurried 3. ______ (outside/through/inside) the bustling classroom. She found a seat 4. ______ (among/between/from) two friendly classmates. The teacher greeted them warmly and started the lesson 5. ______ (about/in/for) numbers. Jahnavi listened attentively, feeling excited 6. ______ (at/about/for) the new adventure ahead.
+
+VII Read the highlighted words in the following sentence from the text.
+
+A kingfisher swept down, its wings an arrow of blue in the sunlight.
+
+Words like on, off, up, down can function both as preposition and as adverb.
+
+For example:
+
+- She ran up the stairs. (preposition)
+
+![img-12.jpeg](img-12.jpeg)
+
+- She rang me up. (adverb)
+
+![img-13.jpeg](img-13.jpeg)
+
+![img-14.jpeg](img-14.jpeg)
+
+Remember, a preposition will always be followed by an object (noun) whereas an adverb will tell you more about the action (verb).
+
+Fill in the blanks with prepositions or adverbs.
+
+1. The cat jumped ______ the table. (preposition)
+2. The children played ______ until dark. (adverb)
+3. She quickly ran ______ the park. (preposition)
+
+POORVI
+
+4. The helicopter was hovering _______. (adverb)
+5. We were just walking _______, chatting. (adverb)
+6. After thoroughly wiping his shoes, he stepped _______. (adverb)
+7. She drove slowly _______ the sharp curve. (preposition)
+8. He placed the keys _______ the mat before leaving. (preposition)
+
+![img-15.jpeg](img-15.jpeg)
+
+## Let us listen
+
+I Read the words given in the box below. You will listen to five people speak about school life. As you listen, circle the words that are used by the speakers. There are two words you do not need. (Transcript for the teacher on pg. 39)
+
+|  lawyer | desks | homemaker | principal | posters  |
+| --- | --- | --- | --- | --- |
+|  newspapers | marriage | advertisements | careers | books  |
+
+II You will once again listen to the five speakers. As you listen, match each statement 1–7 to each speaker (i)–(v). There are two statements that you do not need.
+
+|  Statements | Speaker No.  |
+| --- | --- |
+|  1. Promotes active participation for all in school activities | ☐  |
+|  2. Comments on how school makes learning Mathematics joyful | ☐  |
+|  3. Believes in the power of education that leads to freedom of choice | ☐  |
+|  4. Shares that school also means companionship | ☐  |
+|  5. Understands that boys and girls have different abilities | ☐  |
+|  6. Persuades the parent to grant permission to attend school | ☐  |
+|  7. Believes that learning skills is not gender-based | ☐  |
+
+LEARNING TOGETHER
+
+13
+
+# Let us speak
+
+I Read the sentence given below.
+
+"Dear, dear! What's the matter? ... You shouldn't cry, you know. And you really shouldn't be scared, when you have been coming here to see me every day, well, almost every day."
+
+The River spoke to Jahnavi in a 'sleepy' voice. Work in pairs and take turns to speak the same sentence in 'other' voices. Some hints are given below.
+
+happy surprised angry scared sad worried
+
+II Janhavi asks the River for advice and the River gives advice. Read the given situations and work in pairs to ask for and give advice. Take turns to change your roles. Use the prompts given below.
+
+1. Situation (i) : You wish to play football at school but it has an all-boys' team only.
+2. Situation (ii) : You have been unable to score well in Mathematics due to nervousness during exams.
+3. Situation (iii) : You really enjoy music classes but do not get enough time to practise for it.
+4. Situation (iv) : You cannot see the blackboard clearly from the last bench.
+
+![img-16.jpeg](img-16.jpeg)
+
+# Asking for advice
+
+- ______ problem ______.
+What do you think I should do?
+- ______ problem ______.
+Do you think I should...?
+- ______ problem ______.
+What would you do in my position?
+- ______ problem ______.
+I'd appreciate your advice on this issue.
+
+# Giving advice
+
+- I think you should...
+- Why don't you...?
+- The best thing to do is...
+- If I were you, I would / wouldn't...
+
+POORVI
+
+Let us write
+
+![img-17.jpeg](img-17.jpeg)
+
+## OBSERVING NATURE
+
+Take some time to observe the world around you. Over the next few days, pay attention to the colours, shapes, patterns, and textures found in nature. Look closely at the plants, trees, flowers, birds, and even the sky. Make detailed notes of what you observe, focusing on textures, movements, and how light plays with these elements. Record your observations in detail and the features that draw your attention the most—whether it's the soft ripple of water, the vibrant flutter of a butterfly or the colour of the birds or flowers.
+
+Now, write a descriptive paragraph based on what you've observed. Highlight the colours, shapes, textures, and unique details that made an impression on you.
+
+Give a title to your paragraph.
+
+|  Ideas | Prompts  |
+| --- | --- |
+|  • What do you observe? | • Every day, I see...
+• I find it very interesting that...  |
+|  • How do you feel? Why? | • I like... because...
+• I feel... as...  |
+|  • What is your message to everyone around you? | • I want to tell you that...
+• My advice to all is...  |
+
+![img-18.jpeg](img-18.jpeg)
+
+## Let us explore
+
+I Discuss why rivers in India are considered to be sacred and most of them are referred to as female. Some rivers are referred to as male, for example, the Brahmaputra and the Sone.
+
+## II Whole Class Activity
+
+1. India is a multilingual country, and many of us can speak two to three languages easily. Make a list of the languages that everyone in the class can speak and display it on a chart paper in the classroom.
+2. In which language do you enjoy reading and learning the most?
+
+LEARNING TOGETHER
+
+III Read the poster given below and answer the questions that follow.
+
+![img-19.jpeg](img-19.jpeg)
+
+1. What are the things you can observe in the poster?
+2. Why do you think the girls look happy?
+3. Dignity means ‘self-respect’. What is the relation between ‘dignity’ and ‘happiness’?
+4. How does a Nation prosper when its daughters are happy?
+
+IV The Government has launched many schemes for the education of the girl child. Some of them are ‘Beti Bachao Beti Padhao’, ‘Balika Samridhi Yojana’, ‘Samagra Shiksha Scheme–Kasturba Gandhi Balika Vidyalayas’, etc.
+
+Find out more such schemes from the internet or from your teacher and spread awareness in your neighbourhood.
+
+![img-20.jpeg](img-20.jpeg)
+
+POORVI
+
+# TRY AGAIN
+
+## Let us do these activities before we read.
+
+I Who inspires you to do your best?
+
+II Work in pairs, identify what you see in the pictures given below. What can we learn from them? Share your answers with your classmates and the teacher.
+
+![img-21.jpeg](img-21.jpeg)
+1.
+
+![img-22.jpeg](img-22.jpeg)
+2.
+
+![img-23.jpeg](img-23.jpeg)
+3.
+
+![img-24.jpeg](img-24.jpeg)
+4.
+
+![img-25.jpeg](img-25.jpeg)
+5.
+
+![img-26.jpeg](img-26.jpeg)
+6.
+
+16
+
+LEARNING TOGETHER
+
+Let us read
+
+King Bruce of Scotland flung himself down
+In a lonely mood to think;
+'Tis true he was monarch, and wore a crown,
+But his heart was beginning to sink.
+
+For he had been trying to do a great deed,
+To make his people glad;
+He had tried and tried, but couldn't succeed
+And so he became quite sad.
+
+He flung himself down in low despair,
+As grieved as man could be;
+And after a while he pondered there,
+"I'll give it all up," said he.
+
+Now just at that moment a spider dropped,
+With its silken, filmy clue;
+And the King, in the midst of his thinking, stopped
+To see what the spider would do.
+
+'Twas a long way up to the ceiling dome,
+And it hung by a rope so fine;
+That how it would get to its cobweb home,
+King Bruce could not divine.
+
+![img-27.jpeg](img-27.jpeg)
+
+POORVI
+
+![img-28.jpeg](img-28.jpeg)
+
+It soon began to cling and crawl
+Straight up with strong endeavour;
+But down it came with a slippery sprawl,
+As near to the ground as ever.
+
+Up, up it ran, not a second to stay,
+To utter the least complaint;
+Till it fell still lower, and there it lay,
+A little dizzy and faint.
+
+Its head grew steady — again it went,
+And travelled a half-yard higher;
+'Twas a delicate thread it had to tread,
+And a road where its feet would tire.
+
+Again it fell and swung below,
+But again it quickly mounted;
+Till up and down, now fast, now slow,
+Nine brave attempts were counted.
+
+"Sure," cried the King, "that foolish thing
+Will strive no more to climb;
+When it toils so hard to reach and cling,
+And tumbles every time."
+
+But up the insect went once more,
+Ah me! 'tis an anxious minute;
+He's only a foot from his cobweb door,
+Oh say, will he lose or win it?
+
+Steadily, steadily, inch by inch,
+Higher and higher he got;
+And a bold little run at the very last pinch
+Put him into his native cot.
+
+"Bravo, bravo!" the King cried out,
+"All honour to those who try;
+The spider up there, defied despair;
+He conquered, and why shouldn't I?"
+
+And Bruce of Scotland braced his mind,
+And gossips tell the tale,
+That he tried once more as he tried before,
+And that time did not fail.
+
+ELIZA COOK
+
+LEARNING TOGETHER
+
+# Let us discuss
+
+I Complete the summary of the poem by filling in the blanks with suitable words from the text given in the box below. Share your answers with the teacher. An example has been given.
+
+|  tried | mounted | despair | attempts | great  |
+| --- | --- | --- | --- | --- |
+|  conquered | low | strive |  |   |
+
+The poem, written in a narrative style, tells the story of King Bruce of Scotland, who was feeling 1. ________ after failing multiple times to achieve something 2. ________ for his people. In a moment of 3. ________, he observed a spider trying to reach its web high above. The spider 4. ________ every time it fell after getting close to its goal. It made nine 5. ________ and finally succeeded. The king said that the spider had 6. ________ and so would he. Inspired by the spider's determination, King Bruce decided to 7. ________. When he 8. ________ this time, he ultimately succeeded.
+
+II Complete the following sentences suitably.
+
+1. We can say that the poet uses the narrative style because ______.
+2. The central idea of the poem is ______.
+
+III Pick three examples from the poem for each of the following:
+
+1. lines that describe the spider's efforts
+2. alliteration (the repetition of the same consonant sounds at the beginning of closely connected words)
+
+IV Why does the poet repeat the following words or phrases in the poem?
+
+tried and tried; steadily, steadily; up, up
+
+V Fill in the blanks by choosing the correct answer from within the brackets.
+
+1. The rhyme scheme of the poem is ________. (AABB/ABBA/ABAB)
+2. 'Bravo' is an example of ________. (conjunction/interjection/adjective)
+3. The poet uses 'twas and 'tis for the sake of ________. (rhythm/ rhyme/contraction)
+
+POORVI
+
+VI The spider's climbing is compared to King Bruce's own struggles. Just as the spider repeatedly attempts to reach its web, Bruce is trying to achieve a great deed for his people. This poetic device is called **metaphor**. It strengthens the poem's message about perseverance—keep trying till we succeed.
+
+A metaphor is a figure of speech that involves an implied comparison between two unlike things without using ‘like’, ‘as’, or ‘as...as’. It suggests that one thing is another, highlighting similarities between them to add deeper meaning or understanding.
+
+1. Read the following sentences and identify metaphors and similes. Write M for metaphor and S for simile.
+
+![img-29.jpeg](img-29.jpeg)
+
+(i) He ran as fast as a cheetah.
+(ii) The world is a stage.
+(iii) The night was as dark as coal.
+(iv) He sang like an angel.
+(v) Her voice was music to his ears.
+(vi) The classroom was a zoo.
+(vii) The baby slept like a log.
+(viii) Her smile was as bright as the sun.
+(ix) The lake was a mirror, reflecting the sky.
+
+2. Read the following sentences and transform the similes to metaphors and metaphors to similes. Two examples have been given.
+
+(i) Knowledge spreads like the branches of a mighty tree.
+
+Knowledge is a spreading branch of a mighty tree.
+
+(ii) His courage was a beacon, guiding us through the storm.
+
+- His courage was as bright as a beacon guiding us through the storm.
+- His courage was like a beacon guiding us through the storm.
+
+(iii) The book was a treasure chest, filled with endless adventures.
+(iv) Her laughter was a melody that brightened the darkest days.
+
+#
+
+LEARNING TOGETHER
+
+(v) The mountain stood as a guard, watching over the valley below.
+(vi) The night was like a velvet cloak, wrapping the world in mystery.
+(vii) Her thoughts were like butterflies in a summer meadow.
+
+![img-30.jpeg](img-30.jpeg)
+
+# Let us think and reflect
+
+I Read the extracts given below and answer the questions that follow.
+
+1. He flung himself down in low despair,
+As grieved as man could be;
+And after a while he pondered there,
+“I’ll give it all up,” said he.
+
+Now just at that moment a spider dropped,
+With its silken, filmy clue;
+
+(i) Select the phrase which shows the physical expression of the King’s emotional state.
+(ii) Why does the poet use the word ‘low’ before despair?
+(iii) Choose the correct option to complete the sentence.
+
+In the line, ‘And after a while he pondered there’, the word ‘pondered’ means ___________.
+A. paused
+B. thought
+C. noticed
+D. rested
+
+(iv) Choose the correct option from the words given in the brackets.
+The phrase ‘silken filmy clue’ creates an image of something that is ___________ (long and light/very delicate and soft).
+
+2. “...when it toils so hard to reach and cling, And tumbles every time.”
+
+But up the insect went once more,
+Ah me! ‘tis an anxious minute;
+He’s only a foot from his cobweb door,
+Oh say, will he lose or win it?
+
+(i) Choose the correct option to complete the analogy.
+toil: hard::__________: ___________
+A. roll: tumble
+B. tumble: circle
+C. compress: roll
+D. jump: tumble
+
+![img-31.jpeg](img-31.jpeg)
+
+![img-32.jpeg](img-32.jpeg)
+
+POORVI
+
+(ii) List any two characteristics of the spider highlighted in the line, 'But up the insect went once more'.
+
+(iii) Choose the correct option to complete the sentence.
+
+The expression 'Ah me!' in the extract indicates a sense of
+
+A. happiness
+
+B. stress
+
+C. relief
+
+D. loneliness
+
+(iv) Complete the sentence with an appropriate reason.
+
+Readers are able to relate to this extract because
+
+II Answer the following questions.
+
+1. How does the first stanza help in setting the mood of the poem?
+2. Describe how King Bruce's attitude changes from the beginning towards the end of the poem.
+3. The poet describes every action of the spider in great detail. What does this tell us about his attitude towards the spider?
+4. How does the spider inspire us to overcome despair and not give up?
+5. The poem teaches us that failures are stepping stones to success. Explain.
+6. The spider's journey tells us that anyone can be a source of inspiration in our lives. Elaborate.
+
+![img-33.jpeg](img-33.jpeg)
+
+# Let us learn
+
+I Write the opposites of the following words taken from the poem.
+
+1. up x
+2. fast x
+3. glad x
+4. win x
+5. succeed x
+
+![img-34.jpeg](img-34.jpeg)
+
+LEARNING TOGETHER
+
+II Choose the correct meaning of the underlined words in the following sentences from the box given below. Frame sentences of your own for these words.
+
+1. work very hard and/or for a long time
+2. prepared themselves for something difficult
+3. an attempt to do something new or difficult
+4. to try very hard to achieve something
+
+(i) Please make every endeavour to arrive on time.
+(ii) Ants toil tirelessly to save food for rainy season.
+(iii) We encourage all students to strive to do their best.
+(iv) The sailors braced themselves against the strong wind.
+
+III The poem uses words that show distance.
+
+For example:
+
+a long way up, inch by inch, higher and higher, half-yard higher
+
+Classify the words or phrases in the box given below based on the distance (far or near) and write in the space provided. You may take the help of a dictionary.
+
+|  proximity | middle of nowhere | vicinity | adjacent  |
+| --- | --- | --- | --- |
+|  remoteness | yonder | afar | a stone’s throw  |
+|  light year | hairline | farther |   |
+|  Far | Near  |
+| --- | --- |
+
+POORVI
+
+IV Read the following line from the poem.
+
+'Twas a delicate thread it had to tread,
+
+Now repeat the lines five to six times. Are you able to say it clearly? Create more tongue twisters of your own.
+
+![img-35.jpeg](img-35.jpeg)
+
+# Let us listen
+
+I You will listen to a story about an ant. Read the questions given below and before you listen, guess the answers to these questions. (Transcript for the teacher on pg. 40)
+
+1. What was the ant known for?
+(i) determination
+(ii) strength
+(iii) wisdom
+
+2. Why was the ant unable to take the roti home?
+(i) It was stuck under a rock.
+(ii) It was too heavy to carry.
+(iii) It was pulled by other ants.
+
+3. What was the bird doing?
+(i) playing with the ant
+(ii) searching for food
+(iii) picking up leaves
+
+4. How did the bird make the ant feel?
+(i) proud
+(ii) inspired
+(iii) relaxed
+
+5. How did the fellow ants help?
+(i) by advising the ant continuously
+(ii) by standing still near the ant
+(iii) by joining the ant in her efforts
+
+II Now, listen to the story once again and as you listen, check whether your answers are correct.
+
+#
+
+LEARNING TOGETHER
+
+25
+
+# Let us speak
+
+Narrate a personal experience about a time when you were motivated by someone or something to carry on and never give up. Your perseverance helped you.
+
+Use the following sentence prompts as a guide for your narration. Use as per your topic.
+
+1. Introduction:
+
+- I remember a time when I felt like giving up. It was when...
+- There was a moment in my life when I faced a big challenge. It happened when...
+
+2. Describe the challenge:
+
+The challenge I faced was...
+I was struggling with...
+The problem seemed too big because...
+
+3. Feeling disheartened:
+
+- At first, I felt discouraged and thought about giving up because...
+I didn't think I could succeed because...
+- I felt upset and wanted to leave because...
+
+4. The source of motivation:
+
+- But then, I saw/heard/read about...
+- Someone/something inspired me to keep going. It was...
+- I remembered the poem... do not quit...
+
+5. Taking action:
+
+- After feeling inspired, I decided to...
+I gathered my strength and...
+With a new sense of willpower, I...
+I asked for help from...
+
+6. The result:
+
+- In the end, I was able to...
+Thanks to standing firm and never giving up, I achieved...
+I felt proud because...
+It was worth it because...
+
+7. Reflection:
+
+This experience taught me that...
+I learned that perseverance is the key to success...
+Now, I always remember to...
+The lesson I learnt from this is...
+
+![img-36.jpeg](img-36.jpeg)
+
+POORVI
+
+Let us write
+
+King Bruce was inspired by the spider that kept on trying till it was successful. Think about the steps you can take to overcome a difficult situation and write them down.
+
+Now, write a letter to your cousin on how you plan to overcome any difficult situation. Also, advise not to quit and persevere.
+
+Remember to use transition words like ‘To begin with...’, ‘Next...’, ‘After that...’, ‘Then...’, ‘Finally...’, to share the steps of your plan.
+
+You may begin this way:
+
+20, Rajendra Nagar
+Jeevanpur
+23 August 20XX
+
+Dear Monika,
+Thank you for your letter asking me about...
+
+You may end this way:
+
+Yours affectionately,
+Deepa
+
+# Let us explore
+
+I Collect folk songs in your own language that connect us with nature and compile them as a class project.
+
+II Did you know that spiders are not insects? They belong to a group called the arachnids. Observe a spider and an ant from a distance and note down the differences between them. Share your observations with your classmates. Ask your Science teacher for more information to know about spiders better.
+
+III Let us learn how to weave a spider web.
+
+1. Take three sticks (each about eight inches long) and a roll of old wool.
+2. Tie the sticks together in the centre with the wool (Fig. 1).
+3. Start weaving the web by putting a loop around every stick (Figs. 2 and 3).
+
+LEARNING TOGETHER
+
+4. Complete the web and tie the thread in a knot on the stick where the web is complete (Fig. 4).
+
+Now, decorate it with words and phrases you learnt about the spider in the poem or anything else that you like.
+
+![img-37.jpeg](img-37.jpeg)
+Fig. 1
+
+![img-38.jpeg](img-38.jpeg)
+Fig. 2
+
+![img-39.jpeg](img-39.jpeg)
+Fig. 3
+
+![img-40.jpeg](img-40.jpeg)
+Fig. 4
+
+POORVI
+
+# THREE DAYS TO SEE
+
+Let us do these activities before we read.
+
+I Work in pairs. Recall a visit to a place that you liked. Discuss the details of that place and write about the following:
+
+1. Name of the place
+2. The person(s) you went with
+3. The things that you could:
+- see
+- listen
+- smell
+- taste
+- touch and feel
+
+II How does this memory make you feel?
+
+III Do you think your visit/experience would be different if you could not see or hear? Share your answers with your classmates and the teacher.
+
+Did you know that our five senses are essential for us to experience and make sense of the world around us?
+
+![img-41.jpeg](img-41.jpeg)
+
+LEARNING TOGETHER
+
+1
+
+Let us read
+
+I, who cannot see, find hundreds of things to interest me through mere touch. I feel the delicate symmetry of a leaf. I pass my hands lovingly about the smooth skin of a silver birch, or the rough, shaggy bark of a pine. In spring, I touch the branches of trees hopefully in search of a bud, the first sign of awakening Nature after her winter's sleep. Occasionally, I am very fortunate; I place my hand gently on a small tree and feel the happy quiver of a bird in full song.
+
+At times, my heart cries out with longing to see all these things. If I can get so much pleasure from mere touch, how much more beauty must be revealed by sight. And I have imagined what I should most like to see if I were given the use of my eyes, say, for just three days.
+
+I should divide the period into three parts. On the first day, I should want to see the people whose kindness and companionship have made my life worth living. I do not know what it is to see into the heart of a friend through that ‘window of the soul’, the eye.
+
+I can only ‘see’ through my fingertips the outline of a face. I can detect laughter, sorrow and other obvious emotions. I know my friends from the feel of their faces.
+
+symmetry:
+evenness
+birch: a slender tree with thin peeling bark
+shaggy: hairy
+quiver: shiver
+
+POORVI
+
+behold: see
+
+panorama: scene
+
+glimpse: brief look
+
+pageant: display
+
+condensed: brief
+
+carcasses: remains
+
+mastodons: a large animal similar to an elephant, but with fur
+
+stature: physique, build
+
+haunts: regular meeting places merely: just
+
+![img-42.jpeg](img-42.jpeg)
+
+![img-43.jpeg](img-43.jpeg)
+
+The next day I should arise with the dawn and see the thrilling miracle by which night is transformed into day. I should behold with awe the magnificent panorama of light with which the sun awakens the sleeping earth. This day I should devote to a hasty glimpse of the world, past and present. I should want to see the pageant of man's progress, and so I should go to the museums. There my eyes would see the condensed history of the earth—animals and the races of men pictured in their native environment; gigantic carcasses of dinosaurs and mastodons that roamed the earth before man appeared, with his tiny stature and powerful brain, to conquer the animal kingdom.
+
+The following morning, I should again greet the dawn, anxious to discover new delights, new revelations of beauty. Today, this third day, I shall spend in the workaday world, amid the haunts of men going about the business of life. The city becomes my destination.
+
+First, I stand at a busy corner, merely looking at people, trying by sight of them to understand something of their daily lives. I see smiles, and I am happy. I see serious determination, and I am proud. I see suffering, and I am compassionate.
+
+LEARNING TOGETHER
+
+At midnight, permanent night would close in on me again. Naturally in those three short days I should not have seen all I wanted to see. Only when darkness had again descended upon me should I realise how much I had left unseen.
+
+I who am blind can give one hint to those who can see: use your eyes as if tomorrow you would be stricken blind. And the same method can be applied to your other senses. Hear the music of voice, the song of a bird, the mighty strains of an orchestra, as if you would be stricken deaf tomorrow. Touch each object as if tomorrow your tactile sense would fail. Smell the perfume of flowers, taste with relish each morsel, as if tomorrow you could never smell and taste again. Make the most of every sense; glory in all the facets of pleasure and beauty, which the world reveals to you through the several means of contact, which Nature provides. But of all the senses, I am sure that sight must be the most delightful.
+
+HELEN KELLER
+
+strains: tunes
+tactile sense: sense of touch
+morsel: a small piece of food
+facets: aspects
+
+## Let us discuss
+
+I Work in pairs. Identify the statements that are true from the ones given below. Share your answers with the teacher.
+
+1. The author expresses a deep longing to experience the world through the sense of hearing.
+2. The author would like exploring the city only to observe how people are suffering.
+3. The author would spend the first day seeing the people whose kind-heartedness and friendship have enriched her life.
+4. The author acknowledges that even in three days, she would not be able to see everything.
+5. The author feels that everyone can find the greatest joy merely by the sense of touch.
+6. The author advises those who can see to appreciate every moment as if they might lose their senses tomorrow.
+7. On the third day, the author would like to observe people in their daily lives and understand their experiences.
+
+POORVI
+
+II Complete the table given below with what Helen Keller wanted to do on the three days if she had sight.
+
+|  Day 1 | Day 2 | Day 3  |
+| --- | --- | --- |
+|  see the people, know her friends from the feel of their faces, ... | arise with the dawn, ... |   |
+
+III The author says that you need eyes to be able to ‘see’ the true self of a person. Therefore, she refers to the eye as ‘window of the soul’. How is the narrator able to understand the feelings of a person?
+
+![img-44.jpeg](img-44.jpeg)
+
+## Let us think and reflect
+
+I Read the extracts given below and answer the questions that follow.
+
+1. I feel the delicate symmetry of a leaf. I pass my hands lovingly about the smooth skin of a silver birch, or the rough, shaggy bark of a pine. In spring, I touch the branches of trees hopefully in search of a bud, the first sign of awakening Nature after her winter’s sleep. Occasionally, I am very fortunate; I place my hand gently on a small tree and feel the happy quiver of a bird in full song.
+
+(i) What does the ‘delicate symmetry of a leaf’ symbolise?
+
+(ii) List two phrases from the extract that describe the texture of objects in nature.
+
+(iii) Complete the sentence appropriately.
+
+The phrase ‘awakening Nature after her winter’s sleep’ refers to ___________.
+
+(iv) What is the tone of the writer in this extract?
+
+A. nostalgic
+
+B. proud
+
+C. admiring
+
+D. celebratory
+
+2. The next day I should arise with the dawn and see the thrilling miracle by which night is transformed into day. I should behold with awe the magnificent panorama of light with which the sun awakens the sleeping earth. This day I should devote to a hasty glimpse of the world, past and present. I should want to see the pageant of man’s progress, and so I should go to the museums.
+
+![img-45.jpeg](img-45.jpeg)
+
+![img-46.jpeg](img-46.jpeg)
+
+LEARNING TOGETHER
+
+(i) The word 'thrilling' has been used with 'miracle'.
+
+Which of the following words does not match with the word 'thrilling'?
+
+A. experience
+
+B. tale
+
+C. knowledge
+
+D. adventure
+
+(ii) Why does the writer refer to the earth as 'sleeping earth'?
+
+(iii) Complete the sentence with an appropriate reason.
+
+The writer wishes to dedicate the day to a brief look at the present and past world because ____________.
+
+(iv) Why does the writer use 'should' multiple times in the extract?
+
+## II Answer the following questions.
+
+1. The sense of touch makes up for the loss of sight and hearing. Explain this statement with reference to the text.
+2. Why does the author believe that the sense of sight is the most wonderful?
+3. How might the author's opinion on making the most of our senses guide us to be kinder towards people with special abilities?
+4. What is the significance of imagining the loss of a sense, according to the author?
+5. How does the author encourage people to approach their everyday sensory experiences?
+6. What do the author's choices for the three days tell us about her values and priorities?
+
+![img-47.jpeg](img-47.jpeg)
+
+POORVI
+
+#
+
+Let us learn
+
+I Sensory words are descriptive—they describe how we experience the world: how we see, hear, smell, taste or feel something.
+
+Complete the following table with sensory words from the text in Column 2 for the five senses in Column 1. Add new words in Column 3.
+
+|  Column 1 | Column 2 | Column 3  |
+| --- | --- | --- |
+|  What you see | panorama |   |
+|  What you hear | music |   |
+|  What you smell | perfume |   |
+|  What you taste | relish |   |
+|  What you feel | rough |   |
+
+II Read the following sentences from the text and underline the verbs.
+
+- I should divide the period into three parts.
+- On the first day, I should want to see...
+- The next day I should arise with the dawn...
+- I should behold with awe...
+
+The words you have underlined are a combination of two verbs. In each of these sentences, 'should' is the modal verb (suggestion), and the second verb (divide, want, arise, behold) is the main verb.
+
+Modal verbs are auxiliary verbs that express necessity, possibility, permission, or ability. They are used before the main verb to give additional information about the function of the main verb. Common modal verbs include can, could, may, might, shall, should, will, would, must, and ought to.
+
+III Identify the modal verbs in the following sentences. Choose the functions they express from those given in the box below.
+
+possibility necessity polite request ability moral obligation
+
+1. You can learn a lot from this experience.
+2. They might arrive late due to traffic.
+
+LEARNING TOGETHER
+
+3. She must finish her homework before dinner.
+4. They ought to apologise for their mistake.
+5. He would like to have some *lassi*, please.
+
+IV Read the situations in Column 1 and functions in Column 2. Fill in the blanks in the sentences in Column 4 with appropriate modal verbs from Column 3. After filling in the blanks, explain the function of each modal verb you used to your classmates and the teacher.
+
+|  Column 1 | Column 2 | Column 3 | Column 4  |
+| --- | --- | --- | --- |
+|  1. You want to leave work early. | permission | can, could, may, might, must, ought to, shall, should, will, would | (i) _________ I leave early today if I finish all my tasks?  |
+|  2. You have an important deadline tomorrow. | obligation |   | (ii) I __________ finish this report by tomorrow.  |
+|  3. Your friend is thinking whether to join Art class. | advice |   | (iii) You __________ consider all the pros and cons before making a decision.  |
+|  4. There are dark clouds in the sky. | possibility |   | (iv) It __________ rain later today.  |
+|  5. Asking someone to pass the salt at the dinner table | polite request |   | (v) __________ you pass the salt, please?  |
+|  6. Advising someone to apologise for a mistake | moral obligation |   | (vi) You __________ apologise for the mistake you made.  |
+|  7. Deciding where to go for picnic | suggestion |   | (vii) We __________ go to any park nearby for picnic.  |
+
+POORVI
+
+Let us listen
+
+You will listen to a conversation between a mother and son. As you listen, select four **true** statements from 1–7 given below. (Transcript for the teacher on pg. 41)
+
+|  Statements | True or False  |
+| --- | --- |
+|  1. Anuj finds the concept of Braille fascinating and wants to learn more about it. |   |
+|  2. Mother is unsure of the school’s efforts to include students with visual impairment. |   |
+|  3. Anuj initially thinks that Digital India is only about learning how to use computers. |   |
+|  4. Mother believes that screen readers are very effective for persons who are visually impaired. |   |
+|  5. Anuj already knew that persons who are visually impaired can use computers and smartphones. |   |
+|  6. Anuj wants to know about the effectiveness of assistive technologies for persons who are visually impaired. |   |
+|  7. Mother believes a right mindset is the best support for persons who are visually impaired. |   |
+
+![img-48.jpeg](img-48.jpeg)
+
+# Let us speak
+
+Work in pairs. Take turns to speak for a minute on any one of the senses you value the most. Use the given prompts to frame your response before you speak.
+
+- I value my sense of sight/ sound/ touch/ smell / taste the most because...
+- One of my favourite experiences is...
+- This is so because...
+- I appreciate being able to see/ hear/touch/ smell/ taste...
+- God forbid, if I were to lose the sense of sight/ sound/ touch/ smell / taste, it would make me feel...
+- I would not be able to...
+- I thank God that I am able to see/ hear/ touch/ smell / taste.
+
+36
+
+LEARNING TOGETHER
+
+## Remember to
+
+- speak clearly and confidently
+- glance at your notes for reference rather than reading
+- make eye contact
+- use gestures if you wish to
+- pronounce words clearly and avoid mumbling
+- speak at a steady, moderate pace
+
+![img-49.jpeg](img-49.jpeg)
+
+## Let us write
+
+A descriptive paragraph describes a person, place, object or event to create a memorable experience for the reader. Write a descriptive paragraph describing a place that you visited recently.
+
+Follow the guidelines given below to draft this paragraph.
+
+1. In the opening line, begin with something interesting to capture the reader's attention. Introduce the place you visited.
+2. In the supporting lines, describe the place using adjectives and specific details that appealed to your five senses—sight, sound, smell, taste, and touch. You may include alliterations, similes, and personifications to hold the reader's attention.
+3. In the concluding lines, summarise the description to provide a final impression. Mention what was the most important thing about that place which others should also experience.
+
+![img-50.jpeg](img-50.jpeg)
+
+## Let us explore
+
+I Do you know how persons with visual challenges are able to read and write? They read through touch with the help of Braille, a code of raised dots that represents the letters of the alphabet. This tactile code was developed over a period of nine years by Louis Braille, who became blind at a very young age due to an accident.
+
+![img-51.jpeg](img-51.jpeg)
+Louis Braille (Courtesy FMT)
+
+![img-52.jpeg](img-52.jpeg)
+
+POORVI
+
+Study the code given below and write your name using it. You may use bindis or grains of *daal* to make the dots that you can touch and feel.
+
+|  A | B | C | D | E | F | G | H | I | J | K | L | M  |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+|  😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐  |
+|  😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐  |
+|  😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐 | 😐  |
+
+N O P Q R S T U V W X Y Z
+
+0 1 2 3 4 5 6 7 8 9
+
+II Have you heard about the International Day of Persons with Disabilities? Find out when and how it is observed in India. Write your findings on a sheet and put it up on the class board.
+
+III Do you want to know about sign language? Go to the link given below to learn about the Indian sign language.
+
+https://ncert.nic.in/pdf/accessibility/ISL_200word_v15.pdf
+
+![img-53.jpeg](img-53.jpeg)
+
+LEARNING TOGETHER
+
+# TRANSCRIPTS
+
+## THE DAY THE RIVER SPOKE
+
+### Let us listen (refer to page 12)
+
+I Read the words given in the box below. You will listen to five people speak about school life. As you listen, circle the words that are used by the speakers. There are two words you do not need.
+
+**SPEAKER (i):** (Father) Should girls attend school? Yes, they should. I do my best to ensure that both my son and daughter get equal opportunities. I look forward to their successful careers and rewarding lives. I feel education gives freedom to make choices in life. Whether my daughter wants to work in an organisation or be a homemaker, it should be her choice and the same applies to my son.
+
+**SPEAKER (ii):** (Grandmother) I went to school but many girls at that time could not attend school because some elders in the village felt that girls should help in the house and take care of their little brothers and sisters. I am happy that the situation has changed today.
+
+**SPEAKER (iii):** (Teacher) The school prepares students for meaningful and useful participation in the world of work by learning hands-on abilities and skills, developing equal respect for head-hands-heart, valuing the dignity of labour, and understanding vocational choices for the future.
+
+**SPEAKER (iv):** (Student) I like to go to school. I feel that by coming to school and reading the books, I learn about things from all over the world. I also have friends with whom I can share my feelings.
+
+39
+
+POORVI
+
+SPEAKER (v): (Principal) Everyone should attend school. You must've noticed that the girls are doing very well. However, as the Head of an institution, I know that all students can work hard. My message to students is that they should attend school regularly and take part in every school activity without bothering whether it is for girls or boys. The idea is to focus on learning.
+
+II You will once again listen to the five speakers. As you listen, match each statement 1–7 to each speaker (i)–(v). There are two statements that you do not need.
+
+## TRY AGAIN
+
+![img-54.jpeg](img-54.jpeg)
+
+## Let us listen (refer to page 24)
+
+1. You will listen to a story about an ant. Read the questions given below and before you listen, guess the answers to these questions.
+
+Hello everyone,
+
+I’m sure you have enjoyed learning about King Bruce and the spider. Let me share another story with you.
+
+In a thick green forest, there lived a little ant. She was known for her determination and never-give-up attitude. One sunny day, the ant found a delicious piece of roti that was too big for her to carry alone.
+
+“This crumb is huge, but I must get it back to the anthill. My family will be so happy!” she thought to herself.
+
+She tried to lift the crumb with all her might, but it was too heavy. She tried pushing it, pulling it and even rolling it, but nothing seemed to work. Exhausted and saddened, she sat down and began to cry.
+
+As the ant sat there, feeling beaten, she noticed a small bird nearby. The bird was trying to build a nest. It picked up twigs and leaves, but every time it tried to place them, the wind would blow them away. However, the bird did not give up. It kept trying, over and over again, until finally, it managed to build a strong nest.
+
+40
+
+LEARNING TOGETHER
+
+"If that bird can keep trying and succeed, then I shouldn't give up either," she thought, feeling inspired.
+
+Determined once more, the ant gathered all her strength and decided to try again. She called her fellow ants for help. Together, they formed a chain and lifted the crumb with their combined strength. Slowly but surely, they carried the crumb back to the anthill.
+
+"We did it! Thank you, everyone! We showed that with teamwork and never giving up, we can achieve anything!" the ant shouted, excited and grateful.
+
+She and her friends celebrated their success.
+
+We too should learn this lesson from the ant's experience—never give up, no matter how difficult the situation may seem.
+
+Hope you all liked the story.
+
+Thank you!
+
+2. Now, listen to the story once again and as you listen, check whether your answers are correct. Rectify wherever needed.
+
+## THREE DAYS TO SEE
+
+![img-55.jpeg](img-55.jpeg)
+
+## Let us listen (refer to page 36)
+
+You will listen to a conversation between a mother and son. As you listen, select four **true** statements from 1–7 given below.
+
+**ANUJ**: Ma, we have a new student in our class, Tara. She's quite talkative and pleasant. You know, the writing in her books doesn't look like ours. It's different. She told us that it's called Braille.
+
+**MOTHER**: It's great to know that your school has facilities to address the needs of the visually impaired. Thanks to the Digital India Initiative, which is paving the way for inclusion of the visually impaired.
+
+41
+
+POORVI
+
+ANUJ : Oh, Digital India! That's about being computer literate, isn't it?
+
+MOTHER: Well, Digital India is about more than just internet access. It aims to include everyone, including people with disabilities, by providing digital infrastructure and services. For the visually impaired, it means access to assistive technologies like screen readers, voice-over-enabled smartphones and apps that can make daily activities easier.
+
+ANUJ : Ohh... interesting. What is a screen reader, Ma?
+
+MOTHER: I knew you'd ask about it! Well, a screen reader is a software application that helps people who are visually impaired use computers and smartphones. It reads out the text displayed on the screen and provides audio feedback.
+
+ANUJ : That's amazing! So, Tara can use a computer just like we do?
+
+MOTHER: Yes, she can.
+
+ANUJ : So, it makes a big difference in their daily lives.
+
+MOTHER: It certainly does. It ensures that people who are visually impaired can use digital services independently, without help from others. This can improve their quality of life. It also opens up more job opportunities in fields like IT, banking, and more, where they can work just efficiently like anybody else.
+
+ANUJ : Wow! So that means people who are visually impaired can work and do things on their own? I'm so proud of my school.
+
+MOTHER: Yes, and this way, we can ensure that the benefits of Digital India reach everyone, helping them to participate fully in all areas of life.
+
+Remember, inclusion is not just about having the right tools, but also about having the right mindset.
+
+42

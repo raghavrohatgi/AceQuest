@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - FITB Typed</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 60%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 18px 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .topic-badge { background: #EEF2FF; color: #4338CA; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .voice-btn { width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .sentence { font-size: 20px; font-weight: 600; color: #111827; line-height: 2.2; }
+    /* Typed input blank */
+    .type-area { display: flex; flex-direction: column; gap: 8px; }
+    .type-label { font-size: 12px; font-weight: 600; color: #6B7280; }
+    .type-input-wrap { position: relative; }
+    .type-input { width: 100%; padding: 14px 48px 14px 16px; font-size: 18px; font-weight: 600; color: #111827; background: #F9FAFB; border: 2.5px solid #9CA3AF; border-radius: 12px; outline: none; transition: all 0.15s; font-family: inherit; }
+    .type-input:focus { border-color: #6366F1; background: #fff; box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+    .type-input.correct { border-color: #22C55E; background: #F0FDF4; }
+    .type-input.wrong { border-color: #EF4444; background: #FEF2F2; }
+    .clear-btn { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; background: #E5E7EB; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #6B7280; cursor: pointer; border: none; }
+    .clear-btn:hover { background: #D1D5DB; }
+    /* Keyboard hint */
+    .kbd-hint { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .kbd-hint-text { font-size: 12px; color: #9CA3AF; }
+    .kbd { background: #F3F4F6; border: 1px solid #D1D5DB; border-bottom: 2px solid #9CA3AF; border-radius: 4px; padding: 2px 7px; font-size: 11px; font-weight: 600; color: #4B5563; font-family: monospace; }
+    /* Attempts */
+    .attempts-row { display: flex; align-items: center; gap: 6px; }
+    .attempts-label { font-size: 12px; color: #9CA3AF; }
+    .attempt-dot { width: 8px; height: 8px; border-radius: 50%; background: #22C55E; }
+    .attempt-dot.used { background: #E5E7EB; }
+    .feedback-banner { border-radius: 12px; padding: 12px 14px; display: none; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.5; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 23 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 280 XP</div>
+  </div>
+  <div class="streak">&#128293; 4x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#128218; English</div>
+      <div class="voice-btn">&#128266;</div>
+    </div>
+    <div class="q-label">Fill in the blank — type your answer</div>
+    <div class="sentence">
+      The process by which plants make their own food using sunlight is called ___________.
+    </div>
+
+    <div class="type-area">
+      <div class="type-label">&#9999;&#65039; Type your answer below</div>
+      <div class="type-input-wrap">
+        <input class="type-input" id="ans" type="text" placeholder="Type here..." autocomplete="off" autocorrect="off" spellcheck="false" oninput="onType()" />
+        <button class="clear-btn" onclick="clearInput()">&#10005;</button>
+      </div>
+      <div class="kbd-hint">
+        <span class="kbd-hint-text">Tip: Press</span>
+        <span class="kbd">Enter</span>
+        <span class="kbd-hint-text">to check your answer</span>
+      </div>
+    </div>
+
+    <div class="attempts-row">
+      <span class="attempts-label">Attempts left:</span>
+      <div class="attempt-dot" id="a1"></div>
+      <div class="attempt-dot" id="a2"></div>
+      <div class="attempt-dot" id="a3"></div>
+    </div>
+
+    <div class="feedback-banner" id="fb">
+      <div class="fb-top">
+        <div class="fb-label c" id="fbl">&#10003; Correct!</div>
+        <div class="xp-badge" id="xpb">+15 XP</div>
+      </div>
+      <div class="fb-exp" id="fb-exp">Photosynthesis converts CO&#8322; + H&#8322;O + sunlight into glucose and oxygen.</div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="check()">Check Answer &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-play-fitb-diagram.mockup.html'">Next Question &#8594;</button>
+  </div>
+  <script>
+    let attempts = 0;
+    const correct = 'photosynthesis';
+    const attemptDots = ['a1','a2','a3'];
+    function onType() {
+      const val = document.getElementById('ans').value.trim();
+      document.getElementById('sub').classList.toggle('active', val.length > 0);
+    }
+    function clearInput() {
+      document.getElementById('ans').value = '';
+      document.getElementById('ans').classList.remove('correct','wrong');
+      document.getElementById('sub').classList.remove('active');
+      document.getElementById('ans').focus();
+    }
+    document.getElementById('ans').addEventListener('keydown', e => {
+      if (e.key === 'Enter') check();
+    });
+    function check() {
+      const val = document.getElementById('ans').value.trim().toLowerCase();
+      if (!val) return;
+      const ok = val === correct || val === 'photo synthesis';
+      const input = document.getElementById('ans');
+      input.classList.remove('correct','wrong');
+      const fb = document.getElementById('fb');
+      if (ok) {
+        input.classList.add('correct');
+        fb.style.display = 'block'; fb.className = 'feedback-banner ok';
+        document.getElementById('fbl').className = 'fb-label c';
+        document.getElementById('fbl').textContent = '\u2713 Correct! Well done!';
+        document.getElementById('xpb').style.display = 'inline-block';
+        document.getElementById('fb-exp').textContent = 'Photosynthesis converts CO\u2082 + H\u2082O + sunlight into glucose and oxygen.';
+        document.getElementById('sub').style.display = 'none';
+        document.getElementById('nxt').style.display = 'block';
+        input.disabled = true;
+      } else {
+        input.classList.add('wrong');
+        attempts++;
+        if (attempts <= 3) { document.getElementById(attemptDots[attempts-1]).classList.add('used'); }
+        if (attempts >= 3) {
+          fb.style.display = 'block'; fb.className = 'feedback-banner err';
+          document.getElementById('fbl').className = 'fb-label w';
+          document.getElementById('fbl').textContent = '\u2717 The answer is: photosynthesis';
+          document.getElementById('xpb').style.display = 'none';
+          document.getElementById('fb-exp').textContent = 'Photosynthesis (photo = light, synthesis = making) is the process plants use to produce food.';
+          document.getElementById('sub').style.display = 'none';
+          document.getElementById('nxt').style.display = 'block';
+          input.disabled = true;
+        } else {
+          setTimeout(() => { input.classList.remove('wrong'); input.value = ''; input.focus(); }, 600);
+        }
+      }
+    }
+  </script>
+</body>
+</html>

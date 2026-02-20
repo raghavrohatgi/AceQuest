@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Sign Up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .nav-title {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 0.02em;
+  }
+  .nav-spacer { width: 34px; flex-shrink: 0; }
+
+  /* Hero text */
+  .hero-text {
+    padding: 20px 24px 0;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .hero-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+  .hero-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* ── "Play first" banner ── */
+  .play-first-banner {
+    margin: 12px 20px 0;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .pf-icon { font-size: 22px; flex-shrink: 0; }
+  .pf-text { font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.4; }
+  .pf-text strong { color: #fff; font-weight: 700; }
+  .pf-skip {
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 700;
+    color: #FDE68A;
+    white-space: nowrap;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 16px;
+    padding: 24px 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Social login buttons */
+  .social-row {
+    display: flex;
+    gap: 10px;
+  }
+  .social-btn {
+    flex: 1;
+    height: 46px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+  }
+  .social-icon { font-size: 18px; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: #E5E7EB; }
+  .divider-text { font-size: 12px; color: #9CA3AF; font-weight: 600; white-space: nowrap; }
+
+  /* Two-column row for form fields */
+  .field-row {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .field-row .field-group { flex: 1; min-width: 0; }
+
+  /* Form fields */
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .field-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    letter-spacing: 0.02em;
+  }
+  .field-input {
+    height: 48px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 14px;
+    color: #111827;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #F9FAFB;
+    width: 100%;
+  }
+  .field-input:focus { border-color: #6366F1; background: #fff; }
+  .field-input::placeholder { color: #9CA3AF; }
+
+  /* Phone field with country code */
+  .phone-row { display: flex; gap: 8px; }
+  .country-code {
+    height: 48px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    background: #F9FAFB;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Grade selector */
+  .grade-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .grade-chip {
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1.5px solid #E5E7EB;
+    background: #F9FAFB;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .grade-chip.active { border-color: #6366F1; background: #EEF2FF; color: #6366F1; }
+
+  /* Terms */
+  .terms-text {
+    font-size: 11px;
+    color: #9CA3AF;
+    text-align: center;
+    line-height: 1.5;
+    padding-bottom: 8px;
+    flex-shrink: 0;
+  }
+  .terms-text a { color: #6366F1; text-decoration: none; font-weight: 600; }
+
+  /* Bottom */
+  .bottom {
+    background: #fff;
+    padding: 12px 20px 36px;
+    flex-shrink: 0;
+    border-top: 1px solid #F3F4F6;
+  }
+  .btn-primary {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    margin-bottom: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .login-row {
+    text-align: center;
+    font-size: 13px;
+    color: #6B7280;
+  }
+  .login-row a { color: #6366F1; font-weight: 700; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="onboarding-welcome.mockup.html">←</a>
+  <div class="nav-title">Create Account</div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- Hero -->
+<div class="hero-text">
+  <div class="hero-title">Join AceQuest 🎓</div>
+  <div class="hero-sub">Save your progress & compete with friends</div>
+</div>
+
+<!-- Play first banner -->
+<div class="play-first-banner">
+  <div class="pf-icon">🎮</div>
+  <div class="pf-text"><strong>Not ready yet?</strong> You can start playing without an account and register later.</div>
+  <a class="pf-skip" href="onboarding-avatar.mockup.html">Play first →</a>
+</div>
+
+<!-- White card -->
+<div class="card">
+
+  <!-- Social login -->
+  <div class="social-row">
+    <button class="social-btn"><span class="social-icon">🔵</span> Google</button>
+    <button class="social-btn"><span class="social-icon">🍎</span> Apple</button>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">or sign up with</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Row 1: Mobile + Email -->
+  <div class="field-row">
+    <div class="field-group">
+      <div class="field-label">Mobile Number</div>
+      <div class="phone-row">
+        <div class="country-code">🇮🇳 +91 ▾</div>
+        <input class="field-input" type="tel" placeholder="Mobile" style="flex:1;min-width:0">
+      </div>
+    </div>
+    <div class="field-group">
+      <div class="field-label">Email <span style="color:#9CA3AF;font-weight:400">(optional)</span></div>
+      <input class="field-input" type="email" placeholder="you@example.com">
+    </div>
+  </div>
+
+  <!-- Row 2: Name + Grade -->
+  <div class="field-row">
+    <div class="field-group">
+      <div class="field-label">Child's Name</div>
+      <input class="field-input" type="text" placeholder="e.g. Arjun">
+    </div>
+    <div class="field-group">
+      <div class="field-label">Grade</div>
+      <select class="field-input" style="cursor:pointer">
+        <option>Grade 3</option>
+        <option>Grade 4</option>
+        <option selected>Grade 5</option>
+        <option>Grade 6</option>
+        <option>Grade 7</option>
+        <option>Grade 8</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="terms-text">
+    By signing up you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+    We'll send an OTP to verify your number.
+  </div>
+
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom">
+  <a class="btn-primary" href="onboarding-otp.mockup.html">Send OTP & Continue →</a>
+  <div class="login-row">Already have an account? <a href="onboarding-login.mockup.html">Log in</a></div>
+</div>
+
+</body>
+</html>

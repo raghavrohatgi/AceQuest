@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - FITB Passage</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Gurmukhi', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 70%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 18px 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .topic-badge { background: #FDF4FF; color: #7E22CE; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .voice-btn { width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    /* Progress dots for multiple blanks */
+    .progress-row { display: flex; align-items: center; gap: 8px; }
+    .progress-label { font-size: 12px; color: #9CA3AF; font-weight: 600; }
+    .prog-dots { display: flex; gap: 5px; }
+    .prog-dot { width: 20px; height: 20px; border-radius: 50%; background: #E5E7EB; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: #9CA3AF; transition: all 0.2s; }
+    .prog-dot.done { background: #6366F1; color: #fff; }
+    /* Passage */
+    .passage-box { background: #FAFAFA; border-left: 4px solid #6366F1; border-radius: 0 10px 10px 0; padding: 14px 16px; }
+    .passage-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #6366F1; margin-bottom: 8px; }
+    .passage-text { font-size: 14px; color: #374151; line-height: 2.0; }
+    .blank { display: inline-flex; align-items: center; justify-content: center; min-width: 80px; height: 28px; border-bottom: 2.5px solid #9CA3AF; background: #F9FAFB; border-radius: 4px 4px 0 0; padding: 0 8px; font-size: 13px; font-weight: 700; color: #9CA3AF; cursor: pointer; vertical-align: middle; margin: 0 2px; transition: all 0.15s; }
+    .blank.active-blank { border-bottom-color: #F59E0B; background: #FFFBEB; color: #92400E; }
+    .blank.filled { border-bottom-color: #6366F1; background: #EEF2FF; color: #4338CA; position: relative; }
+    .blank.filled::after { content: '×'; position: absolute; top: -7px; right: -7px; width: 14px; height: 14px; background: #6366F1; color: #fff; border-radius: 50%; font-size: 9px; font-weight: 700; display: flex; align-items: center; justify-content: center; line-height: 14px; text-align: center; }
+    .blank.correct { border-bottom-color: #22C55E; background: #F0FDF4; color: #16A34A; }
+    .blank.wrong { border-bottom-color: #EF4444; background: #FEF2F2; color: #DC2626; text-decoration: line-through; }
+    .blank-num { font-size: 9px; vertical-align: super; margin-right: 2px; color: #9CA3AF; }
+    .wb-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .word-bank { display: flex; flex-wrap: wrap; gap: 8px; }
+    .word-chip { background: #F3F4F6; border: 2px solid #D1D5DB; border-radius: 8px; padding: 7px 14px; font-size: 14px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .word-chip:hover { border-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .word-chip.used { background: #F9FAFB; border-color: #E5E7EB; color: #D1D5DB; cursor: default; text-decoration: line-through; pointer-events: none; }
+    .feedback-banner { border-radius: 12px; padding: 12px 14px; display: none; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.5; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 27 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 330 XP</div>
+  </div>
+  <div class="streak">&#128293; 2x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#128214; Reading</div>
+      <div class="voice-btn">&#128266;</div>
+    </div>
+    <div class="q-label">Fill in the blanks — read and complete</div>
+
+    <div class="progress-row">
+      <span class="progress-label">Blanks filled:</span>
+      <div class="prog-dots">
+        <div class="prog-dot" id="pd1">1</div>
+        <div class="prog-dot" id="pd2">2</div>
+        <div class="prog-dot" id="pd3">3</div>
+      </div>
+    </div>
+
+    <div class="passage-box">
+      <div class="passage-title">&#128218; Read the passage carefully</div>
+      <div class="passage-text">
+        The water cycle is the continuous movement of water through Earth's systems.
+        Water evaporates from oceans and lakes to form
+        <span class="blank active-blank" id="b1" onclick="activateBlank('b1')"><span class="blank-num">1</span>____</span>.
+        These rise and cool, eventually falling back to Earth as
+        <span class="blank" id="b2" onclick="activateBlank('b2')"><span class="blank-num">2</span>____</span>.
+        The water then flows into rivers and lakes, a process called
+        <span class="blank" id="b3" onclick="activateBlank('b3')"><span class="blank-num">3</span>____</span>,
+        and the cycle begins again.
+      </div>
+    </div>
+
+    <div class="wb-label">Word Bank — tap a filled blank to clear it &amp; pick again</div>
+    <div class="word-bank">
+      <div class="word-chip" onclick="fillBlank(this,'clouds')">clouds</div>
+      <div class="word-chip" onclick="fillBlank(this,'precipitation')">precipitation</div>
+      <div class="word-chip" onclick="fillBlank(this,'runoff')">runoff</div>
+      <div class="word-chip" onclick="fillBlank(this,'fog')">fog</div>
+      <div class="word-chip" onclick="fillBlank(this,'erosion')">erosion</div>
+    </div>
+
+    <div class="feedback-banner" id="fb">
+      <div class="fb-top">
+        <div class="fb-label c" id="fbl">&#10003; All blanks filled correctly!</div>
+        <div class="xp-badge" id="xpb">+25 XP</div>
+      </div>
+      <div class="fb-exp" id="fb-exp">Great work! Clouds &#8594; Precipitation &#8594; Runoff are the three key steps in the water cycle.</div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="check()">Check Answer &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-play-match-text.mockup.html'">Next Question &#8594;</button>
+  </div>
+  <script>
+    const answers = { b1: null, b2: null, b3: null };
+    const correct = { b1: 'clouds', b2: 'precipitation', b3: 'runoff' };
+    const chipMap = {};
+    let activeBlankId = 'b1';
+
+    function activateBlank(id) {
+      const b = document.getElementById(id);
+      // If already filled, clear it so the student can re-answer
+      if (b.classList.contains('filled')) {
+        clearBlank(id);
+        return;
+      }
+      document.querySelectorAll('.blank').forEach(el => el.classList.remove('active-blank'));
+      b.classList.add('active-blank');
+      activeBlankId = id;
+    }
+
+    function clearBlank(id) {
+      const b = document.getElementById(id);
+      // Restore chip
+      const chip = chipMap[id];
+      if (chip) chip.classList.remove('used');
+      delete chipMap[id];
+      answers[id] = null;
+      const idx = id.replace('b','');
+      b.innerHTML = '<span class="blank-num">' + idx + '</span>____';
+      b.classList.remove('filled', 'active-blank');
+      // Un-fill progress dot
+      document.getElementById('pd' + idx).classList.remove('done');
+      // Set this blank as active
+      document.querySelectorAll('.blank').forEach(el => el.classList.remove('active-blank'));
+      b.classList.add('active-blank');
+      activeBlankId = id;
+      // Disable submit
+      document.getElementById('sub').classList.remove('active');
+    }
+
+    function fillBlank(chip, word) {
+      if (chip.classList.contains('used') || !activeBlankId) return;
+      const b = document.getElementById(activeBlankId);
+      if (b.classList.contains('filled')) return;
+      // Mark chip used
+      chip.classList.add('used');
+      chipMap[activeBlankId] = chip;
+      answers[activeBlankId] = word;
+      b.innerHTML = '<span class="blank-num">' + activeBlankId.replace('b','') + '</span>' + word;
+      b.classList.remove('active-blank');
+      b.classList.add('filled');
+      // Update progress dots
+      const idx = parseInt(activeBlankId.replace('b',''));
+      document.getElementById('pd' + idx).classList.add('done');
+      // Move to next unfilled blank
+      const all = ['b1','b2','b3'];
+      const nextEmpty = all.find(id => answers[id] === null);
+      if (nextEmpty) activateBlank(nextEmpty); else activeBlankId = null;
+      // Enable submit if all filled
+      const allFilled = Object.values(answers).every(v => v !== null);
+      document.getElementById('sub').classList.toggle('active', allFilled);
+    }
+
+    function check() {
+      const allFilled = Object.values(answers).every(v => v !== null);
+      if (!allFilled) return;
+      let allOk = true;
+      ['b1','b2','b3'].forEach(id => {
+        const b = document.getElementById(id);
+        const ok = answers[id] === correct[id];
+        b.classList.remove('filled','active-blank');
+        b.classList.add(ok ? 'correct' : 'wrong');
+        if (!ok) allOk = false;
+      });
+      const fb = document.getElementById('fb');
+      fb.style.display = 'block';
+      fb.className = 'feedback-banner ' + (allOk ? 'ok' : 'err');
+      document.getElementById('fbl').className = 'fb-label ' + (allOk ? 'c' : 'w');
+      document.getElementById('fbl').textContent = allOk ? '\u2713 All correct! Amazing!' : '\u2717 Some blanks are wrong';
+      document.getElementById('xpb').style.display = allOk ? 'inline-block' : 'none';
+      if (!allOk) {
+        document.getElementById('fb-exp').textContent = 'Correct answers: 1) clouds, 2) precipitation, 3) runoff.';
+      }
+      document.getElementById('sub').style.display = 'none';
+      document.getElementById('nxt').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

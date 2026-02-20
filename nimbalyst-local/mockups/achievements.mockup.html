@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Achievements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F9FAFB;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: #F3F4F6;
+    border: none; border-radius: 50%;
+    color: #374151; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-title { flex: 1; text-align: center; font-size: 16px; font-weight: 800; color: #111827; }
+  .nav-spacer { width: 34px; }
+
+  /* Scroll body */
+  .body-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* Summary banner */
+  .summary-banner {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 18px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .summary-avatar {
+    width: 56px; height: 56px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
+  }
+  .summary-info { flex: 1; }
+  .summary-name { font-size: 16px; font-weight: 800; color: #fff; }
+  .summary-xp { font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+  .summary-count {
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .summary-count-num { font-size: 28px; font-weight: 800; color: #FDE68A; }
+  .summary-count-label { font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+
+  /* XP bar */
+  .xp-bar-wrap {
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    height: 6px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .xp-bar-fill {
+    height: 100%;
+    width: 72%;
+    background: linear-gradient(90deg, #FDE68A, #F59E0B);
+    border-radius: 3px;
+  }
+  .xp-bar-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 4px;
+  }
+
+  /* Filter tabs */
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .filter-tab {
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid #E5E7EB;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B7280;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .filter-tab.active {
+    border-color: #6366F1;
+    background: #EEF2FF;
+    color: #6366F1;
+  }
+
+  /* Section label */
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0 2px;
+    flex-shrink: 0;
+  }
+
+  /* Achievement grid */
+  .achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    flex-shrink: 0;
+  }
+
+  .ach-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border: 1.5px solid #F3F4F6;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.1s;
+  }
+  .ach-card:active { transform: scale(0.97); }
+  .ach-card.locked {
+    opacity: 0.45;
+    filter: grayscale(0.6);
+  }
+  .ach-card.new-badge::after {
+    content: 'NEW';
+    position: absolute;
+    top: -6px; right: -4px;
+    background: #EF4444;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+  }
+
+  .ach-icon { font-size: 32px; }
+  .ach-name { font-size: 10px; font-weight: 700; color: #374151; text-align: center; line-height: 1.3; }
+  .ach-xp { font-size: 10px; color: #6366F1; font-weight: 700; }
+  .ach-lock { font-size: 18px; }
+
+  /* Progress bar on card */
+  .ach-progress {
+    width: 100%;
+    height: 4px;
+    background: #F3F4F6;
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 2px;
+  }
+  .ach-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366F1, #4F46E5);
+    border-radius: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="student-profile.mockup.html">←</a>
+  <div class="nav-title">Achievements</div>
+  <div class="nav-spacer"></div>
+</div>
+
+<div class="body-scroll">
+
+  <!-- Summary banner -->
+  <div class="summary-banner">
+    <div class="summary-avatar">🦁</div>
+    <div class="summary-info">
+      <div class="summary-name">Arjun</div>
+      <div class="summary-xp">⚡ 2,480 XP · Level 12</div>
+      <div class="xp-bar-wrap"><div class="xp-bar-fill"></div></div>
+      <div class="xp-bar-label">720 XP to Level 13</div>
+    </div>
+    <div class="summary-count">
+      <div class="summary-count-num">14</div>
+      <div class="summary-count-label">Badges<br>Earned</div>
+    </div>
+  </div>
+
+  <!-- Filter tabs -->
+  <div class="filter-tabs">
+    <div class="filter-tab active">All</div>
+    <div class="filter-tab">🔥 Streaks</div>
+    <div class="filter-tab">📐 Math</div>
+    <div class="filter-tab">📖 English</div>
+    <div class="filter-tab">🔬 Science</div>
+    <div class="filter-tab">🏆 Special</div>
+  </div>
+
+  <!-- Earned -->
+  <div class="section-label">🏆 Earned (14)</div>
+  <div class="achievement-grid">
+
+    <div class="ach-card new-badge">
+      <div class="ach-icon">🔥</div>
+      <div class="ach-name">7-Day Streak</div>
+      <div class="ach-xp">+100 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">⚡</div>
+      <div class="ach-name">Speed Demon</div>
+      <div class="ach-xp">+50 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🎯</div>
+      <div class="ach-name">Perfect Score</div>
+      <div class="ach-xp">+75 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🌟</div>
+      <div class="ach-name">First Game</div>
+      <div class="ach-xp">+25 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">📚</div>
+      <div class="ach-name">Bookworm</div>
+      <div class="ach-xp">+60 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🧠</div>
+      <div class="ach-name">Big Brain</div>
+      <div class="ach-xp">+80 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🥇</div>
+      <div class="ach-name">Top of Class</div>
+      <div class="ach-xp">+120 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🎮</div>
+      <div class="ach-name">10 Games</div>
+      <div class="ach-xp">+50 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🦅</div>
+      <div class="ach-name">Eagle Eye</div>
+      <div class="ach-xp">+40 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🌍</div>
+      <div class="ach-name">Explorer</div>
+      <div class="ach-xp">+35 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🚀</div>
+      <div class="ach-name">Rocket Start</div>
+      <div class="ach-xp">+45 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">💎</div>
+      <div class="ach-name">Diamond</div>
+      <div class="ach-xp">+200 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🎵</div>
+      <div class="ach-name">Rhythm King</div>
+      <div class="ach-xp">+30 XP</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🏅</div>
+      <div class="ach-name">Champion</div>
+      <div class="ach-xp">+150 XP</div>
+    </div>
+
+  </div>
+
+  <!-- In Progress -->
+  <div class="section-label">⏳ In Progress (3)</div>
+  <div class="achievement-grid">
+
+    <div class="ach-card">
+      <div class="ach-icon">🔥</div>
+      <div class="ach-name">30-Day Streak</div>
+      <div class="ach-progress"><div class="ach-progress-fill" style="width:23%"></div></div>
+      <div class="ach-xp" style="color:#9CA3AF">7/30 days</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🎯</div>
+      <div class="ach-name">5 Perfect Scores</div>
+      <div class="ach-progress"><div class="ach-progress-fill" style="width:60%"></div></div>
+      <div class="ach-xp" style="color:#9CA3AF">3/5 done</div>
+    </div>
+
+    <div class="ach-card">
+      <div class="ach-icon">🏆</div>
+      <div class="ach-name">50 Games</div>
+      <div class="ach-progress"><div class="ach-progress-fill" style="width:24%"></div></div>
+      <div class="ach-xp" style="color:#9CA3AF">12/50 games</div>
+    </div>
+
+  </div>
+
+  <!-- Locked -->
+  <div class="section-label">🔒 Locked (8)</div>
+  <div class="achievement-grid">
+
+    <div class="ach-card locked">
+      <div class="ach-lock">🔒</div>
+      <div class="ach-icon" style="font-size:20px;opacity:0.4">🌙</div>
+      <div class="ach-name">Night Owl</div>
+    </div>
+
+    <div class="ach-card locked">
+      <div class="ach-lock">🔒</div>
+      <div class="ach-icon" style="font-size:20px;opacity:0.4">👑</div>
+      <div class="ach-name">King of Math</div>
+    </div>
+
+    <div class="ach-card locked">
+      <div class="ach-lock">🔒</div>
+      <div class="ach-icon" style="font-size:20px;opacity:0.4">🌈</div>
+      <div class="ach-name">All Subjects</div>
+    </div>
+
+    <div class="ach-card locked">
+      <div class="ach-lock">🔒</div>
+      <div class="ach-icon" style="font-size:20px;opacity:0.4">🦄</div>
+      <div class="ach-name">Unicorn</div>
+    </div>
+
+    <div class="ach-card locked">
+      <div class="ach-lock">🔒</div>
+      <div class="ach-icon" style="font-size:20px;opacity:0.4">⚡</div>
+      <div class="ach-name">Lightning</div>
+    </div>
+
+    <div class="ach-card locked">
+      <div class="ach-lock">🔒</div>
+      <div class="ach-icon" style="font-size:20px;opacity:0.4">🧪</div>
+      <div class="ach-name">Scientist</div>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Concept Video</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .skip-btn {
+    margin-left: auto;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 6px 14px;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  /* Progress context */
+  .progress-strip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px 0;
+    flex-shrink: 0;
+  }
+  .progress-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 45%;
+    background: linear-gradient(90deg, #FDE68A, #F59E0B);
+    border-radius: 3px;
+  }
+  .progress-count {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* Interstitial label */
+  .interstitial-badge {
+    margin: 12px 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .badge-pill {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #FDE68A;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .badge-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+  }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Video area */
+  .video-wrapper {
+    background: #000;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    flex-shrink: 0;
+  }
+  .video-thumb {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+  }
+  .play-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .play-btn {
+    width: 64px; height: 64px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    padding-left: 4px;
+  }
+  .video-title-overlay {
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    padding: 0 24px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+  /* Video progress bar */
+  .video-progress {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 8px 12px;
+    background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .vp-time { font-size: 10px; color: #fff; font-weight: 600; white-space: nowrap; }
+  .vp-bar { flex: 1; height: 3px; background: rgba(255,255,255,0.3); border-radius: 2px; }
+  .vp-fill { width: 0%; height: 100%; background: #FDE68A; border-radius: 2px; }
+  .vp-vol { font-size: 14px; color: #fff; cursor: pointer; }
+
+  /* Info section */
+  .video-info {
+    padding: 16px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+  }
+
+  .video-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.3;
+  }
+  .video-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .meta-chip {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: #F3F4F6;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #6B7280;
+  }
+
+  .divider { height: 1px; background: #F3F4F6; flex-shrink: 0; }
+
+  /* Key concepts */
+  .concepts-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .concepts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .concept-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .concept-dot {
+    width: 8px; height: 8px;
+    background: #6366F1;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .concept-text { font-size: 13px; color: #374151; }
+
+  /* Bottom CTA */
+  .bottom {
+    background: #fff;
+    padding: 12px 20px 36px;
+    flex-shrink: 0;
+    border-top: 1px solid #F3F4F6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-primary {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-ghost {
+    text-align: center;
+    font-size: 13px;
+    color: #9CA3AF;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);">📐 Mathematics · Grade 5</div>
+  <a class="skip-btn" href="game-play.mockup.html">Skip ›</a>
+</div>
+
+<!-- Progress strip -->
+<div class="progress-strip">
+  <div class="progress-label">Q 9 of 20</div>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <div class="progress-count">⚡ 480 XP</div>
+</div>
+
+<!-- Interstitial badge -->
+<div class="interstitial-badge">
+  <div class="badge-pill">🎬 Concept Video</div>
+  <div class="badge-sub">Watch before the next set</div>
+</div>
+
+<!-- White card -->
+<div class="card">
+
+  <!-- Video player -->
+  <div class="video-wrapper">
+    <div class="video-thumb"></div>
+    <div class="play-overlay">
+      <div class="play-btn">▶</div>
+      <div class="video-title-overlay">Understanding Fractions — Part 2</div>
+    </div>
+    <div class="video-progress">
+      <div class="vp-time">0:00</div>
+      <div class="vp-bar"><div class="vp-fill"></div></div>
+      <div class="vp-time">3:24</div>
+      <div class="vp-vol">🔊</div>
+    </div>
+  </div>
+
+  <!-- Info -->
+  <div class="video-info">
+    <div class="video-title">Understanding Fractions — Adding Unlike Denominators</div>
+    <div class="video-meta">
+      <div class="meta-chip">⏱ 3 min 24 sec</div>
+      <div class="meta-chip">📐 Fractions</div>
+      <div class="meta-chip">⭐ Grade 5</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="concepts-label">Key Concepts in this video</div>
+    <div class="concepts-list">
+      <div class="concept-row"><div class="concept-dot"></div><div class="concept-text">Finding the Lowest Common Denominator (LCD)</div></div>
+      <div class="concept-row"><div class="concept-dot"></div><div class="concept-text">Converting fractions to equivalent form</div></div>
+      <div class="concept-row"><div class="concept-dot"></div><div class="concept-text">Adding fractions step by step</div></div>
+      <div class="concept-row"><div class="concept-dot"></div><div class="concept-text">Simplifying the result</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom">
+  <a class="btn-primary" href="game-play.mockup.html">Continue Playing →</a>
+  <a class="btn-ghost" href="game-play.mockup.html">Skip video</a>
+</div>
+
+</body>
+</html>

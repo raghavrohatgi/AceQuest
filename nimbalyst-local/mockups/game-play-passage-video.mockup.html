@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Video Passage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Gurmukhi', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HUD */
+  .hud {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    flex-shrink: 0;
+  }
+  .pause-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .progress-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    text-align: center;
+  }
+  .progress-track {
+    height: 7px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 57.9%;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .xp-badge {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Streak banner */
+  .streak-banner {
+    margin: 0 16px 10px;
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    margin: 0 16px 0;
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topic-badge {
+    background: #FDF4FF;
+    color: #6B21A8;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+  }
+
+  .q-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .passage-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    flex-shrink: 0;
+  }
+  .source-row {
+    font-size: 11px;
+    color: #6B7280;
+    flex-shrink: 0;
+  }
+
+  /* ── Video player (compact by default, expandable) ── */
+  .video-wrapper {
+    flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #1F2937;
+    position: relative;
+  }
+  /* Compact mode: fixed height, thumbnail-style */
+  .video-wrapper.compact {
+    height: 160px;
+  }
+  /* Expanded mode: 16:9 */
+  .video-wrapper.expanded {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    height: auto;
+  }
+
+  .video-volcano {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    font-size: 42px;
+  }
+  .video-wrapper.compact .video-volcano { font-size: 32px; top: 38%; }
+
+  .video-title-overlay {
+    position: absolute;
+    bottom: 32px;
+    left: 12px;
+    color: rgba(255,255,255,0.9);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .video-wrapper.compact .video-title-overlay { display: none; }
+
+  .play-btn {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.92);
+    border: none;
+    border-radius: 50%;
+    font-size: 18px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    transition: transform 0.1s;
+    z-index: 2;
+  }
+  .play-btn:active { transform: translate(-50%, -50%) scale(0.93); }
+
+  /* Expand/collapse button — top-right corner of video */
+  .expand-btn {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 28px; height: 28px;
+    background: rgba(0,0,0,0.55);
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 3;
+  }
+
+  .scrubber {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 28px;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    gap: 8px;
+    z-index: 2;
+  }
+  .time-display {
+    color: #fff;
+    font-size: 11px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .progress-bar-track {
+    flex: 1;
+    height: 3px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 2px;
+    position: relative;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #6366F1;
+    border-radius: 2px;
+    transition: width 0.5s linear;
+  }
+  .fullscreen-icon {
+    color: #fff;
+    font-size: 14px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Transcript */
+  .transcript-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    background: white;
+    cursor: pointer;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+  .transcript-panel {
+    display: none;
+    background: #F9FAFB;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 12px;
+    color: #374151;
+    line-height: 1.6;
+    max-height: 100px;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .transcript-panel.show { display: block; }
+
+  .speaker-row {
+    font-size: 11px;
+    color: #6B7280;
+    flex-shrink: 0;
+  }
+
+  /* Bottom section */
+  .bottom {
+    background: transparent;
+    padding: 10px 16px 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+  .btn-primary {
+    flex: 1;
+    padding: 14px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: block;
+    text-align: center;
+  }
+  .btn-secondary {
+    flex: 0 0 auto;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div class="hud">
+  <button class="pause-btn">⏸</button>
+  <div class="progress-wrap">
+    <div class="progress-label">Q 22 / 38</div>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+  </div>
+  <div class="xp-badge">⚡ 275 XP</div>
+</div>
+
+<!-- Streak Banner -->
+<div class="streak-banner">🔥 2x Combo!</div>
+
+<!-- White Card (scrollable) -->
+<div class="card">
+  <div class="card-top">
+    <span class="topic-badge">🌋 Science</span>
+  </div>
+
+  <div class="q-label">VIDEO PASSAGE</div>
+  <div class="passage-title">How Do Volcanoes Erupt?</div>
+  <div class="source-row">🏷️ Source: BBC Learning</div>
+
+  <!-- Video player (compact by default) -->
+  <div class="video-wrapper compact" id="videoWrapper">
+    <div class="video-volcano">🌋</div>
+    <div class="video-title-overlay">How Do Volcanoes Erupt?</div>
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+    <button class="expand-btn" id="expandBtn" onclick="toggleExpand()" title="Expand">⤢</button>
+    <div class="scrubber">
+      <span class="time-display" id="timeDisplay">0:00 / 3:42</span>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" id="videoProgress"></div>
+      </div>
+      <span class="fullscreen-icon">⛶</span>
+    </div>
+  </div>
+
+  <!-- Transcript toggle -->
+  <button class="transcript-toggle" onclick="toggleTranscript()">
+    📝 <span id="transcriptLabel">Show Transcript</span>
+  </button>
+
+  <!-- Transcript panel -->
+  <div class="transcript-panel" id="transcriptPanel">
+    A volcano is an opening in Earth's surface where molten rock, gases, and ash can escape from below the surface. When pressure builds up inside the Earth, it forces magma upward through the vent. The dramatic explosion we see is called an eruption. Volcanoes can be found on land and under the ocean.
+  </div>
+
+  <div class="speaker-row">🎙️ Narrator: Dr. Jane Smith, Geologist</div>
+</div>
+
+<!-- Bottom Section -->
+<div class="bottom">
+  <a class="btn-secondary" href="game-play-passage-cover.mockup.html">← Back</a>
+  <a class="btn-primary" href="game-play-passage-question.mockup.html?type=video">Go to Questions →</a>
+</div>
+
+<script>
+  let isPlaying = false;
+  let progressInterval = null;
+  let progressPct = 0;
+  let elapsed = 0;
+  const totalSeconds = 222; // 3:42
+  let isExpanded = false;
+
+  function togglePlay() {
+    isPlaying = !isPlaying;
+    const btn = document.getElementById('playBtn');
+    btn.textContent = isPlaying ? '⏸' : '▶';
+
+    if (isPlaying) {
+      progressInterval = setInterval(() => {
+        elapsed += 1;
+        if (elapsed >= totalSeconds) { elapsed = totalSeconds; isPlaying = false; clearInterval(progressInterval); btn.textContent = '▶'; }
+        progressPct = (elapsed / totalSeconds) * 100;
+        document.getElementById('videoProgress').style.width = progressPct + '%';
+        const m = Math.floor(elapsed / 60);
+        const s = elapsed % 60;
+        document.getElementById('timeDisplay').textContent = m + ':' + String(s).padStart(2,'0') + ' / 3:42';
+      }, 1000);
+    } else {
+      clearInterval(progressInterval);
+    }
+  }
+
+  function toggleExpand() {
+    const wrapper = document.getElementById('videoWrapper');
+    const btn = document.getElementById('expandBtn');
+    isExpanded = !isExpanded;
+    if (isExpanded) {
+      wrapper.classList.remove('compact');
+      wrapper.classList.add('expanded');
+      btn.textContent = '⤡';
+      btn.title = 'Collapse';
+    } else {
+      wrapper.classList.remove('expanded');
+      wrapper.classList.add('compact');
+      btn.textContent = '⤢';
+      btn.title = 'Expand';
+    }
+  }
+
+  function toggleTranscript() {
+    const panel = document.getElementById('transcriptPanel');
+    const label = document.getElementById('transcriptLabel');
+    const showing = panel.classList.toggle('show');
+    label.textContent = showing ? 'Hide Transcript' : 'Show Transcript';
+  }
+</script>
+</body>
+</html>

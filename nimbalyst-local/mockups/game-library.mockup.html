@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Game Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F9FAFB;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    background: #fff;
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    flex-shrink: 0;
+    gap: 10px;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: #F3F4F6; border: none; border-radius: 50%;
+    color: #374151; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-title { flex: 1; font-size: 16px; font-weight: 800; color: #111827; }
+  .search-btn {
+    width: 34px; height: 34px;
+    background: #F3F4F6; border: none; border-radius: 50%;
+    color: #374151; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* Search bar */
+  .search-bar {
+    padding: 10px 16px;
+    background: #fff;
+    border-bottom: 1px solid #F3F4F6;
+    flex-shrink: 0;
+  }
+  .search-input-wrap {
+    background: #F3F4F6;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .search-icon { font-size: 16px; color: #9CA3AF; flex-shrink: 0; }
+  .search-input {
+    flex: 1; border: none; background: none;
+    font-size: 14px; font-family: inherit; color: #374151;
+    outline: none;
+  }
+  .search-input::placeholder { color: #9CA3AF; }
+
+  /* Subject tabs */
+  .subject-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #fff;
+    overflow-x: auto;
+    flex-shrink: 0;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .subject-tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid #E5E7EB;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6B7280;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .tab.active { border-color: #6366F1; background: #EEF2FF; color: #6366F1; }
+
+  /* Scroll body */
+  .body-scroll { flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 16px; }
+
+  /* Section label */
+  .section-label { font-size: 11px; font-weight: 800; color: #9CA3AF; letter-spacing: 0.08em; text-transform: uppercase; }
+
+  /* Horizontal scroll row */
+  .h-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+  .h-scroll::-webkit-scrollbar { display: none; }
+
+  /* Featured card (wide) */
+  .featured-card {
+    flex-shrink: 0;
+    width: 220px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    border-radius: 18px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+  .featured-card::after {
+    content: '';
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+  }
+  .fc-subject { font-size: 10px; font-weight: 800; color: rgba(255,255,255,0.75); text-transform: uppercase; letter-spacing: 0.06em; }
+  .fc-title { font-size: 15px; font-weight: 800; color: #fff; line-height: 1.3; }
+  .fc-meta { font-size: 11px; color: rgba(255,255,255,0.75); }
+  .fc-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .fc-chip {
+    background: rgba(255,255,255,0.2);
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 10px; font-weight: 700; color: #fff;
+  }
+  .fc-icon { font-size: 28px; position: absolute; top: 14px; right: 16px; }
+
+  /* Game card (list) */
+  .game-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    border: 1.5px solid #F3F4F6;
+    transition: border-color 0.15s;
+  }
+  .game-card:hover { border-color: #C7D2FE; }
+  .game-card.completed { opacity: 0.7; }
+
+  .game-icon-box {
+    width: 50px; height: 50px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+  .game-info { flex: 1; min-width: 0; }
+  .game-title { font-size: 14px; font-weight: 700; color: #111827; }
+  .game-sub { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .game-badges { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 3px;
+    background: #F3F4F6; border-radius: 999px;
+    padding: 2px 8px; font-size: 10px; font-weight: 700; color: #6B7280;
+  }
+  .badge.green { background: #D1FAE5; color: #065F46; }
+  .badge.blue { background: #DBEAFE; color: #1D4ED8; }
+
+  .game-right { text-align: right; flex-shrink: 0; }
+  .game-xp { font-size: 12px; font-weight: 800; color: #6366F1; }
+  .game-questions { font-size: 11px; color: #9CA3AF; margin-top: 2px; }
+  .game-check { font-size: 18px; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: #fff;
+    border-top: 1px solid #F3F4F6;
+    display: flex;
+    padding: 8px 0 20px;
+    flex-shrink: 0;
+  }
+  .nav-item {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    font-size: 10px; font-weight: 700; color: #9CA3AF;
+    cursor: pointer; text-decoration: none;
+  }
+  .nav-item.active { color: #6366F1; }
+  .nav-icon { font-size: 20px; }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="student-home-dashboard.mockup.html">←</a>
+  <div class="nav-title">Game Library</div>
+  <button class="search-btn">🔍</button>
+</div>
+
+<!-- Search bar -->
+<div class="search-bar">
+  <div class="search-input-wrap">
+    <div class="search-icon">🔍</div>
+    <input class="search-input" type="text" placeholder="Search games, topics, grades…">
+  </div>
+</div>
+
+<!-- Subject tabs -->
+<div class="subject-tabs">
+  <div class="tab active">All</div>
+  <div class="tab">📐 Maths</div>
+  <div class="tab">📖 English</div>
+  <div class="tab">🔬 Science</div>
+  <div class="tab">🌍 Social Studies</div>
+  <div class="tab">🎨 Arts</div>
+</div>
+
+<!-- Body -->
+<div class="body-scroll">
+
+  <!-- Featured -->
+  <div class="section-label">🔥 Trending this week</div>
+  <div class="h-scroll">
+    <a class="featured-card" href="game-intro.mockup.html">
+      <div class="fc-icon">📐</div>
+      <div class="fc-subject">Mathematics</div>
+      <div class="fc-title">Fractions — Adding & Subtracting</div>
+      <div class="fc-meta">Grade 5 · 20 questions · ~8 min</div>
+      <div class="fc-chips">
+        <div class="fc-chip">⭐ Easy–Medium</div>
+        <div class="fc-chip">🏆 500 XP</div>
+      </div>
+    </a>
+
+    <a class="featured-card" href="game-intro.mockup.html" style="background:linear-gradient(135deg,#10B981,#059669)">
+      <div class="fc-icon">📖</div>
+      <div class="fc-subject">English</div>
+      <div class="fc-title">Reading Comprehension Level 2</div>
+      <div class="fc-meta">Grade 5 · 15 questions · ~10 min</div>
+      <div class="fc-chips">
+        <div class="fc-chip">📄 Passage</div>
+        <div class="fc-chip">🏆 400 XP</div>
+      </div>
+    </a>
+
+    <a class="featured-card" href="game-intro.mockup.html" style="background:linear-gradient(135deg,#F59E0B,#D97706)">
+      <div class="fc-icon">🔬</div>
+      <div class="fc-subject">Science</div>
+      <div class="fc-title">The Water Cycle</div>
+      <div class="fc-meta">Grade 5 · 18 questions · ~7 min</div>
+      <div class="fc-chips">
+        <div class="fc-chip">🎬 Video</div>
+        <div class="fc-chip">🏆 450 XP</div>
+      </div>
+    </a>
+  </div>
+
+  <!-- Continue -->
+  <div class="section-label">▶ Continue where you left off</div>
+
+  <a class="game-card" href="game-intro.mockup.html">
+    <div class="game-icon-box" style="background:#EEF2FF">📐</div>
+    <div class="game-info">
+      <div class="game-title">Fractions — Grade 5</div>
+      <div class="game-sub">Mathematics · 20 questions</div>
+      <div class="game-badges">
+        <div class="badge blue">▶ 11/20 done</div>
+        <div class="badge">⏱ 4 min left</div>
+      </div>
+    </div>
+    <div class="game-right">
+      <div class="game-xp">🏆 500 XP</div>
+      <div class="game-questions">~4 min left</div>
+    </div>
+  </a>
+
+  <!-- More to play -->
+  <div class="section-label">📚 More to play — Grade 5</div>
+
+  <a class="game-card" href="game-intro.mockup.html">
+    <div class="game-icon-box" style="background:#FEF3C7">📐</div>
+    <div class="game-info">
+      <div class="game-title">Decimals & Percentages</div>
+      <div class="game-sub">Mathematics · 20 questions</div>
+      <div class="game-badges">
+        <div class="badge">⭐ Medium</div>
+        <div class="badge">🏆 480 XP</div>
+      </div>
+    </div>
+    <div class="game-right">
+      <div class="game-xp">NEW</div>
+    </div>
+  </a>
+
+  <a class="game-card" href="game-intro.mockup.html">
+    <div class="game-icon-box" style="background:#D1FAE5">📖</div>
+    <div class="game-info">
+      <div class="game-title">Synonyms & Antonyms</div>
+      <div class="game-sub">English · 15 questions</div>
+      <div class="game-badges">
+        <div class="badge">⭐ Easy</div>
+      </div>
+    </div>
+    <div class="game-right">
+      <div class="game-xp">🏆 350 XP</div>
+    </div>
+  </a>
+
+  <a class="game-card completed" href="game-intro.mockup.html">
+    <div class="game-icon-box" style="background:#F3F4F6">🔬</div>
+    <div class="game-info">
+      <div class="game-title">Food Chains & Ecosystems</div>
+      <div class="game-sub">Science · 18 questions</div>
+      <div class="game-badges">
+        <div class="badge green">✓ Completed — 95%</div>
+      </div>
+    </div>
+    <div class="game-right">
+      <div class="game-check">✅</div>
+    </div>
+  </a>
+
+  <a class="game-card completed" href="game-intro.mockup.html">
+    <div class="game-icon-box" style="background:#F3F4F6">🌍</div>
+    <div class="game-info">
+      <div class="game-title">Indian States & Capitals</div>
+      <div class="game-sub">Social Studies · 25 questions</div>
+      <div class="game-badges">
+        <div class="badge green">✓ Completed — 88%</div>
+      </div>
+    </div>
+    <div class="game-right">
+      <div class="game-check">✅</div>
+    </div>
+  </a>
+
+</div>
+
+<!-- Bottom nav -->
+<div class="bottom-nav">
+  <a class="nav-item" href="student-home-dashboard.mockup.html">
+    <div class="nav-icon">🏠</div>Home
+  </a>
+  <a class="nav-item active" href="game-library.mockup.html">
+    <div class="nav-icon">📚</div>Library
+  </a>
+  <a class="nav-item" href="leaderboard.mockup.html">
+    <div class="nav-icon">🏆</div>Ranks
+  </a>
+  <a class="nav-item" href="student-profile.mockup.html">
+    <div class="nav-icon">🦁</div>Profile
+  </a>
+  <a class="nav-item" href="settings.mockup.html">
+    <div class="nav-icon">⚙️</div>Settings
+  </a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Pick Your Avatar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .nav-title {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+  }
+  .nav-spacer { width: 34px; flex-shrink: 0; }
+
+  /* Step indicator */
+  .step-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0 0;
+    flex-shrink: 0;
+  }
+  .step-dot {
+    width: 24px; height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.3);
+    transition: background 0.2s;
+  }
+  .step-dot.active { background: #fff; width: 32px; }
+  .step-dot.done { background: rgba(255,255,255,0.6); }
+
+  /* Hero */
+  .hero-text {
+    padding: 14px 24px 0;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .hero-title { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.75); }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 16px;
+    padding: 20px 16px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Selected avatar preview */
+  .avatar-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .avatar-big {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #EEF2FF, #FEF3C7);
+    border-radius: 50%;
+    border: 3px solid #6366F1;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 42px;
+    box-shadow: 0 4px 16px rgba(99,102,241,0.25);
+    transition: transform 0.2s;
+  }
+  .avatar-preview-label { font-size: 12px; color: #6B7280; font-weight: 600; }
+
+  /* Avatar grid */
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .av-opt {
+    aspect-ratio: 1;
+    background: #F9FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .av-opt:hover { border-color: #C7D2FE; background: #EEF2FF; }
+  .av-opt.selected { border-color: #6366F1; background: #EEF2FF; box-shadow: 0 0 0 2px rgba(99,102,241,0.2); }
+
+  /* Name field */
+  .field-group { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .field-label { font-size: 12px; font-weight: 700; color: #374151; }
+  .field-input {
+    height: 48px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #F9FAFB;
+    width: 100%;
+    text-align: center;
+  }
+  .field-input:focus { border-color: #6366F1; background: #fff; }
+  .field-input::placeholder { color: #9CA3AF; font-weight: 400; }
+
+  /* Grade pills */
+  .grade-row { display: flex; gap: 6px; flex-wrap: wrap; }
+  .grade-chip {
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1.5px solid #E5E7EB;
+    background: #F9FAFB;
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .grade-chip.active { border-color: #6366F1; background: #EEF2FF; color: #6366F1; }
+
+  /* Save progress nudge */
+  .save-nudge {
+    background: #FFFBEB;
+    border: 1.5px solid #FDE68A;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .nudge-icon { font-size: 18px; flex-shrink: 0; }
+  .nudge-text { font-size: 12px; color: #92400E; line-height: 1.5; }
+  .nudge-text strong { color: #78350F; }
+
+  /* Bottom */
+  .bottom {
+    background: #fff;
+    padding: 12px 16px 36px;
+    flex-shrink: 0;
+    border-top: 1px solid #F3F4F6;
+  }
+  .btn-primary {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="onboarding-welcome.mockup.html">←</a>
+  <div class="nav-title">Set Up Your Profile</div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- Step indicator: Step 1 of 2 -->
+<div class="step-row">
+  <div class="step-dot active"></div>
+  <div class="step-dot"></div>
+</div>
+
+<!-- Hero -->
+<div class="hero-text">
+  <div class="hero-title">Pick your character 🎮</div>
+  <div class="hero-sub" id="heroSub">You can always change this later</div>
+</div>
+
+<!-- White card -->
+<div class="card">
+
+  <!-- Selected avatar preview -->
+  <div class="avatar-preview">
+    <div class="avatar-big" id="selectedAvatar">🦁</div>
+    <div class="avatar-preview-label">Your avatar</div>
+  </div>
+
+  <!-- Avatar grid -->
+  <div class="section-label">Choose your avatar</div>
+  <div class="avatar-grid">
+    <div class="av-opt selected" onclick="selectAvatar(this, '🦁')">🦁</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🦄')">🦄</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🐼')">🐼</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🦊')">🦊</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🐸')">🐸</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🦉')">🦉</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🐯')">🐯</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🦖')">🦖</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🐙')">🐙</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🦅')">🦅</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🐺')">🐺</div>
+    <div class="av-opt" onclick="selectAvatar(this, '🦈')">🦈</div>
+  </div>
+
+  <!-- Name (hidden if coming from signup — already collected) -->
+  <div class="field-group" id="nameField">
+    <div class="field-label">Your Name</div>
+    <input class="field-input" type="text" placeholder="What should we call you?" maxlength="20">
+  </div>
+
+  <!-- Grade (hidden if coming from signup — already collected) -->
+  <div class="field-group" id="gradeField">
+    <div class="field-label">Grade</div>
+    <div class="grade-row">
+      <div class="grade-chip">Gr 3</div>
+      <div class="grade-chip">Gr 4</div>
+      <div class="grade-chip active">Gr 5</div>
+      <div class="grade-chip">Gr 6</div>
+      <div class="grade-chip">Gr 7</div>
+      <div class="grade-chip">Gr 8</div>
+    </div>
+  </div>
+
+  <!-- Progressive registration nudge (only shown when NOT coming from signup) -->
+  <div class="save-nudge" id="saveNudge">
+    <div class="nudge-icon">💾</div>
+    <div class="nudge-text"><strong>Want to save your progress?</strong> Add your mobile number after playing to make sure you never lose your XP and streaks.</div>
+  </div>
+
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom">
+  <a class="btn-primary" href="student-home-first-time.mockup.html">Let's Play! 🚀</a>
+</div>
+
+<script>
+  function selectAvatar(el, emoji) {
+    document.querySelectorAll('.av-opt').forEach(a => a.classList.remove('selected'));
+    el.classList.add('selected');
+    const preview = document.getElementById('selectedAvatar');
+    preview.textContent = emoji;
+    preview.style.transform = 'scale(1.15)';
+    setTimeout(() => { preview.style.transform = 'scale(1)'; }, 200);
+  }
+
+  // Grade chip toggle
+  document.querySelectorAll('.grade-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('.grade-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
+  // If coming from signup, name/grade already collected — hide those fields
+  const params = new URLSearchParams(window.location.search);
+  const fromSignup = params.get('from') === 'signup';
+  if (fromSignup) {
+    document.getElementById('nameField').style.display = 'none';
+    document.getElementById('gradeField').style.display = 'none';
+    document.getElementById('saveNudge').style.display = 'none';
+    document.getElementById('heroSub').textContent = 'Almost there — pick your character!';
+  }
+</script>
+</body>
+</html>

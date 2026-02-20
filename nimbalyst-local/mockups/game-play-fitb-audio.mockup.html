@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - FITB: Listen & Identify</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 63%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 18px 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; align-items: center; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; width: 100%; flex-shrink: 0; }
+    .topic-badge { background: #EEF2FF; color: #4338CA; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; width: 100%; text-align: center; }
+    .q-text { font-size: 18px; font-weight: 700; color: #111827; text-align: center; line-height: 1.4; }
+    /* Audio player */
+    .audio-player {
+      background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+      border: 2px solid #C7D2FE;
+      border-radius: 20px;
+      padding: 24px 32px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      width: 100%;
+    }
+    .play-btn {
+      width: 72px; height: 72px;
+      background: linear-gradient(135deg, #6366F1, #4F46E5);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; color: #fff; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(99,102,241,0.4);
+      transition: transform 0.15s;
+      user-select: none;
+    }
+    .play-btn:active { transform: scale(0.92); }
+    .play-btn.playing { background: linear-gradient(135deg, #10B981, #059669); }
+    /* Sound wave animation */
+    .wave { display: flex; align-items: center; gap: 3px; height: 32px; }
+    .bar { width: 4px; background: #6366F1; border-radius: 2px; animation: wave 0.8s ease-in-out infinite; opacity: 0.3; }
+    .bar:nth-child(1) { height: 10px; animation-delay: 0s; }
+    .bar:nth-child(2) { height: 22px; animation-delay: 0.1s; }
+    .bar:nth-child(3) { height: 16px; animation-delay: 0.2s; }
+    .bar:nth-child(4) { height: 28px; animation-delay: 0.3s; }
+    .bar:nth-child(5) { height: 18px; animation-delay: 0.4s; }
+    .bar:nth-child(6) { height: 24px; animation-delay: 0.5s; }
+    .bar:nth-child(7) { height: 12px; animation-delay: 0.6s; }
+    .bar.active { opacity: 1; }
+    @keyframes wave { 0%,100% { transform: scaleY(1); } 50% { transform: scaleY(1.8); } }
+    .audio-hint { font-size: 12px; color: #6366F1; font-weight: 600; }
+    .play-count { font-size: 11px; color: #9CA3AF; }
+    /* Answer area */
+    .answer-area { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .ans-row { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .ans-label { font-size: 14px; color: #6B7280; font-weight: 600; }
+    .blank { display: inline-flex; align-items: center; justify-content: center; min-width: 130px; height: 42px; border-bottom: 2.5px solid #9CA3AF; background: #F9FAFB; border-radius: 6px 6px 0 0; padding: 0 16px; font-size: 18px; font-weight: 700; color: #9CA3AF; cursor: pointer; transition: all 0.15s; letter-spacing: 0.05em; }
+    .blank.filled { border-bottom-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .blank.correct { border-bottom-color: #22C55E; background: #F0FDF4; color: #16A34A; }
+    .blank.wrong { border-bottom-color: #EF4444; background: #FEF2F2; color: #DC2626; text-decoration: line-through; }
+    .wb-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .word-bank { display: flex; flex-wrap: wrap; gap: 8px; }
+    .word-chip { background: #F3F4F6; border: 2px solid #D1D5DB; border-radius: 8px; padding: 8px 16px; font-size: 15px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .word-chip:hover:not(.used) { border-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .word-chip.used { background: #F9FAFB; border-color: #E5E7EB; color: #D1D5DB; cursor: default; text-decoration: line-through; pointer-events: none; }
+    .feedback-banner { border-radius: 12px; padding: 12px 14px; display: none; width: 100%; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.5; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 24 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 285 XP</div>
+  </div>
+  <div class="streak">&#128293; 2x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#127897; English / Listening</div>
+      <div></div>
+    </div>
+    <div class="q-label">Listen and identify the word</div>
+    <div class="q-text">What word do you hear?</div>
+
+    <!-- Audio Player -->
+    <div class="audio-player">
+      <div class="play-btn" id="playBtn" onclick="togglePlay()">&#9654;</div>
+      <div class="wave" id="wave">
+        <div class="bar" id="bar1"></div>
+        <div class="bar" id="bar2"></div>
+        <div class="bar" id="bar3"></div>
+        <div class="bar" id="bar4"></div>
+        <div class="bar" id="bar5"></div>
+        <div class="bar" id="bar6"></div>
+        <div class="bar" id="bar7"></div>
+      </div>
+      <div class="audio-hint" id="audioHint">Tap &#9654; to listen</div>
+      <div class="play-count" id="playCount">You can play up to 3 times</div>
+    </div>
+
+    <!-- Answer -->
+    <div class="answer-area">
+      <div class="ans-row">
+        <div class="ans-label">The word is:</div>
+        <div class="blank" id="b1">&#95;&#95;&#95;&#95;</div>
+      </div>
+      <div class="wb-label">Word Bank</div>
+      <div class="word-bank">
+        <div class="word-chip" onclick="fill(this,'Elephant')">Elephant</div>
+        <div class="word-chip" onclick="fill(this,'Eleven')">Eleven</div>
+        <div class="word-chip" onclick="fill(this,'Element')">Element</div>
+        <div class="word-chip" onclick="fill(this,'Elegant')">Elegant</div>
+      </div>
+      <div class="feedback-banner" id="fb">
+        <div class="fb-top">
+          <div class="fb-label c" id="fbl">&#10003; Correct!</div>
+          <div class="xp-badge" id="xpb">+15 XP</div>
+        </div>
+        <div class="fb-exp">The word spoken was "Elephant" — a large mammal with a trunk.</div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="check()">Check Answer &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-play-fitb-sentence-image.mockup.html'">Next Question &#8594;</button>
+  </div>
+  <script>
+    let plays = 0, playing = false, filled = null;
+    function togglePlay() {
+      if (plays >= 3) return;
+      if (playing) return;
+      playing = true; plays++;
+      const btn = document.getElementById('playBtn');
+      btn.classList.add('playing'); btn.textContent = '⏸';
+      document.querySelectorAll('.bar').forEach(b => b.classList.add('active'));
+      document.getElementById('audioHint').textContent = 'Playing... 🔊';
+      document.getElementById('playCount').textContent = (3 - plays) + ' plays remaining';
+      setTimeout(() => {
+        playing = false;
+        btn.classList.remove('playing'); btn.textContent = '▶';
+        document.querySelectorAll('.bar').forEach(b => b.classList.remove('active'));
+        document.getElementById('audioHint').textContent = plays < 3 ? 'Tap ▶ to listen again' : 'No more plays';
+        if (plays >= 3) { btn.style.opacity = '0.4'; btn.style.cursor = 'default'; }
+      }, 2000);
+    }
+    function fill(chip, word) {
+      document.querySelectorAll('.word-chip').forEach(c => c.classList.remove('used'));
+      chip.classList.add('used');
+      const b = document.getElementById('b1');
+      b.textContent = word; b.classList.add('filled'); filled = word;
+      document.getElementById('sub').classList.add('active');
+    }
+    function check() {
+      if (!filled) return;
+      const b = document.getElementById('b1');
+      const ok = filled === 'Elephant';
+      b.classList.remove('filled'); b.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('fb');
+      fb.style.display = 'block'; fb.className = 'feedback-banner ' + (ok ? 'ok' : 'err');
+      document.getElementById('fbl').className = 'fb-label ' + (ok ? 'c' : 'w');
+      document.getElementById('fbl').textContent = ok ? '✓ Correct! That\'s Elephant!' : '✗ The word was "Elephant"';
+      document.getElementById('xpb').style.display = ok ? 'inline-block' : 'none';
+      document.getElementById('sub').style.display = 'none';
+      document.getElementById('nxt').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

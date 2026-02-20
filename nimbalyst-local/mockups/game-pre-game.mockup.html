@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - Multiplication Master</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Brand Colors */
+      --primary-purple: #6366F1;
+      --primary-purple-hover: #4F46E5;
+      --primary-purple-light: #E0E7FF;
+      --accent-orange: #F59E0B;
+      --accent-green: #10B981;
+      --accent-blue: #3B82F6;
+      --accent-yellow: #FBBF24;
+
+      /* Neutrals */
+      --gray-900: #111827;
+      --gray-700: #374151;
+      --gray-600: #4B5563;
+      --gray-500: #6B7280;
+      --gray-300: #D1D5DB;
+      --gray-200: #E5E7EB;
+      --gray-100: #F3F4F6;
+      --gray-50: #F9FAFB;
+      --white: #FFFFFF;
+
+      /* Typography */
+      --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-2xl: 48px;
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-lg);
+    }
+
+    /* Back Button */
+    .back-button {
+      position: fixed;
+      top: var(--spacing-lg);
+      left: var(--spacing-lg);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      padding: var(--spacing-sm) var(--spacing-lg);
+      border-radius: var(--radius-full);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      z-index: 10;
+    }
+
+    .back-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-4px);
+    }
+
+    /* Audio Button */
+    .audio-button {
+      position: fixed;
+      top: var(--spacing-lg);
+      right: var(--spacing-lg);
+      width: 56px;
+      height: 56px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: var(--radius-full);
+      color: var(--white);
+      font-size: 24px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .audio-button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+
+    .audio-button.playing {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      animation: pulse-audio 1.5s infinite;
+    }
+
+    @keyframes pulse-audio {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(245, 158, 11, 0);
+      }
+    }
+
+    .audio-indicator {
+      position: absolute;
+      bottom: -8px;
+      right: -8px;
+      width: 24px;
+      height: 24px;
+      background: var(--accent-green);
+      border: 3px solid var(--white);
+      border-radius: var(--radius-full);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .audio-button.playing .audio-indicator {
+      display: flex;
+    }
+
+    /* Main Container */
+    .game-intro-container {
+      max-width: 800px;
+      width: 100%;
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hero Section */
+    .game-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: var(--spacing-2xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-hero::before {
+      content: '✨';
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 60px;
+      opacity: 0.3;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .game-hero::after {
+      content: '⭐';
+      position: absolute;
+      bottom: 20px;
+      left: 40px;
+      font-size: 50px;
+      opacity: 0.3;
+      animation: float 3s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .game-icon {
+      width: 120px;
+      height: 120px;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: var(--radius-xl);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      margin: 0 auto var(--spacing-lg) auto;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-title {
+      font-size: 36px;
+      font-weight: 900;
+      color: var(--white);
+      margin-bottom: var(--spacing-sm);
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: var(--spacing-lg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .game-meta-badges {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .meta-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-full);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .hero-start-button {
+      background: var(--white);
+      color: var(--primary-purple);
+      padding: var(--spacing-md) var(--spacing-xl);
+      border: none;
+      border-radius: var(--radius-full);
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .hero-start-button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-start-button:active {
+      transform: translateY(-2px);
+    }
+
+    /* Story Section */
+    .game-story {
+      padding: var(--spacing-xl) var(--spacing-2xl);
+    }
+
+    .story-header {
+      text-align: center;
+      margin-bottom: var(--spacing-lg);
+      position: relative;
+    }
+
+    .story-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .section-audio-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      background: var(--primary-purple-light);
+      border: 2px solid var(--primary-purple);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-full);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary-purple);
+      transition: all 0.2s ease;
+      margin-top: var(--spacing-sm);
+    }
+
+    .section-audio-btn:hover {
+      background: var(--primary-purple);
+      color: var(--white);
+      transform: scale(1.05);
+    }
+
+    .section-audio-btn.playing {
+      background: var(--accent-orange);
+      border-color: var(--accent-orange);
+      color: var(--white);
+      animation: pulse-audio 1.5s infinite;
+    }
+
+    .story-content {
+      background: linear-gradient(135deg, var(--primary-purple-light) 0%, #FEF3C7 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      border: 3px solid var(--primary-purple);
+    }
+
+    .story-text {
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--gray-900);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .story-character {
+      font-size: 64px;
+      text-align: center;
+      margin-bottom: var(--spacing-md);
+    }
+
+    /* Learning Objectives */
+    .learning-objectives {
+      background: var(--gray-50);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .objectives-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: 0;
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .objectives-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .objective-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: var(--white);
+      border-radius: var(--radius-lg);
+    }
+
+    .objective-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary-purple) 0%, #7C3AED 100%);
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .objective-text {
+      font-size: 14px;
+      color: var(--gray-700);
+      line-height: 1.4;
+    }
+
+    /* Rewards Preview */
+    .rewards-preview {
+      background: linear-gradient(135deg, #FEF3C7 0%, #FBBF24 100%);
+      border: 3px solid var(--accent-orange);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-lg);
+      margin-bottom: var(--spacing-lg);
+      text-align: center;
+    }
+
+    .rewards-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #92400E;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .rewards-items {
+      display: flex;
+      gap: var(--spacing-md);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .reward-item {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      background: var(--white);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-full);
+      font-size: 16px;
+      font-weight: 700;
+      color: #92400E;
+    }
+
+    /* Action Buttons */
+    .action-section {
+      padding: 0 var(--spacing-xl) var(--spacing-xl) var(--spacing-xl);
+      text-align: center;
+    }
+
+    .scroll-hint {
+      font-size: 13px;
+      color: var(--gray-500);
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .start-button {
+      width: 100%;
+      padding: var(--spacing-md) var(--spacing-lg);
+      background: linear-gradient(135deg, var(--primary-purple) 0%, #7C3AED 100%);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-xl);
+      font-size: 18px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+      box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+    }
+
+    .start-button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
+    }
+
+    .start-button:active {
+      transform: translateY(-2px);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      body {
+        padding: var(--spacing-md);
+      }
+
+      .game-hero {
+        padding: var(--spacing-xl);
+      }
+
+      .game-title {
+        font-size: 28px;
+      }
+
+      .game-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 56px;
+      }
+
+      .game-story {
+        padding: var(--spacing-xl) var(--spacing-lg);
+      }
+
+      .story-text {
+        font-size: 16px;
+      }
+
+      .action-section {
+        padding: 0 var(--spacing-lg) var(--spacing-xl) var(--spacing-lg);
+      }
+
+      .back-button {
+        top: var(--spacing-md);
+        left: var(--spacing-md);
+      }
+
+      .audio-button {
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="back-button" onclick="window.location.href='student-home-first-time.mockup.html'">
+    ← Back
+  </button>
+
+  <button class="audio-button" id="mainAudioBtn" onclick="playFullAudio()" title="Listen to instructions">
+    🔊
+    <span class="audio-indicator">▶️</span>
+  </button>
+
+  <div class="game-intro-container">
+    <!-- Hero Section -->
+    <div class="game-hero">
+      <div class="game-icon">✖️</div>
+      <h1 class="game-title">Multiplication Master</h1>
+      <p class="game-subtitle">Master multiplication tables through fun challenges!</p>
+
+      <div class="game-meta-badges">
+        <div class="meta-badge">
+          📚 Grade 5
+        </div>
+        <div class="meta-badge">
+          ⏱️ 10 min
+        </div>
+        <div class="meta-badge">
+          ❓ 10 Questions
+        </div>
+      </div>
+
+      <button class="hero-start-button" onclick="window.location.href='game-diagnostic.mockup.html'">
+        Start Your Adventure! 🚀
+      </button>
+    </div>
+
+    <!-- Story Section -->
+    <div class="game-story">
+      <div class="story-header">
+        <h2 class="story-title">🎮 Your Mission</h2>
+        <button class="section-audio-btn" onclick="playStoryAudio(this)">
+          🔊 Listen to Story
+        </button>
+      </div>
+
+      <div class="story-content">
+        <div class="story-character">🦸‍♂️</div>
+        <p class="story-text" data-audio-text="Welcome, Math Hero! The kingdom needs your help to rebuild the Magic Multiplication Bridges. Each bridge requires solving multiplication problems. Are you ready to save the day?">
+          Welcome, Math Hero! The kingdom needs your help to rebuild the Magic Multiplication Bridges.
+          Each bridge requires solving multiplication problems. Are you ready to save the day?
+        </p>
+      </div>
+
+      <!-- Learning Objectives -->
+      <div class="learning-objectives">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-md);">
+          <h3 class="objectives-title" style="margin-bottom: 0;">
+            🎯 What You'll Learn
+          </h3>
+          <button class="section-audio-btn" onclick="playObjectivesAudio(this)" style="margin-top: 0;">
+            🔊 Listen
+          </button>
+        </div>
+        <div class="objectives-list">
+          <div class="objective-item">
+            <div class="objective-icon">✖️</div>
+            <div class="objective-text">Multiplication tables from 2 to 12</div>
+          </div>
+          <div class="objective-item">
+            <div class="objective-icon">⚡</div>
+            <div class="objective-text">Quick mental math strategies</div>
+          </div>
+          <div class="objective-item">
+            <div class="objective-icon">🎯</div>
+            <div class="objective-text">Problem-solving under time pressure</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Rewards Preview -->
+      <div class="rewards-preview">
+        <h3 class="rewards-title">🎁 Complete This Game to Earn</h3>
+        <div class="rewards-items">
+          <div class="reward-item">
+            ⭐ +30 XP
+          </div>
+          <div class="reward-item">
+            🏆 Math Hero Badge
+          </div>
+          <div class="reward-item">
+            🔥 Streak +1
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Section -->
+    <div class="action-section">
+      <p class="scroll-hint">Ready to begin?</p>
+      <button class="start-button" onclick="window.location.href='game-diagnostic.mockup.html'">
+        Start Your Adventure! 🚀
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // Text-to-Speech functionality
+    let currentSpeech = null;
+
+    function speak(text, button) {
+      // Cancel any ongoing speech
+      if (currentSpeech) {
+        window.speechSynthesis.cancel();
+      }
+
+      // Create new speech
+      currentSpeech = new SpeechSynthesisUtterance(text);
+      currentSpeech.rate = 0.9; // Slightly slower for kids
+      currentSpeech.pitch = 1.1; // Slightly higher pitch
+      currentSpeech.volume = 1.0;
+
+      // Add playing class to button
+      if (button) {
+        button.classList.add('playing');
+      }
+
+      // When speech ends, remove playing class
+      currentSpeech.onend = function() {
+        if (button) {
+          button.classList.remove('playing');
+        }
+        currentSpeech = null;
+      };
+
+      // Speak
+      window.speechSynthesis.speak(currentSpeech);
+    }
+
+    function stopSpeech() {
+      if (currentSpeech) {
+        window.speechSynthesis.cancel();
+        document.querySelectorAll('.playing').forEach(el => {
+          el.classList.remove('playing');
+        });
+        currentSpeech = null;
+      }
+    }
+
+    function playFullAudio() {
+      const button = document.getElementById('mainAudioBtn');
+
+      if (button.classList.contains('playing')) {
+        stopSpeech();
+        return;
+      }
+
+      const fullText = `
+        Welcome to Multiplication Master!
+
+        Your Mission: Welcome, Math Hero! The kingdom needs your help to rebuild the Magic Multiplication Bridges.
+        Each bridge requires solving multiplication problems. Are you ready to save the day?
+
+        What You'll Learn: You'll practice multiplication tables from 2 to 12,
+        learn quick mental math strategies, and improve your problem-solving skills under time pressure.
+
+        Complete this game to earn 30 XP points, a Math Hero Badge, and add 1 to your streak!
+
+        Click the Start Your Adventure button when you're ready to begin!
+      `;
+
+      speak(fullText, button);
+    }
+
+    function playStoryAudio(button) {
+      if (button.classList.contains('playing')) {
+        stopSpeech();
+        return;
+      }
+
+      const text = document.querySelector('.story-text').getAttribute('data-audio-text');
+      speak(text, button);
+    }
+
+    function playObjectivesAudio(button) {
+      if (button.classList.contains('playing')) {
+        stopSpeech();
+        return;
+      }
+
+      const text = `
+        What You'll Learn:
+        First, you'll practice multiplication tables from 2 to 12.
+        Second, you'll learn quick mental math strategies.
+        Third, you'll improve your problem-solving skills under time pressure.
+      `;
+
+      speak(text, button);
+    }
+
+    // Stop speech when leaving page
+    window.addEventListener('beforeunload', function() {
+      stopSpeech();
+    });
+  </script>
+
+</body>
+</html>

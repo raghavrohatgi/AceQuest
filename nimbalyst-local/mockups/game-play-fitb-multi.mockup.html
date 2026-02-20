@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - Fill in the Blanks (Multiple)</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 53%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 18px 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .topic-badge { background: #EEF2FF; color: #4338CA; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .voice-btn { width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .sentence { font-size: 18px; font-weight: 600; color: #111827; line-height: 2.6; }
+    .blank { display: inline-flex; align-items: center; justify-content: center; min-width: 90px; height: 36px; border-bottom: 2.5px solid #9CA3AF; background: #F9FAFB; border-radius: 6px 6px 0 0; padding: 0 10px; font-size: 15px; font-weight: 700; color: #9CA3AF; cursor: pointer; vertical-align: middle; margin: 0 3px; transition: all 0.15s; position: relative; }
+    .blank.active-blank { border-bottom-color: #6366F1; box-shadow: 0 2px 0 #6366F1; background: #F5F3FF; }
+    .blank.filled { border-bottom-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .blank.correct { border-bottom-color: #22C55E; background: #F0FDF4; color: #16A34A; cursor: default; }
+    .blank.wrong { border-bottom-color: #EF4444; background: #FEF2F2; color: #DC2626; text-decoration: line-through; cursor: default; }
+    /* Progress dots */
+    .dots { display: flex; gap: 6px; align-items: center; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: #E5E7EB; transition: background 0.2s; }
+    .dot.on { background: #6366F1; }
+    .wb-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .word-bank { display: flex; flex-wrap: wrap; gap: 8px; }
+    .word-chip { background: #F3F4F6; border: 2px solid #D1D5DB; border-radius: 8px; padding: 8px 14px; font-size: 15px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .word-chip:hover:not(.used) { border-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .word-chip.used { background: #F9FAFB; border-color: #E5E7EB; color: #D1D5DB; cursor: default; text-decoration: line-through; pointer-events: none; }
+    .feedback-banner { border-radius: 12px; padding: 12px 14px; display: none; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.5; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 20 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 235 XP</div>
+  </div>
+  <div class="streak">&#128293; 3x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#127758; Science</div>
+      <div class="voice-btn">&#128266;</div>
+    </div>
+    <div class="q-label">Fill in all the blanks</div>
+    <div class="sentence">
+      <span class="blank filled" id="b1" data-ans="Plants" onclick="pickBlank('b1')">Plants</span>
+      use
+      <span class="blank" id="b2" data-ans="sunlight" onclick="pickBlank('b2')">&#95;2&#95;</span>
+      to make food through
+      <span class="blank" id="b3" data-ans="photosynthesis" onclick="pickBlank('b3')">&#95;3&#95;</span>.
+    </div>
+    <!-- Progress dots -->
+    <div class="dots">
+      <div class="dot on" id="d1"></div>
+      <div class="dot" id="d2"></div>
+      <div class="dot" id="d3"></div>
+      <span style="font-size:11px;color:#9CA3AF;margin-left:4px" id="dotLabel">1 of 3 filled</span>
+    </div>
+    <div class="wb-label">Word Bank — select a blank, then tap a word</div>
+    <div class="word-bank">
+      <div class="word-chip used" onclick="useWord(this,'Plants')">Plants</div>
+      <div class="word-chip" onclick="useWord(this,'sunlight')">sunlight</div>
+      <div class="word-chip" onclick="useWord(this,'photosynthesis')">photosynthesis</div>
+      <div class="word-chip" onclick="useWord(this,'Animals')">Animals</div>
+      <div class="word-chip" onclick="useWord(this,'moonlight')">moonlight</div>
+      <div class="word-chip" onclick="useWord(this,'respiration')">respiration</div>
+    </div>
+    <div class="feedback-banner" id="fb">
+      <div class="fb-top">
+        <div class="fb-label c" id="fbl">&#10003; All correct!</div>
+        <div class="xp-badge" id="xpb">+20 XP</div>
+      </div>
+      <div class="fb-exp" id="fbexp">Plants use sunlight to convert CO&#x2082; and water into food through photosynthesis.</div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="check()">Check Answer &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-play-fitb-image.mockup.html'">Next Question &#8594;</button>
+  </div>
+  <script>
+    const answers = { b1: 'Plants', b2: 'sunlight', b3: 'photosynthesis' };
+    const filled = { b1: 'Plants', b2: null, b3: null };
+    let activeBlank = null;
+
+    function pickBlank(id) {
+      document.querySelectorAll('.blank').forEach(b => b.classList.remove('active-blank'));
+      activeBlank = id;
+      const el = document.getElementById(id);
+      if (!el.classList.contains('filled')) el.classList.add('active-blank');
+    }
+
+    function useWord(chip, word) {
+      if (!activeBlank) { activeBlank = firstEmpty(); }
+      if (!activeBlank) return;
+      const id = activeBlank;
+      const prev = filled[id];
+      // Return previous word to bank if any
+      if (prev) {
+        document.querySelectorAll('.word-chip').forEach(c => { if (c.textContent === prev) c.classList.remove('used'); });
+      }
+      chip.classList.add('used');
+      const el = document.getElementById(id);
+      el.textContent = word; el.classList.remove('active-blank'); el.classList.add('filled');
+      filled[id] = word;
+      activeBlank = firstEmpty();
+      if (activeBlank) { document.getElementById(activeBlank).classList.add('active-blank'); }
+      updateDots(); updateBtn();
+    }
+
+    function firstEmpty() {
+      return ['b1','b2','b3'].find(id => !filled[id]) || null;
+    }
+
+    function updateDots() {
+      const count = Object.values(filled).filter(Boolean).length;
+      ['b1','b2','b3'].forEach((id, i) => {
+        document.getElementById('d' + (i+1)).className = 'dot' + (filled[id] ? ' on' : '');
+      });
+      document.getElementById('dotLabel').textContent = count + ' of 3 filled';
+    }
+
+    function updateBtn() {
+      const all = Object.values(filled).every(Boolean);
+      document.getElementById('sub').classList.toggle('active', all);
+    }
+
+    function check() {
+      if (!Object.values(filled).every(Boolean)) return;
+      let allOk = true;
+      ['b1','b2','b3'].forEach(id => {
+        const el = document.getElementById(id);
+        const ok = filled[id]?.toLowerCase() === answers[id]?.toLowerCase();
+        if (!ok) allOk = false;
+        el.classList.remove('filled','active-blank');
+        el.classList.add(ok ? 'correct' : 'wrong');
+        el.onclick = null;
+      });
+      document.querySelectorAll('.word-chip').forEach(c => c.style.pointerEvents = 'none');
+      const fb = document.getElementById('fb');
+      fb.style.display = 'block';
+      fb.className = 'feedback-banner ' + (allOk ? 'ok' : 'err');
+      document.getElementById('fbl').className = 'fb-label ' + (allOk ? 'c' : 'w');
+      document.getElementById('fbl').textContent = allOk ? '✓ All correct! Well done!' : '✗ Some answers need review';
+      document.getElementById('xpb').style.display = allOk ? 'inline-block' : 'none';
+      document.getElementById('sub').style.display = 'none';
+      document.getElementById('nxt').style.display = 'block';
+    }
+
+    updateDots(); updateBtn();
+  </script>
+</body>
+</html>

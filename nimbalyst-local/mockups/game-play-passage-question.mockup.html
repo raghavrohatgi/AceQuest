@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Passage Question</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Gurmukhi', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HUD */
+  .hud {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    flex-shrink: 0;
+  }
+  .pause-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .progress-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    text-align: center;
+  }
+  .progress-track {
+    height: 7px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 55.3%;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .xp-badge {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Streak banner */
+  .streak-banner {
+    margin: 0 16px 10px;
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* ── Normal (single-panel) layout ── */
+  .main-area {
+    flex: 1;
+    display: flex;
+    gap: 10px;
+    margin: 0 16px 0;
+    overflow: hidden;
+  }
+
+  /* White card — question side */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow: hidden;
+    transition: flex 0.3s ease;
+  }
+
+  /* Passage panel — hidden by default, shown in split mode */
+  .passage-panel {
+    flex: 0;
+    background: #fff;
+    border-radius: 20px;
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: flex 0.3s ease, opacity 0.3s ease;
+  }
+  .passage-panel.visible {
+    flex: 1;
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Card top */
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topic-badge {
+    background: #ECFDF5;
+    color: #065F46;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+  }
+  .view-passage-btn {
+    border: 1.5px solid #6366F1;
+    color: #6366F1;
+    background: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .view-passage-btn.active {
+    background: #6366F1;
+    color: #fff;
+  }
+
+  /* Question progress */
+  .q-progress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .q-progress-label {
+    font-size: 12px;
+    color: #6B7280;
+  }
+  .q-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+  .dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: #E5E7EB;
+  }
+  .dot.active { background: #6366F1; }
+
+  .q-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.4;
+    flex-shrink: 0;
+  }
+
+  /* MCQ options */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    overflow: hidden;
+    justify-content: flex-start;
+  }
+  .option {
+    background: #F9FAFB;
+    border: 2px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .option:hover:not(.locked) { border-color: #C7D2FE; background: #EEF2FF; }
+  .option.locked { cursor: default; }
+  .option.correct { border-color: #22C55E !important; background: #F0FDF4 !important; }
+  .option.wrong { border-color: #EF4444 !important; background: #FEF2F2 !important; }
+  .letter-badge {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s, color 0.15s;
+    color: #374151;
+  }
+  .option.correct .letter-badge { background: #22C55E; color: #fff; }
+  .option.wrong .letter-badge { background: #EF4444; color: #fff; }
+  .option-text {
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  /* Feedback banner */
+  .feedback { display: none; flex-shrink: 0; }
+  .feedback.show { display: block; }
+  .feedback-correct {
+    background: #F0FDF4;
+    border: 1.5px solid #86EFAC;
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .feedback-wrong {
+    background: #FEF2F2;
+    border: 1.5px solid #FCA5A5;
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+  .feedback-title-correct { font-size: 13px; font-weight: 700; color: #16A34A; }
+  .feedback-title-wrong { font-size: 13px; font-weight: 700; color: #DC2626; }
+  .xp-pill {
+    background: #F59E0B;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .feedback-text { font-size: 12px; color: #374151; line-height: 1.5; }
+
+  /* ── Passage panel styles ── */
+  .panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .panel-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+  }
+  .panel-close {
+    width: 26px; height: 26px;
+    background: #F3F4F6;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #6B7280;
+    flex-shrink: 0;
+  }
+  .panel-source {
+    font-size: 11px;
+    color: #6B7280;
+    flex-shrink: 0;
+  }
+  .panel-divider {
+    border: none;
+    border-top: 1px solid #F3F4F6;
+    flex-shrink: 0;
+  }
+  /* Text passage body */
+  .panel-body {
+    flex: 1;
+    overflow-y: auto;
+    font-size: 13px;
+    color: #374151;
+    line-height: 1.7;
+  }
+  .panel-body p { margin-bottom: 10px; }
+  /* Audio passage body */
+  .panel-audio-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+  }
+  .audio-player-mock {
+    background: #F3F4F6;
+    border-radius: 12px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .audio-waveform {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 36px;
+  }
+  .wave-bar {
+    flex: 1;
+    background: #C7D2FE;
+    border-radius: 2px;
+    transition: height 0.3s;
+  }
+  .audio-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .audio-play-btn {
+    width: 36px; height: 36px;
+    background: #6366F1;
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .audio-progress-track {
+    flex: 1;
+    height: 4px;
+    background: #E5E7EB;
+    border-radius: 2px;
+  }
+  .audio-progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #6366F1;
+    border-radius: 2px;
+  }
+  .audio-time {
+    font-size: 11px;
+    color: #6B7280;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .audio-transcript-text {
+    font-size: 12px;
+    color: #374151;
+    line-height: 1.7;
+    overflow-y: auto;
+    flex: 1;
+  }
+  /* Video passage body */
+  .panel-video-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+  }
+  .mini-video {
+    background: #1F2937;
+    border-radius: 10px;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .mini-video-emoji {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -60%);
+    font-size: 30px;
+  }
+  .mini-play-btn {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 36px; height: 36px;
+    background: rgba(255,255,255,0.9);
+    border: none;
+    border-radius: 50%;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2;
+  }
+  .mini-scrubber {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 22px;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    gap: 6px;
+    z-index: 2;
+  }
+  .mini-time { color: #fff; font-size: 10px; white-space: nowrap; flex-shrink: 0; }
+  .mini-track { flex: 1; height: 2px; background: rgba(255,255,255,0.3); border-radius: 2px; }
+  .mini-fill { height: 100%; width: 0%; background: #6366F1; border-radius: 2px; }
+  .video-panel-title { font-size: 13px; font-weight: 700; color: #111827; flex-shrink: 0; }
+  .video-transcript-text {
+    font-size: 12px;
+    color: #374151;
+    line-height: 1.7;
+    overflow-y: auto;
+    flex: 1;
+  }
+
+  /* Bottom section */
+  .bottom {
+    background: transparent;
+    padding: 10px 16px 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: none;
+    text-align: center;
+  }
+  .btn-primary.show { display: block; }
+
+  /* Passage type tabs in panel */
+  .passage-type-tabs {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .ptab {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1.5px solid #E5E7EB;
+    background: white;
+    color: #6B7280;
+    cursor: pointer;
+  }
+  .ptab.active { background: #EEF2FF; border-color: #6366F1; color: #6366F1; }
+
+  /* Image infographic in panel */
+  .panel-infographic {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid #E5E7EB;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .panel-infographic-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, #BFDBFE 0%, #93C5FD 60%, #DBEAFE 100%);
+  }
+  .pi-sun { position: absolute; top: 8px; right: 12px; font-size: 26px; line-height: 1; }
+  .pi-cloud { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); font-size: 26px; line-height: 1; }
+  .pi-ocean {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 32px;
+    background: linear-gradient(180deg, #3B82F6, #1D4ED8);
+    border-radius: 0 0 10px 10px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 10px; font-weight: 700;
+  }
+  .pi-mountain { position: absolute; bottom: 32px; right: 14px; font-size: 22px; line-height: 1; }
+  .pi-pill {
+    position: absolute;
+    background: white;
+    border-radius: 999px;
+    padding: 3px 8px;
+    font-size: 9px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    color: #374151;
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div class="hud">
+  <button class="pause-btn">⏸</button>
+  <div class="progress-wrap">
+    <div class="progress-label">Q 21 / 38</div>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+  </div>
+  <div class="xp-badge">⚡ 260 XP</div>
+</div>
+
+<!-- Streak Banner -->
+<div class="streak-banner">🔥 2x Combo!</div>
+
+<!-- Main area: question card + passage panel -->
+<div class="main-area">
+
+  <!-- Question Card -->
+  <div class="card">
+    <!-- Card top -->
+    <div class="card-top">
+      <span class="topic-badge">📖 English</span>
+      <button class="view-passage-btn" id="viewPassageBtn" onclick="togglePassagePanel()">📄 View Passage</button>
+    </div>
+
+    <!-- Question progress -->
+    <div class="q-progress">
+      <span class="q-progress-label">Question 1 of 4</span>
+      <div class="q-dots">
+        <div class="dot active"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+      </div>
+    </div>
+
+    <div class="q-label">PASSAGE QUESTION</div>
+    <div class="q-text">What is the Amazon Rainforest often called?</div>
+
+    <!-- Options -->
+    <div class="options" id="optionsContainer">
+      <div class="option" id="optA" onclick="selectOption('A')">
+        <div class="letter-badge" id="badgeA">A</div>
+        <div class="option-text">The Lungs of the Earth</div>
+      </div>
+      <div class="option" id="optB" onclick="selectOption('B')">
+        <div class="letter-badge" id="badgeB">B</div>
+        <div class="option-text">The Heart of Africa</div>
+      </div>
+      <div class="option" id="optC" onclick="selectOption('C')">
+        <div class="letter-badge" id="badgeC">C</div>
+        <div class="option-text">The Great Green Wall</div>
+      </div>
+      <div class="option" id="optD" onclick="selectOption('D')">
+        <div class="letter-badge" id="badgeD">D</div>
+        <div class="option-text">The Blue Planet</div>
+      </div>
+    </div>
+
+    <!-- Feedback banners -->
+    <div class="feedback" id="feedbackCorrect">
+      <div class="feedback-correct">
+        <div class="feedback-header">
+          <span class="feedback-title-correct">✓ Correct!</span>
+          <span class="xp-pill">+15 XP</span>
+        </div>
+        <div class="feedback-text">The Amazon produces ~20% of Earth's oxygen, earning it this famous nickname.</div>
+      </div>
+    </div>
+
+    <div class="feedback" id="feedbackWrong">
+      <div class="feedback-wrong">
+        <div class="feedback-header">
+          <span class="feedback-title-wrong">✗ Not quite.</span>
+        </div>
+        <div class="feedback-text">The correct answer is A — 'The Lungs of the Earth'. The Amazon produces ~20% of Earth's oxygen.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Passage Panel (50% split, hidden by default) -->
+  <div class="passage-panel" id="passagePanel">
+
+    <!-- Panel header -->
+    <div class="panel-header">
+      <span class="panel-title" id="panelTitle">📖 Passage</span>
+      <button class="panel-close" onclick="togglePassagePanel()">✕</button>
+    </div>
+    <div class="panel-source" id="panelSource"></div>
+
+    <!-- Passage type selector -->
+    <div class="passage-type-tabs" id="passageTabs">
+      <button class="ptab" id="tabText" onclick="showPassageType('text', this)">📄 Text</button>
+      <button class="ptab" id="tabAudio" onclick="showPassageType('audio', this)">🎧 Audio</button>
+      <button class="ptab" id="tabVideo" onclick="showPassageType('video', this)">🎬 Video</button>
+      <button class="ptab" id="tabImage" onclick="showPassageType('image', this)">🖼 Image</button>
+    </div>
+
+    <hr class="panel-divider">
+
+    <!-- TEXT passage -->
+    <div class="panel-body" id="ptText">
+      <p>The Amazon Rainforest, often called 'The Lungs of the Earth', is the world's largest tropical rainforest. Covering over 5.5 million square kilometres, it spans across nine countries in South America. Brazil contains about 60% of this vast forest, which produces approximately 20% of the world's oxygen.</p>
+      <p>The Amazon is home to an extraordinary diversity of life. Scientists estimate that the rainforest houses around 10% of all species on Earth, including 40,000 plant species, 1,300 bird species, and 3,000 types of fish. Many of these species are found nowhere else on the planet, making the Amazon truly unique.</p>
+      <p>The forest plays a critical role in regulating the global climate. Its trees absorb enormous amounts of carbon dioxide and release oxygen through photosynthesis. The Amazon also creates its own rainfall through a process called transpiration, where trees release water vapour that forms clouds and rain.</p>
+      <p>Unfortunately, the Amazon faces serious threats. Deforestation for agriculture, logging, and urban development has destroyed significant portions of the forest. Scientists warn that if deforestation continues at its current rate, the Amazon could reach a 'tipping point' beyond which it cannot recover.</p>
+    </div>
+
+    <!-- AUDIO passage (hidden) -->
+    <div class="panel-audio-wrap" id="ptAudio" style="display:none">
+      <div class="audio-player-mock">
+        <div class="audio-waveform" id="panelWave"></div>
+        <div class="audio-controls">
+          <button class="audio-play-btn" id="panelPlayBtn" onclick="togglePanelAudio()">▶</button>
+          <div class="audio-progress-track">
+            <div class="audio-progress-fill" id="panelAudioFill"></div>
+          </div>
+          <span class="audio-time" id="panelAudioTime">0:00 / 4:15</span>
+        </div>
+      </div>
+      <div class="audio-transcript-text">
+        <strong style="font-size:11px;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.07em">Transcript</strong><br><br>
+        The Amazon Rainforest, often called 'The Lungs of the Earth', is the world's largest tropical rainforest. Covering over 5.5 million square kilometres, it spans nine countries in South America and produces approximately 20% of the world's oxygen. It is home to 10% of all species on Earth...
+      </div>
+    </div>
+
+    <!-- VIDEO passage (hidden) -->
+    <div class="panel-video-wrap" id="ptVideo" style="display:none">
+      <div class="mini-video">
+        <div class="mini-video-emoji">🌋</div>
+        <button class="mini-play-btn">▶</button>
+        <div class="mini-scrubber">
+          <span class="mini-time">0:00 / 3:42</span>
+          <div class="mini-track"><div class="mini-fill"></div></div>
+        </div>
+      </div>
+      <div class="video-panel-title">How Do Volcanoes Erupt?</div>
+      <div class="video-transcript-text">
+        A volcano is an opening in Earth's surface where molten rock, gases, and ash can escape from below. When pressure builds up inside the Earth, it forces magma upward through the vent. The dramatic explosion we see is called an eruption...
+      </div>
+    </div>
+
+    <!-- IMAGE passage (hidden) -->
+    <div class="panel-video-wrap" id="ptImage" style="display:none">
+      <div class="panel-infographic">
+        <div class="panel-infographic-bg"></div>
+        <div class="pi-sun">☀️</div>
+        <div class="pi-cloud">☁️</div>
+        <div class="pi-mountain">⛰️</div>
+        <div class="pi-ocean">Ocean / Lake</div>
+        <div class="pi-pill" style="bottom:38px;left:10px">⬆ Evaporation</div>
+        <div class="pi-pill" style="top:50px;left:10px">☁ Condensation</div>
+        <div class="pi-pill" style="top:50px;right:10px">⬇ Precipitation</div>
+        <div class="pi-pill" style="bottom:38px;right:10px">↘ Runoff</div>
+      </div>
+      <div class="video-panel-title">The Water Cycle</div>
+      <div class="video-transcript-text">
+        The water cycle describes how water evaporates from the surface, rises into the atmosphere, condenses into clouds, and falls back down as precipitation. Tap any label in the full image passage to explore each stage in detail.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Bottom Section -->
+<div class="bottom">
+  <a class="btn-primary" id="nextBtn" href="game-play-passage-explanation.mockup.html">Next Question →</a>
+</div>
+
+<script>
+  let answered = false;
+  let panelVisible = false;
+  let audioPlaying = false;
+  let audioInterval = null;
+  let audioElapsed = 0;
+  const audioTotal = 255; // 4:15
+
+  // Build waveform bars
+  const wave = document.getElementById('panelWave');
+  const heights = [30,50,70,40,80,60,90,55,45,75,35,65,85,50,40,70,60,80,45,55,75,35,65,30,50];
+  heights.forEach(h => {
+    const bar = document.createElement('div');
+    bar.className = 'wave-bar';
+    bar.style.height = h + '%';
+    wave.appendChild(bar);
+  });
+
+  function selectOption(letter) {
+    if (answered) return;
+    answered = true;
+
+    ['A','B','C','D'].forEach(l => {
+      document.getElementById('opt'+l).classList.add('locked');
+    });
+
+    if (letter === 'A') {
+      document.getElementById('optA').classList.add('correct');
+      document.getElementById('feedbackCorrect').classList.add('show');
+    } else {
+      document.getElementById('opt'+letter).classList.add('wrong');
+      document.getElementById('optA').classList.add('correct');
+      document.getElementById('feedbackWrong').classList.add('show');
+    }
+
+    document.getElementById('nextBtn').classList.add('show');
+  }
+
+  function togglePassagePanel() {
+    panelVisible = !panelVisible;
+    const panel = document.getElementById('passagePanel');
+    const btn = document.getElementById('viewPassageBtn');
+    if (panelVisible) {
+      panel.classList.add('visible');
+      btn.classList.add('active');
+      btn.textContent = '✕ Close Passage';
+    } else {
+      panel.classList.remove('visible');
+      btn.classList.remove('active');
+      btn.textContent = '📄 View Passage';
+    }
+  }
+
+  function showPassageType(type, tabEl) {
+    document.getElementById('ptText').style.display = 'none';
+    document.getElementById('ptAudio').style.display = 'none';
+    document.getElementById('ptVideo').style.display = 'none';
+    document.getElementById('ptImage').style.display = 'none';
+    document.querySelectorAll('.ptab').forEach(t => t.classList.remove('active'));
+    if (tabEl) tabEl.classList.add('active');
+    if (type === 'text') { document.getElementById('ptText').style.display = 'block'; if (!tabEl) document.getElementById('tabText').classList.add('active'); }
+    else if (type === 'audio') { document.getElementById('ptAudio').style.display = 'flex'; if (!tabEl) document.getElementById('tabAudio').classList.add('active'); }
+    else if (type === 'video') { document.getElementById('ptVideo').style.display = 'flex'; if (!tabEl) document.getElementById('tabVideo').classList.add('active'); }
+    else if (type === 'image') { document.getElementById('ptImage').style.display = 'flex'; if (!tabEl) document.getElementById('tabImage').classList.add('active'); }
+  }
+
+  // Auto-open passage panel based on URL param
+  const passageMeta = {
+    text:  { title: '📖 The Amazon Rainforest', source: '🏷️ National Geographic for Kids' },
+    audio: { title: '🎧 The Amazon Rainforest', source: '🏷️ National Geographic for Kids' },
+    video: { title: '🎬 How Do Volcanoes Erupt?', source: '🏷️ BBC Learning' },
+    image: { title: '🖼 The Water Cycle', source: '🏷️ NASA Education' },
+  };
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const params = new URLSearchParams(window.location.search);
+    const passageType = params.get('type') || 'text';
+    const meta = passageMeta[passageType] || passageMeta.text;
+    document.getElementById('panelTitle').textContent = meta.title;
+    document.getElementById('panelSource').textContent = meta.source;
+    // Auto-open panel and activate the right tab
+    togglePassagePanel();
+    showPassageType(passageType, null);
+  });
+
+  function togglePanelAudio() {
+    audioPlaying = !audioPlaying;
+    const btn = document.getElementById('panelPlayBtn');
+    const bars = document.querySelectorAll('.wave-bar');
+    btn.textContent = audioPlaying ? '⏸' : '▶';
+
+    if (audioPlaying) {
+      audioInterval = setInterval(() => {
+        audioElapsed++;
+        if (audioElapsed >= audioTotal) { audioElapsed = audioTotal; audioPlaying = false; clearInterval(audioInterval); btn.textContent = '▶'; }
+        document.getElementById('panelAudioFill').style.width = (audioElapsed/audioTotal*100) + '%';
+        const m = Math.floor(audioElapsed/60), s = audioElapsed%60;
+        document.getElementById('panelAudioTime').textContent = m+':'+String(s).padStart(2,'0')+' / 4:15';
+        // animate waveform bars
+        bars.forEach(bar => {
+          bar.style.height = (20 + Math.random()*70) + '%';
+          bar.style.background = '#818CF8';
+        });
+      }, 1000);
+    } else {
+      clearInterval(audioInterval);
+      bars.forEach(bar => { bar.style.background = '#C7D2FE'; });
+    }
+  }
+</script>
+</body>
+</html>

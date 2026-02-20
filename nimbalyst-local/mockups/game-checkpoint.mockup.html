@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Checkpoint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 20px;
+    gap: 0;
+    position: relative;
+  }
+
+  /* Confetti dots */
+  .confetti {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    animation: confettiFall linear infinite;
+    top: -10px;
+  }
+  @keyframes confettiFall {
+    0%   { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0.3; }
+  }
+
+  /* Central checkpoint card */
+  .checkpoint-card {
+    background: #fff;
+    border-radius: 28px;
+    padding: 28px 24px 24px;
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+    z-index: 1;
+  }
+
+  /* Badge */
+  .checkpoint-badge {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #FDE68A, #F59E0B);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    box-shadow: 0 4px 20px rgba(245,158,11,0.4);
+  }
+
+  .cp-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .cp-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #111827;
+    text-align: center;
+    line-height: 1.2;
+    margin-top: -4px;
+  }
+  .cp-subtitle {
+    font-size: 14px;
+    color: #6B7280;
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  /* XP earned pop */
+  .xp-earned {
+    background: linear-gradient(135deg, #EEF2FF, #E0E7FF);
+    border: 1.5px solid #C7D2FE;
+    border-radius: 16px;
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+  }
+  .xp-icon { font-size: 24px; }
+  .xp-text { flex: 1; }
+  .xp-val { font-size: 22px; font-weight: 800; color: #4F46E5; }
+  .xp-label { font-size: 12px; color: #6B7280; font-weight: 600; }
+  .xp-streak { font-size: 20px; }
+
+  /* Mini stats */
+  .mini-stats {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+  .mini-stat {
+    flex: 1;
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+  }
+  .mini-stat-val { font-size: 20px; font-weight: 800; color: #111827; }
+  .mini-stat-val.green { color: #10B981; }
+  .mini-stat-val.red { color: #EF4444; }
+  .mini-stat-label { font-size: 10px; color: #9CA3AF; font-weight: 600; margin-top: 2px; }
+
+  /* Divider */
+  .divider { height: 1px; background: #F3F4F6; width: 100%; }
+
+  /* Next section hint */
+  .next-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: #F0FDF4;
+    border: 1px solid #BBF7D0;
+    border-radius: 12px;
+    padding: 10px 14px;
+  }
+  .ns-icon { font-size: 20px; flex-shrink: 0; }
+  .ns-text { flex: 1; }
+  .ns-label { font-size: 10px; font-weight: 800; color: #065F46; text-transform: uppercase; letter-spacing: 0.06em; }
+  .ns-title { font-size: 13px; font-weight: 700; color: #111827; margin-top: 1px; }
+
+  /* Buttons */
+  .btn-primary {
+    width: 100%; height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff; font-size: 16px; font-weight: 800;
+    border: none; border-radius: 13px; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-ghost {
+    font-size: 13px; color: #9CA3AF; font-weight: 700;
+    background: none; border: none; cursor: pointer;
+    text-decoration: none; display: block; text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- Confetti -->
+<div class="confetti" style="left:10%;background:#FDE68A;animation-duration:2.5s;animation-delay:0s;"></div>
+<div class="confetti" style="left:25%;background:#6EE7B7;animation-duration:3s;animation-delay:0.4s;"></div>
+<div class="confetti" style="left:50%;background:#C4B5FD;animation-duration:2.2s;animation-delay:0.8s;"></div>
+<div class="confetti" style="left:70%;background:#FCA5A5;animation-duration:3.5s;animation-delay:0.2s;"></div>
+<div class="confetti" style="left:85%;background:#93C5FD;animation-duration:2.8s;animation-delay:1.1s;"></div>
+
+<div class="checkpoint-card">
+
+  <div class="checkpoint-badge">⭐</div>
+  <div class="cp-label">Halfway checkpoint</div>
+  <div class="cp-title">Halfway there, Arjun!</div>
+  <div class="cp-subtitle">Great work on the first 10 questions. You're on fire — keep it going!</div>
+
+  <!-- XP earned -->
+  <div class="xp-earned">
+    <div class="xp-icon">⚡</div>
+    <div class="xp-text">
+      <div class="xp-val">+270 XP earned</div>
+      <div class="xp-label">First half complete</div>
+    </div>
+    <div class="xp-streak">🔥 6</div>
+  </div>
+
+  <!-- Mini stats -->
+  <div class="mini-stats">
+    <div class="mini-stat">
+      <div class="mini-stat-val">10</div>
+      <div class="mini-stat-label">Done</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val green">9</div>
+      <div class="mini-stat-label">Correct</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val red">1</div>
+      <div class="mini-stat-label">Wrong</div>
+    </div>
+    <div class="mini-stat">
+      <div class="mini-stat-val">90%</div>
+      <div class="mini-stat-label">Accuracy</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Next section hint -->
+  <div class="next-section">
+    <div class="ns-icon">🔮</div>
+    <div class="ns-text">
+      <div class="ns-label">Up Next</div>
+      <div class="ns-title">Adding unlike fractions — 10 questions</div>
+    </div>
+  </div>
+
+  <!-- Buttons -->
+  <a class="btn-primary" href="game-play.mockup.html">Continue →</a>
+  <a class="btn-ghost" href="game-results.mockup.html">End game early</a>
+
+</div>
+
+</body>
+</html>

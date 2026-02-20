@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - FITB Diagram</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .hud { display: flex; align-items: center; gap: 10px; padding: 14px 16px 10px; flex-shrink: 0; }
+    .hud-pause { width: 34px; height: 34px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; cursor: pointer; flex-shrink: 0; }
+    .hud-center { flex: 1; }
+    .hud-label { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 4px; }
+    .hud-track { height: 5px; background: rgba(255,255,255,0.3); border-radius: 999px; overflow: hidden; }
+    .hud-fill { height: 100%; width: 65%; background: #fff; border-radius: 999px; }
+    .hud-xp { background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); color: #fff; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; }
+    .streak { margin: 0 16px 10px; background: linear-gradient(135deg, #F59E0B, #D97706); border-radius: 10px; padding: 8px 14px; text-align: center; font-size: 13px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .question-card { flex: 1; background: #fff; border-radius: 20px; margin: 0 16px 0; padding: 18px 18px 14px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
+    .card-top { display: flex; align-items: flex-start; justify-content: space-between; flex-shrink: 0; }
+    .topic-badge { background: #ECFDF5; color: #065F46; font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 999px; }
+    .voice-btn { width: 32px; height: 32px; background: #F3F4F6; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+    .q-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .q-text { font-size: 15px; font-weight: 500; color: #374151; }
+    /* Diagram */
+    .diagram-wrap { background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .body-figure { position: relative; width: 180px; height: 180px; margin: 0 auto; }
+    /* Simple human silhouette using CSS shapes */
+    .head { width: 44px; height: 44px; background: #FCD34D; border-radius: 50%; position: absolute; top: 0; left: 50%; transform: translateX(-50%); border: 2px solid #D97706; }
+    .torso { width: 70px; height: 70px; background: #93C5FD; border-radius: 8px; position: absolute; top: 48px; left: 50%; transform: translateX(-50%); border: 2px solid #3B82F6; }
+    .arm-left { width: 18px; height: 55px; background: #93C5FD; border-radius: 9px; position: absolute; top: 50px; left: 28px; transform: rotate(-10deg); border: 2px solid #3B82F6; }
+    .arm-right { width: 18px; height: 55px; background: #93C5FD; border-radius: 9px; position: absolute; top: 50px; right: 28px; transform: rotate(10deg); border: 2px solid #3B82F6; }
+    .leg-left { width: 22px; height: 58px; background: #A78BFA; border-radius: 8px; position: absolute; top: 116px; left: 50%; margin-left: -26px; border: 2px solid #7C3AED; }
+    .leg-right { width: 22px; height: 58px; background: #A78BFA; border-radius: 8px; position: absolute; top: 116px; left: 50%; margin-left: 4px; border: 2px solid #7C3AED; }
+    /* Label lines */
+    .labels-wrap { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 8px; }
+    .label-col { display: flex; flex-direction: column; gap: 10px; }
+    .label-item { display: flex; align-items: center; gap: 6px; }
+    .label-item.right { flex-direction: row-reverse; }
+    .label-dot { width: 8px; height: 8px; border-radius: 50%; background: #6366F1; flex-shrink: 0; }
+    .label-line { width: 24px; height: 1px; background: #9CA3AF; }
+    .label-text { font-size: 12px; font-weight: 600; color: #374151; }
+    /* Blank label */
+    .label-blank { display: inline-flex; align-items: center; justify-content: center; min-width: 60px; height: 26px; border-bottom: 2.5px solid #9CA3AF; background: #F9FAFB; border-radius: 4px 4px 0 0; padding: 0 8px; font-size: 12px; font-weight: 700; color: #9CA3AF; cursor: pointer; transition: all 0.15s; }
+    .label-blank.filled { border-bottom-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .label-blank.correct { border-bottom-color: #22C55E; background: #F0FDF4; color: #16A34A; }
+    .label-blank.wrong { border-bottom-color: #EF4444; background: #FEF2F2; color: #DC2626; text-decoration: line-through; }
+    .diagram-title { font-size: 11px; color: #9CA3AF; font-weight: 600; text-align: center; }
+    .wb-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: #9CA3AF; }
+    .word-bank { display: flex; flex-wrap: wrap; gap: 8px; }
+    .word-chip { background: #F3F4F6; border: 2px solid #D1D5DB; border-radius: 8px; padding: 7px 14px; font-size: 14px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.15s; user-select: none; }
+    .word-chip:hover { border-color: #6366F1; background: #EEF2FF; color: #4338CA; }
+    .word-chip.used { background: #F9FAFB; border-color: #E5E7EB; color: #D1D5DB; cursor: default; text-decoration: line-through; pointer-events: none; }
+    .feedback-banner { border-radius: 12px; padding: 12px 14px; display: none; }
+    .feedback-banner.ok { background: #F0FDF4; border: 1.5px solid #86EFAC; }
+    .feedback-banner.err { background: #FEF2F2; border: 1.5px solid #FCA5A5; }
+    .fb-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .fb-label { font-size: 13px; font-weight: 700; }
+    .fb-label.c { color: #16A34A; } .fb-label.w { color: #DC2626; }
+    .xp-badge { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; font-size: 11px; font-weight: 700; padding: 2px 9px; border-radius: 999px; }
+    .fb-exp { font-size: 12px; color: #4B5563; line-height: 1.5; }
+    .bottom-section { background: transparent; padding: 10px 32px 20px; flex-shrink: 0; display: flex; flex-direction: column; gap: 8px; }
+    .btn-submit { width: 100%; padding: 14px; background: #D1D5DB; color: #9CA3AF; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: not-allowed; text-align: center; transition: all 0.2s; }
+    .btn-submit.active { background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+    .btn-next { display: none; width: 100%; padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5); color: #fff; font-size: 15px; font-weight: 700; border: none; border-radius: 13px; cursor: pointer; box-shadow: 0 4px 14px rgba(99,102,241,0.4); }
+  </style>
+</head>
+<body>
+  <div class="hud">
+    <div class="hud-pause">&#9616;&#9616;</div>
+    <div class="hud-center">
+      <div class="hud-label">Q 25 / 38</div>
+      <div class="hud-track"><div class="hud-fill"></div></div>
+    </div>
+    <div class="hud-xp">&#11088; 305 XP</div>
+  </div>
+  <div class="streak">&#128293; 5x Combo!</div>
+  <div class="question-card">
+    <div class="card-top">
+      <div class="topic-badge">&#129516; Science</div>
+      <div class="voice-btn">&#128266;</div>
+    </div>
+    <div class="q-label">Label the diagram</div>
+    <div class="q-text">Look at the human body diagram. Fill in the missing label.</div>
+
+    <div class="diagram-wrap">
+      <div class="diagram-title">Human Body — Parts</div>
+      <div style="display:flex; align-items:center; gap:16px; width:100%;">
+        <!-- Left labels -->
+        <div class="label-col" style="flex:1; align-items:flex-end;">
+          <div class="label-item">
+            <div class="label-text">Head</div>
+            <div class="label-line"></div>
+            <div class="label-dot"></div>
+          </div>
+          <div class="label-item">
+            <span class="label-blank" id="b1" onclick="selectBlank('b1')">&#95;&#95;&#95;</span>
+            <div class="label-line"></div>
+            <div class="label-dot"></div>
+          </div>
+          <div class="label-item">
+            <div class="label-text">Arm</div>
+            <div class="label-line"></div>
+            <div class="label-dot"></div>
+          </div>
+        </div>
+        <!-- Figure -->
+        <div class="body-figure">
+          <div class="head"></div>
+          <div class="torso"></div>
+          <div class="arm-left"></div>
+          <div class="arm-right"></div>
+          <div class="leg-left"></div>
+          <div class="leg-right"></div>
+        </div>
+        <!-- Right labels -->
+        <div class="label-col" style="flex:1; align-items:flex-start;">
+          <div class="label-item right">
+            <div class="label-text">Neck</div>
+            <div class="label-line"></div>
+            <div class="label-dot"></div>
+          </div>
+          <div class="label-item right">
+            <div class="label-text">Shoulder</div>
+            <div class="label-line"></div>
+            <div class="label-dot"></div>
+          </div>
+          <div class="label-item right">
+            <div class="label-text">Leg</div>
+            <div class="label-line"></div>
+            <div class="label-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wb-label">Word Bank — choose the missing label</div>
+    <div class="word-bank">
+      <div class="word-chip" onclick="fillBlank(this,'Torso')">Torso</div>
+      <div class="word-chip" onclick="fillBlank(this,'Knee')">Knee</div>
+      <div class="word-chip" onclick="fillBlank(this,'Elbow')">Elbow</div>
+      <div class="word-chip" onclick="fillBlank(this,'Chest')">Chest</div>
+    </div>
+
+    <div class="feedback-banner" id="fb">
+      <div class="fb-top">
+        <div class="fb-label c" id="fbl">&#10003; Correct!</div>
+        <div class="xp-badge" id="xpb">+15 XP</div>
+      </div>
+      <div class="fb-exp" id="fb-exp">The torso (also called the trunk) is the central part of the body, housing major organs like the heart and lungs.</div>
+    </div>
+  </div>
+  <div class="bottom-section">
+    <button class="btn-submit" id="sub" onclick="check()">Check Answer &#8594;</button>
+    <button class="btn-next" id="nxt" onclick="window.location.href='game-play-fitb-passage.mockup.html'">Next Question &#8594;</button>
+  </div>
+  <script>
+    let filled = null;
+    function selectBlank(id) {}
+    function fillBlank(chip, word) {
+      if (chip.classList.contains('used')) return;
+      document.querySelectorAll('.word-chip.used').forEach(c => c.classList.remove('used'));
+      const b = document.getElementById('b1');
+      b.textContent = word; b.classList.add('filled'); b.dataset.val = word;
+      chip.classList.add('used');
+      filled = word;
+      document.getElementById('sub').classList.add('active');
+    }
+    function check() {
+      if (!filled) return;
+      const b = document.getElementById('b1');
+      const ok = filled === 'Torso';
+      b.classList.remove('filled'); b.classList.add(ok ? 'correct' : 'wrong');
+      const fb = document.getElementById('fb');
+      fb.style.display = 'block'; fb.className = 'feedback-banner ' + (ok ? 'ok' : 'err');
+      document.getElementById('fbl').className = 'fb-label ' + (ok ? 'c' : 'w');
+      document.getElementById('fbl').textContent = ok ? '\u2713 Correct! Well done!' : '\u2717 The answer is: Torso';
+      document.getElementById('xpb').style.display = ok ? 'inline-block' : 'none';
+      document.getElementById('sub').style.display = 'none';
+      document.getElementById('nxt').style.display = 'block';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARI — Indian Reading Level Checker</title>
+  <meta name="description" content="Free readability checker for CBSE/ICSE teachers. Find the right grade level for any passage." />
+
+  <!-- Cloudflare Turnstile -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --blue:      #2563EB;
+      --blue-dark: #1D4ED8;
+      --blue-lt:   #EFF6FF;
+      --green:     #16A34A;
+      --green-lt:  #DCFCE7;
+      --gray-bg:   #F9FAFB;
+      --gray-bd:   #E5E7EB;
+      --gray-mid:  #9CA3AF;
+      --gray-text: #6B7280;
+      --dark:      #111827;
+      --mid:       #374151;
+      --white:     #FFFFFF;
+      --radius:    12px;
+      --shadow:    0 2px 10px rgba(0,0,0,.07);
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--gray-bg);
+      color: var(--dark);
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--blue);
+      color: var(--white);
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 10px; }
+    .logo-badge {
+      background: var(--white); color: var(--blue);
+      font-weight: 800; font-size: 16px; padding: 3px 9px; border-radius: 6px;
+    }
+    header h1 { font-size: 20px; font-weight: 700; }
+    header p  { font-size: 12px; opacity: 0.85; margin-top: 3px; }
+
+    /* ── Layout ── */
+    main { max-width: 640px; margin: 0 auto; padding: 24px 16px 60px; }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-bd);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; color: var(--gray-text); margin-bottom: 12px;
+    }
+
+    /* ── Textarea ── */
+    textarea {
+      width: 100%; min-height: 140px;
+      border: 1.5px solid var(--gray-bd); border-radius: 8px;
+      padding: 12px 14px; font-size: 15px; color: var(--dark);
+      resize: vertical; outline: none; font-family: inherit;
+      line-height: 1.6; background: var(--white);
+      transition: border-color .15s;
+    }
+    textarea::placeholder { color: var(--gray-mid); }
+    textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.1); }
+    .word-count { text-align: right; font-size: 11px; color: var(--gray-mid); margin-top: 4px; }
+
+    /* ── Controls row ── */
+    .controls { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    select {
+      flex: 0 0 auto; border: 1.5px solid var(--gray-bd); border-radius: 8px;
+      padding: 10px 32px 10px 12px; font-size: 14px; color: var(--mid);
+      background: var(--white); outline: none; cursor: pointer; font-family: inherit;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7280' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+    }
+    select:focus { border-color: var(--blue); }
+
+    .btn {
+      flex: 1 1 auto; border: none; border-radius: 8px;
+      padding: 12px 20px; font-size: 15px; font-weight: 600;
+      cursor: pointer; font-family: inherit; transition: background .15s;
+    }
+    .btn-primary { background: var(--blue); color: var(--white); }
+    .btn-primary:hover { background: var(--blue-dark); }
+    .btn-primary:disabled { background: var(--gray-mid); cursor: not-allowed; }
+    .btn-secondary {
+      background: var(--white); color: var(--blue);
+      border: 1.5px solid var(--blue);
+    }
+    .btn-secondary:hover { background: var(--blue-lt); }
+
+    /* ── Rating pills ── */
+    .rate-prompt { font-size: 15px; font-weight: 600; color: var(--dark); margin-bottom: 14px; }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .pill {
+      width: 44px; height: 44px; border-radius: 50%;
+      border: 1.5px solid var(--gray-bd); background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 600; color: var(--mid);
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .pill:hover { border-color: var(--blue); color: var(--blue); }
+    .pill.selected {
+      background: var(--blue); border-color: var(--blue);
+      color: var(--white); box-shadow: 0 2px 8px rgba(37,99,235,.3);
+    }
+    .pill-hint { font-size: 11px; color: var(--gray-text); margin-bottom: 14px; }
+
+    /* ── ARI result ── */
+    .ari-box {
+      background: var(--blue-lt); border: 1.5px solid #BFDBFE;
+      border-radius: 10px; padding: 16px; margin-bottom: 14px;
+    }
+    .ari-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--blue); margin-bottom: 4px; }
+    .ari-grade { font-size: 30px; font-weight: 800; color: var(--blue); line-height: 1; }
+    .ari-sub   { font-size: 12px; color: #3B82F6; margin-top: 3px; }
+
+    /* Confidence bar */
+    .conf-label { font-size: 12px; color: var(--gray-text); margin-bottom: 5px; }
+    .bar-track  { height: 8px; background: var(--gray-bd); border-radius: 999px; overflow: hidden; margin-bottom: 14px; }
+    .bar-fill   { height: 100%; background: var(--blue); border-radius: 999px; transition: width .3s; }
+
+    /* Agreement strip */
+    .agree-strip {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--green-lt); border: 1px solid #BBF7D0;
+      border-radius: 8px; padding: 12px; margin-bottom: 14px;
+    }
+    .agree-icon {
+      width: 28px; height: 28px; border-radius: 50%; background: var(--green);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; color: var(--white); font-size: 14px; font-weight: 700;
+    }
+    .agree-text { font-size: 13px; color: #166534; font-weight: 500; line-height: 1.3; }
+
+    /* Disagree input */
+    .disagree-section { margin-top: 2px; }
+    .disagree-label { font-size: 12px; color: var(--gray-text); margin-bottom: 6px; font-style: italic; }
+    .disagree-input {
+      width: 100%; border: 1px solid var(--gray-bd); border-radius: 6px;
+      padding: 8px 10px; font-size: 13px; font-family: inherit; color: var(--mid);
+      resize: none; outline: none; height: 64px;
+    }
+    .disagree-input:focus { border-color: var(--blue); }
+    .disagree-input::placeholder { color: var(--gray-mid); }
+
+    /* Teacher rating echo */
+    .echo { font-size: 13px; color: var(--gray-text); margin-bottom: 12px; }
+    .echo-grade {
+      display: inline-block; border: 1.5px solid var(--blue);
+      color: var(--blue); font-weight: 700; font-size: 13px;
+      border-radius: 20px; padding: 2px 10px; margin-left: 4px;
+    }
+
+    /* Turnstile wrapper */
+    .captcha-wrap { margin-bottom: 14px; }
+
+    /* Error / success messages */
+    .msg {
+      padding: 12px 14px; border-radius: 8px;
+      font-size: 13px; font-weight: 500; margin-bottom: 12px;
+    }
+    .msg-error   { background: #FEF2F2; border: 1px solid #FCA5A5; color: #B91C1C; }
+    .msg-success { background: var(--green-lt); border: 1px solid #86EFAC; color: #166534; }
+
+    /* Hidden utility */
+    .hidden { display: none !important; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center; padding: 16px; font-size: 11px; color: var(--gray-text);
+      border-top: 1px solid var(--gray-bd); margin-top: 8px;
+    }
+    footer a { color: var(--blue); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <span class="logo-badge">ARI</span>
+    <h1>Indian Reading Level Checker</h1>
+  </div>
+  <p>Free tool for CBSE / ICSE teachers — no login needed</p>
+</header>
+
+<main>
+
+  <!-- ── Step 1: Input ── -->
+  <div class="card" id="card-input">
+    <div class="card-title">Paste a Passage</div>
+    <textarea id="passage"
+      placeholder="Paste a passage here — story, textbook paragraph, or any text..."
+      oninput="onPassageInput()"
+    ></textarea>
+    <div class="word-count" id="word-count">0 words</div>
+
+    <div class="controls">
+      <select id="subject">
+        <option value="English">English</option>
+        <option value="Maths">Maths</option>
+        <option value="Science">Science</option>
+        <option value="EVS">EVS</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Other">Other</option>
+      </select>
+      <button class="btn btn-primary" id="btn-check" onclick="checkPassage()" disabled>
+        Check Reading Level
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Step 2: Teacher rates first ── -->
+  <div class="card hidden" id="card-rate">
+    <div class="card-title">Your Rating</div>
+    <p class="rate-prompt">What grade would <em>you</em> assign this passage?</p>
+    <div class="pills" id="pills"></div>
+    <p class="pill-hint">Tap a grade, then submit — you'll see ARI's answer after.</p>
+
+    <!-- Cloudflare Turnstile CAPTCHA -->
+    <div class="captcha-wrap">
+      <div class="cf-turnstile"
+           data-sitekey="0x4AAAAAABxxxxxxxxxxxxxxxxx"
+           data-callback="onTurnstileSuccess"
+           data-expired-callback="onTurnstileExpired"
+           data-theme="light">
+      </div>
+    </div>
+
+    <div id="msg-rate" class="hidden"></div>
+
+    <button class="btn btn-primary" id="btn-submit" onclick="submitRating()" disabled>
+      Submit my rating
+    </button>
+  </div>
+
+  <!-- ── Step 3: ARI result revealed ── -->
+  <div class="card hidden" id="card-result">
+    <div class="card-title">ARI Result</div>
+
+    <div class="echo">
+      Your rating: <span class="echo-grade" id="echo-grade">—</span>
+    </div>
+
+    <div class="ari-box">
+      <div class="ari-label">ARI suggests</div>
+      <div class="ari-grade" id="ari-grade">—</div>
+      <div class="ari-sub">Automated Readability Index — calibrated for CBSE/ICSE</div>
+    </div>
+
+    <div class="conf-label" id="conf-label">Confidence range</div>
+    <div class="bar-track">
+      <div class="bar-fill" id="bar-fill" style="width: 0%"></div>
+    </div>
+
+    <div class="agree-strip" id="agree-strip">
+      <div class="agree-icon">✓</div>
+      <div class="agree-text" id="agree-text">—</div>
+    </div>
+
+    <!-- Disagree reason (shown when teacher grade is outside ARI range) -->
+    <div class="disagree-section hidden" id="disagree-section">
+      <div class="disagree-label">Optional — why do you disagree?</div>
+      <textarea class="disagree-input" id="disagree-input"
+        placeholder="e.g. 'vocabulary is too advanced', 'dialogue makes it easier than it looks'..."
+      ></textarea>
+      <button class="btn btn-secondary" style="margin-top:8px; width:100%;"
+        onclick="submitReason()">Send feedback</button>
+      <div id="msg-reason" class="hidden" style="margin-top:8px;"></div>
+    </div>
+
+    <button class="btn btn-secondary" style="margin-top:14px; width:100%;"
+      onclick="reset()">Check another passage</button>
+  </div>
+
+</main>
+
+<footer>
+  No login required
+  &nbsp;·&nbsp;
+  Your passage is stored anonymously to improve ARI
+  &nbsp;·&nbsp;
+  <a href="https://acequest.in" target="_blank">acequest.in</a>
+</footer>
+
+<script>
+  // ── Config ──
+  const API_BASE = window.location.hostname === 'localhost'
+    ? 'http://localhost:8080'
+    : 'https://ari-acequest.fly.dev';   // update after fly deploy
+
+  // ── State ──
+  let state = {
+    text: '',
+    subject: 'English',
+    ari: null,           // { grade_low, grade_mid, grade_high, label }
+    teacherGrade: null,
+    turnstileToken: null,
+    feedbackId: null,
+  };
+
+  // ── Turnstile callbacks ──
+  function onTurnstileSuccess(token) {
+    state.turnstileToken = token;
+    updateSubmitBtn();
+  }
+  function onTurnstileExpired() {
+    state.turnstileToken = null;
+    updateSubmitBtn();
+  }
+
+  // ── Passage input ──
+  function onPassageInput() {
+    const text = document.getElementById('passage').value;
+    const words = text.trim().split(/\s+/).filter(Boolean).length;
+    document.getElementById('word-count').textContent = words + ' words';
+    document.getElementById('btn-check').disabled = words < 5;
+  }
+
+  // ── Pill rendering ──
+  function renderPills() {
+    const container = document.getElementById('pills');
+    container.innerHTML = '';
+    for (let g = 1; g <= 10; g++) {
+      const d = document.createElement('div');
+      d.className = 'pill' + (state.teacherGrade === g ? ' selected' : '');
+      d.textContent = g;
+      d.onclick = () => selectGrade(g);
+      container.appendChild(d);
+    }
+  }
+
+  function selectGrade(g) {
+    state.teacherGrade = g;
+    renderPills();
+    updateSubmitBtn();
+  }
+
+  function updateSubmitBtn() {
+    const ready = state.teacherGrade !== null && state.turnstileToken !== null;
+    document.getElementById('btn-submit').disabled = !ready;
+  }
+
+  // ── Step 1 → 2: Score the passage ──
+  async function checkPassage() {
+    const text = document.getElementById('passage').value.trim();
+    const subject = document.getElementById('subject').value;
+
+    if (!text || text.split(/\s+/).length < 5) return;
+
+    state.text = text;
+    state.subject = subject;
+    state.teacherGrade = null;
+    state.turnstileToken = null;
+
+    document.getElementById('btn-check').disabled = true;
+    document.getElementById('btn-check').textContent = 'Analysing…';
+
+    try {
+      const resp = await fetch(`${API_BASE}/score`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, subject }),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        alert('Error: ' + (err.detail || 'Something went wrong'));
+        return;
+      }
+
+      state.ari = await resp.json();
+      show('card-rate');
+      renderPills();
+    } catch (e) {
+      alert('Could not reach ARI server. Please try again.');
+    } finally {
+      document.getElementById('btn-check').disabled = false;
+      document.getElementById('btn-check').textContent = 'Check Reading Level';
+    }
+  }
+
+  // ── Step 2 → 3: Submit rating, reveal ARI ──
+  async function submitRating() {
+    if (!state.teacherGrade || !state.turnstileToken) return;
+
+    document.getElementById('btn-submit').disabled = true;
+    document.getElementById('btn-submit').textContent = 'Submitting…';
+
+    try {
+      const resp = await fetch(`${API_BASE}/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: state.text,
+          subject: state.subject,
+          ari_grade_mid: state.ari.grade_mid,
+          teacher_grade: state.teacherGrade,
+          teacher_board: 'CBSE',
+          reason: '',
+          turnstile_token: state.turnstileToken,
+        }),
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json();
+        showMsg('msg-rate', 'error', err.detail || 'Submission failed. Please try again.');
+        return;
+      }
+
+      revealResult();
+    } catch (e) {
+      showMsg('msg-rate', 'error', 'Network error — please try again.');
+    } finally {
+      document.getElementById('btn-submit').disabled = false;
+      document.getElementById('btn-submit').textContent = 'Submit my rating';
+    }
+  }
+
+  // ── Reveal ARI result ──
+  function revealResult() {
+    const { grade_low, grade_mid, grade_high, label } = state.ari;
+    const tg = state.teacherGrade;
+
+    document.getElementById('echo-grade').textContent = 'Grade ' + tg;
+    document.getElementById('ari-grade').textContent = label;
+
+    // Confidence bar — map grade range onto 0-100%
+    const pct = ((grade_high - grade_low + 2) / 10) * 100;
+    document.getElementById('bar-fill').style.width = Math.min(pct, 100) + '%';
+    document.getElementById('conf-label').textContent =
+      `Confidence range: Grade ${grade_low}–${grade_high}`;
+
+    // Agreement text
+    const inRange = tg >= grade_low && tg <= grade_high;
+    const agreeEl = document.getElementById('agree-text');
+    const stripEl = document.getElementById('agree-strip');
+    if (inRange) {
+      agreeEl.innerHTML = 'Your rating is <strong>within ARI\'s predicted range</strong>. 👍';
+      stripEl.style.background = 'var(--green-lt)';
+    } else {
+      agreeEl.innerHTML = `Your rating (Grade ${tg}) is <strong>outside ARI's range</strong> (${label}). Your expertise matters — please share why below.`;
+      stripEl.style.background = '#FEF3C7';
+      stripEl.style.borderColor = '#FCD34D';
+      document.getElementById('agree-icon') && (document.getElementById('agree-strip').querySelector('.agree-icon').textContent = '!');
+      show('disagree-section');
+    }
+
+    hide('card-input');
+    hide('card-rate');
+    show('card-result');
+  }
+
+  // ── Submit disagree reason ──
+  async function submitReason() {
+    const reason = document.getElementById('disagree-input').value.trim();
+    if (!reason) return;
+
+    try {
+      // Re-use feedback endpoint with reason — send a fresh request
+      await fetch(`${API_BASE}/feedback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: state.text,
+          subject: state.subject,
+          ari_grade_mid: state.ari.grade_mid,
+          teacher_grade: state.teacherGrade,
+          teacher_board: 'CBSE',
+          reason: reason,
+          turnstile_token: state.turnstileToken || 'reason-only',
+        }),
+      });
+    } catch (_) { /* best-effort */ }
+
+    showMsg('msg-reason', 'success', 'Thank you — your feedback helps improve ARI!');
+    document.querySelector('#disagree-section .btn-secondary').disabled = true;
+  }
+
+  // ── Reset ──
+  function reset() {
+    state = { text:'', subject:'English', ari:null, teacherGrade:null, turnstileToken:null };
+    document.getElementById('passage').value = '';
+    document.getElementById('word-count').textContent = '0 words';
+    document.getElementById('btn-check').disabled = true;
+    document.getElementById('disagree-input').value = '';
+    hide('card-rate'); hide('card-result'); hide('disagree-section');
+    show('card-input');
+    // Reset Turnstile
+    if (window.turnstile) window.turnstile.reset();
+  }
+
+  // ── UI helpers ──
+  function show(id) { document.getElementById(id).classList.remove('hidden'); }
+  function hide(id) { document.getElementById(id).classList.add('hidden'); }
+
+  function showMsg(id, type, text) {
+    const el = document.getElementById(id);
+    el.className = 'msg msg-' + type;
+    el.textContent = text;
+    el.classList.remove('hidden');
+  }
+</script>
+
+</body>
+</html>

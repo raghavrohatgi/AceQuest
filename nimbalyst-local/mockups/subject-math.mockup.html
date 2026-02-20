@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - Math Adventures</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary-purple: #6366F1;
+      --primary-purple-light: #E0E7FF;
+      --accent-orange: #F59E0B;
+      --accent-green: #10B981;
+      --gray-900: #111827;
+      --gray-700: #374151;
+      --gray-600: #4B5563;
+      --gray-500: #6B7280;
+      --gray-300: #D1D5DB;
+      --gray-200: #E5E7EB;
+      --gray-100: #F3F4F6;
+      --gray-50: #F9FAFB;
+      --white: #FFFFFF;
+      --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --spacing-xs: 4px; --spacing-sm: 8px; --spacing-md: 16px;
+      --spacing-lg: 24px; --spacing-xl: 32px; --spacing-2xl: 48px;
+      --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px;
+      --radius-xl: 16px; --radius-full: 9999px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    body { font-family: var(--font-primary); background: var(--gray-50); min-height: 100vh; }
+
+    /* Header */
+    .subject-hero {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: var(--spacing-xl) var(--spacing-lg);
+      position: relative;
+      overflow: hidden;
+    }
+    .subject-hero::before {
+      content: '🔢';
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 120px;
+      opacity: 0.15;
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+      color: var(--white);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-full);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: var(--spacing-lg);
+      transition: all 0.2s ease;
+    }
+    .back-btn:hover { background: rgba(255,255,255,0.3); }
+    .hero-content { max-width: 1200px; margin: 0 auto; }
+    .hero-title { font-size: 40px; font-weight: 900; color: var(--white); margin-bottom: var(--spacing-sm); }
+    .hero-subtitle { font-size: 16px; color: rgba(255,255,255,0.9); margin-bottom: var(--spacing-lg); }
+    .hero-stats { display: flex; gap: var(--spacing-md); flex-wrap: wrap; }
+    .hero-stat {
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255,255,255,0.3);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-full);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* Filters */
+    .filters-bar {
+      background: var(--white);
+      border-bottom: 2px solid var(--gray-100);
+      padding: var(--spacing-md) var(--spacing-lg);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: var(--shadow-sm);
+    }
+    .filters-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      gap: var(--spacing-sm);
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: var(--spacing-sm) var(--spacing-md);
+      border-radius: var(--radius-full);
+      border: 2px solid var(--gray-200);
+      background: var(--white);
+      color: var(--gray-700);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .filter-chip:hover { border-color: var(--primary-purple); color: var(--primary-purple); }
+    .filter-chip.active {
+      background: var(--primary-purple);
+      border-color: var(--primary-purple);
+      color: var(--white);
+    }
+
+    /* Main Content */
+    .main-content { max-width: 1200px; margin: 0 auto; padding: var(--spacing-xl) var(--spacing-lg); }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .game-card {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    .game-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+    .recommended-badge {
+      position: absolute;
+      top: var(--spacing-md);
+      left: var(--spacing-md);
+      background: var(--primary-purple);
+      color: var(--white);
+      padding: var(--spacing-xs) var(--spacing-md);
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      z-index: 10;
+    }
+
+    .locked-badge {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: rgba(0,0,0,0.5);
+      color: var(--white);
+      padding: var(--spacing-xs) var(--spacing-sm);
+      border-radius: var(--radius-full);
+      font-size: 16px;
+      z-index: 10;
+    }
+
+    .game-thumbnail {
+      width: 100%;
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 56px;
+    }
+    .game-card.locked .game-thumbnail { filter: grayscale(0.5); }
+
+    .game-info { padding: var(--spacing-md); }
+    .game-title { font-size: 17px; font-weight: 700; color: var(--gray-900); margin-bottom: var(--spacing-xs); }
+    .game-description { font-size: 13px; color: var(--gray-600); margin-bottom: var(--spacing-sm); line-height: 1.5; }
+    .game-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-bottom: var(--spacing-sm);
+    }
+    .game-meta-item { display: flex; align-items: center; gap: var(--spacing-xs); }
+
+    .difficulty {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      padding: 2px var(--spacing-sm);
+      border-radius: var(--radius-full);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: var(--spacing-sm);
+    }
+    .difficulty.easy { background: #D1FAE5; color: #065F46; }
+    .difficulty.medium { background: #FEF3C7; color: #92400E; }
+    .difficulty.hard { background: #FEE2E2; color: #991B1B; }
+
+    .start-button {
+      width: 100%;
+      padding: var(--spacing-sm) var(--spacing-md);
+      background: linear-gradient(135deg, var(--primary-purple) 0%, #7C3AED 100%);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-lg);
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .start-button:hover { transform: translateY(-2px); }
+    .start-button.locked-btn {
+      background: var(--gray-200);
+      color: var(--gray-500);
+      cursor: not-allowed;
+    }
+    .start-button.locked-btn:hover { transform: none; }
+
+    @media (max-width: 768px) {
+      .games-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 28px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Subject Hero -->
+  <div class="subject-hero">
+    <div class="hero-content">
+      <a href="student-home-first-time.mockup.html" class="back-btn">← Back to Home</a>
+      <h1 class="hero-title">🔢 Math Adventures</h1>
+      <p class="hero-subtitle">Master numbers, patterns, and problem-solving through fun challenges!</p>
+      <div class="hero-stats">
+        <div class="hero-stat">📚 Grade 5</div>
+        <div class="hero-stat">🎮 6 Games</div>
+        <div class="hero-stat">⭐ Up to +45 XP each</div>
+        <div class="hero-stat">🏆 4 Badges to earn</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-bar">
+    <div class="filters-content">
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">⚡ Quick (5 min)</button>
+      <button class="filter-chip">🎯 Beginner</button>
+      <button class="filter-chip">🔥 Medium</button>
+      <button class="filter-chip">💪 Hard</button>
+      <button class="filter-chip">🏆 Has Badge</button>
+    </div>
+  </div>
+
+  <main class="main-content">
+
+    <!-- Recommended -->
+    <p class="section-label">⭐ Recommended for You</p>
+    <div class="games-grid">
+      <div class="game-card" onclick="window.location.href='game-pre-game.mockup.html'">
+        <div class="recommended-badge">RECOMMENDED</div>
+        <div class="game-thumbnail" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">✖️</div>
+        <div class="game-info">
+          <span class="difficulty easy">● Easy</span>
+          <h3 class="game-title">Multiplication Master</h3>
+          <p class="game-description">Perfect for beginners! Learn multiplication tables through fun challenges.</p>
+          <div class="game-meta">
+            <div class="game-meta-item"><span>⏱️</span><span>10 min</span></div>
+            <div class="game-meta-item"><span>⭐</span><span>+30 XP</span></div>
+            <div class="game-meta-item"><span>🏆</span><span>Badge</span></div>
+          </div>
+          <button class="start-button" onclick="event.stopPropagation(); window.location.href='game-pre-game.mockup.html'">START GAME 🚀</button>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-thumbnail" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">🧮</div>
+        <div class="game-info">
+          <span class="difficulty easy">● Easy</span>
+          <h3 class="game-title">Number Ninja</h3>
+          <p class="game-description">Practice addition and subtraction with exciting challenges!</p>
+          <div class="game-meta">
+            <div class="game-meta-item"><span>⏱️</span><span>8 min</span></div>
+            <div class="game-meta-item"><span>⭐</span><span>+25 XP</span></div>
+          </div>
+          <button class="start-button">START GAME 🎮</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Games -->
+    <p class="section-label">🎮 All Math Games</p>
+    <div class="games-grid">
+      <div class="game-card">
+        <div class="game-thumbnail" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">📐</div>
+        <div class="game-info">
+          <span class="difficulty easy">● Easy</span>
+          <h3 class="game-title">Shape Explorer</h3>
+          <p class="game-description">Discover the world of geometry with interactive puzzles!</p>
+          <div class="game-meta">
+            <div class="game-meta-item"><span>⏱️</span><span>12 min</span></div>
+            <div class="game-meta-item"><span>⭐</span><span>+35 XP</span></div>
+          </div>
+          <button class="start-button">START GAME 🎮</button>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-thumbnail" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">📊</div>
+        <div class="game-info">
+          <span class="difficulty medium">● Medium</span>
+          <h3 class="game-title">Fraction Fun</h3>
+          <p class="game-description">Understand fractions, decimals and percentages through games!</p>
+          <div class="game-meta">
+            <div class="game-meta-item"><span>⏱️</span><span>15 min</span></div>
+            <div class="game-meta-item"><span>⭐</span><span>+40 XP</span></div>
+            <div class="game-meta-item"><span>🏆</span><span>Badge</span></div>
+          </div>
+          <button class="start-button">START GAME 🎮</button>
+        </div>
+      </div>
+
+      <div class="game-card">
+        <div class="game-thumbnail" style="background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);">🔣</div>
+        <div class="game-info">
+          <span class="difficulty medium">● Medium</span>
+          <h3 class="game-title">Algebra Intro</h3>
+          <p class="game-description">Learn basic algebra concepts with fun puzzles and equations!</p>
+          <div class="game-meta">
+            <div class="game-meta-item"><span>⏱️</span><span>18 min</span></div>
+            <div class="game-meta-item"><span>⭐</span><span>+40 XP</span></div>
+          </div>
+          <button class="start-button">START GAME 🎮</button>
+        </div>
+      </div>
+
+      <div class="game-card locked">
+        <div class="locked-badge">🔒</div>
+        <div class="game-thumbnail" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);">📏</div>
+        <div class="game-info">
+          <span class="difficulty hard">● Hard</span>
+          <h3 class="game-title">Division Dungeon</h3>
+          <p class="game-description">Master division through an epic dungeon adventure. Unlock after Multiplication Master!</p>
+          <div class="game-meta">
+            <div class="game-meta-item"><span>⏱️</span><span>20 min</span></div>
+            <div class="game-meta-item"><span>⭐</span><span>+45 XP</span></div>
+            <div class="game-meta-item"><span>🏆</span><span>Badge</span></div>
+          </div>
+          <button class="start-button locked-btn">🔒 Complete Multiplication Master</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Welcome</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Decorative background bubbles */
+  .bg-bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    pointer-events: none;
+  }
+  .bb1 { width: 300px; height: 300px; top: -80px; right: -80px; }
+  .bb2 { width: 180px; height: 180px; bottom: 120px; left: -60px; }
+  .bb3 { width: 100px; height: 100px; top: 200px; left: 30px; }
+
+  /* Top wordmark */
+  .top-wordmark {
+    padding: 20px 0 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* Hero section */
+  .hero {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    gap: 20px;
+  }
+
+  /* Mascot / character badge */
+  .mascot-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .mascot-glow {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    filter: blur(16px);
+  }
+  .mascot-card {
+    width: 100px;
+    height: 100px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    position: relative;
+    animation: float 3s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+  .mascot-badge {
+    position: absolute;
+    bottom: 4px; right: 4px;
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+
+  /* App name */
+  .app-name {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .app-name span {
+    background: linear-gradient(135deg, #FDE68A, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Tagline */
+  .tagline {
+    font-size: 16px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.85);
+    text-align: center;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+
+  /* Subject pills */
+  .subject-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .pill {
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Social proof */
+  .social-proof {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .stars {
+    font-size: 16px;
+    letter-spacing: 1px;
+  }
+  .social-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Bottom section */
+  .bottom {
+    padding: 16px 24px 36px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .btn-start {
+    width: 100%;
+    height: 54px;
+    background: #fff;
+    color: #4F46E5;
+    font-size: 17px;
+    font-weight: 800;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+  }
+  .btn-start:active {
+    transform: scale(0.98);
+    box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+  }
+  .btn-arrow {
+    font-size: 20px;
+    transition: transform 0.2s;
+  }
+  .btn-start:hover .btn-arrow { transform: translateX(3px); }
+
+  .login-link {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    text-align: center;
+    white-space: nowrap;
+  }
+  .login-link a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .fine-print {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-align: center;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- Decorative bubbles -->
+<div class="bg-bubble bb1"></div>
+<div class="bg-bubble bb2"></div>
+<div class="bg-bubble bb3"></div>
+
+<!-- Top wordmark -->
+<div class="top-wordmark">AceQuest</div>
+
+<!-- Hero -->
+<div class="hero">
+
+  <!-- Mascot -->
+  <div class="mascot-wrap">
+    <div class="mascot-glow"></div>
+    <div class="mascot-card">
+      🎓
+      <div class="mascot-badge">⚡</div>
+    </div>
+  </div>
+
+  <!-- App name -->
+  <div class="app-name">Ace<span>Quest</span></div>
+
+  <!-- Tagline -->
+  <div class="tagline">Learn. Play. Level Up.</div>
+
+  <!-- Subject pills -->
+  <div class="subject-pills">
+    <div class="pill">📐 Math</div>
+    <div class="pill">📖 English</div>
+    <div class="pill">🔬 Science</div>
+  </div>
+
+  <!-- Social proof -->
+  <div class="social-proof">
+    <div class="stars">⭐⭐⭐⭐⭐</div>
+    <div class="social-text">Join 50,000+ students already playing</div>
+  </div>
+
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom">
+  <a class="btn-start" href="onboarding-signup.mockup.html">
+    Start Playing <span class="btn-arrow">→</span>
+  </a>
+  <div class="login-link">
+    Already have an account? <a href="onboarding-login.mockup.html">Log in</a>
+  </div>
+  <div class="fine-print">No credit card required · Free to start</div>
+</div>
+
+</body>
+</html>

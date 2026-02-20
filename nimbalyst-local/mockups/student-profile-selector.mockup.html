@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - Who's Playing?</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Brand Colors */
+      --primary-purple: #6366F1;
+      --primary-purple-hover: #4F46E5;
+      --primary-purple-light: #E0E7FF;
+      --accent-orange: #F59E0B;
+      --accent-green: #10B981;
+
+      /* Neutrals */
+      --gray-900: #111827;
+      --gray-700: #374151;
+      --gray-500: #6B7280;
+      --gray-300: #D1D5DB;
+      --gray-100: #F3F4F6;
+      --gray-50: #F9FAFB;
+      --white: #FFFFFF;
+
+      /* Typography */
+      --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+
+      /* Spacing */
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+      --spacing-2xl: 48px;
+
+      /* Border Radius */
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+
+      /* Shadows */
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    body {
+      font-family: var(--font-primary);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-lg);
+    }
+
+    /* Container for 2 screens side by side */
+    .screens-container {
+      display: flex;
+      gap: var(--spacing-2xl);
+      max-width: 1400px;
+      width: 100%;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .screen {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      width: 100%;
+      max-width: 600px;
+      overflow: hidden;
+    }
+
+    .screen-header {
+      text-align: center;
+      padding: var(--spacing-lg);
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .screen-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--primary-purple);
+      background: var(--primary-purple-light);
+      padding: var(--spacing-xs) var(--spacing-md);
+      border-radius: var(--radius-full);
+      display: inline-block;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-sm);
+    }
+
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-orange) 100%);
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-purple) 0%, var(--accent-orange) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .screen-content {
+      padding: var(--spacing-2xl);
+    }
+
+    /* Screen 1: Profile Selector */
+    .page-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--gray-900);
+      margin-bottom: var(--spacing-sm);
+      text-align: center;
+    }
+
+    .page-subtitle {
+      font-size: 18px;
+      color: var(--gray-600);
+      margin-bottom: var(--spacing-2xl);
+      text-align: center;
+    }
+
+    .profiles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .profile-card {
+      background: var(--white);
+      border: 3px solid var(--gray-200);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-xl);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .profile-card:hover {
+      border-color: var(--primary-purple);
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .profile-avatar {
+      width: 96px;
+      height: 96px;
+      background: linear-gradient(135deg, var(--primary-purple-light) 0%, #FEF3C7 100%);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      margin: 0 auto var(--spacing-md);
+      border: 4px solid var(--white);
+      box-shadow: var(--shadow-md);
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gray-900);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .profile-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--spacing-md);
+      font-size: 14px;
+      color: var(--gray-600);
+    }
+
+    .profile-stat {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+    }
+
+    .stat-icon {
+      font-size: 16px;
+    }
+
+    .add-profile-button {
+      width: 100%;
+      padding: var(--spacing-xl);
+      border: 3px dashed var(--gray-300);
+      border-radius: var(--radius-xl);
+      background: var(--white);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .add-profile-button:hover {
+      border-color: var(--primary-purple);
+      background: var(--primary-purple-light);
+    }
+
+    .add-profile-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--gray-100);
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: var(--gray-500);
+    }
+
+    .add-profile-button:hover .add-profile-icon {
+      background: var(--primary-purple);
+      color: var(--white);
+    }
+
+    .add-profile-text {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .parent-link {
+      text-align: center;
+      margin-top: var(--spacing-xl);
+      padding-top: var(--spacing-xl);
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .parent-link a {
+      color: var(--gray-600);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .parent-link a:hover {
+      color: var(--primary-purple);
+      text-decoration: underline;
+    }
+
+    /* Screen 2: Add New Player */
+    .back-button {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--spacing-xs);
+      color: var(--gray-600);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: var(--spacing-sm) 0;
+      margin-bottom: var(--spacing-lg);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .back-button:hover {
+      color: var(--primary-purple);
+    }
+
+    .form-section {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: var(--spacing-md);
+      text-align: center;
+    }
+
+    .avatar-selector {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .avatar-option {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--gray-100);
+      border: 3px solid transparent;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .avatar-option:hover {
+      transform: scale(1.05);
+      border-color: var(--gray-300);
+    }
+
+    .avatar-option.selected {
+      border-color: var(--primary-purple);
+      background: var(--primary-purple-light);
+      box-shadow: var(--shadow-md);
+    }
+
+    .name-input-wrapper {
+      text-align: center;
+    }
+
+    .name-input {
+      width: 100%;
+      max-width: 400px;
+      padding: var(--spacing-lg);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      color: var(--gray-900);
+      transition: all 0.2s ease;
+    }
+
+    .name-input:focus {
+      outline: none;
+      border-color: var(--primary-purple);
+      box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    }
+
+    .name-input::placeholder {
+      color: var(--gray-400);
+      font-weight: 400;
+    }
+
+    .grade-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .grade-option {
+      padding: var(--spacing-lg);
+      background: var(--white);
+      border: 2px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gray-700);
+    }
+
+    .grade-option:hover {
+      border-color: var(--gray-400);
+      background: var(--gray-50);
+    }
+
+    .grade-option.selected {
+      border-color: var(--primary-purple);
+      background: var(--primary-purple-light);
+      color: var(--primary-purple);
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      padding: var(--spacing-lg) var(--spacing-xl);
+      border-radius: var(--radius-lg);
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-purple) 0%, #7C3AED 100%);
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .info-message {
+      text-align: center;
+      font-size: 13px;
+      color: var(--gray-600);
+      margin-top: var(--spacing-lg);
+      padding: var(--spacing-md);
+      background: var(--gray-50);
+      border-radius: var(--radius-md);
+      line-height: 1.5;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .screens-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .profiles-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .avatar-selector {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .grade-selector {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="screens-container">
+
+    <!-- Screen 1: Profile Selector (Who's Playing?) -->
+    <div class="screen">
+      <div class="screen-header">
+        <div class="screen-label">Screen 1: Profile Selector</div>
+        <div class="logo">
+          <div class="logo-icon">🎮</div>
+          <div class="logo-text">AceQuest</div>
+        </div>
+      </div>
+
+      <div class="screen-content">
+        <h1 class="page-title">Who's playing? 🎮</h1>
+        <p class="page-subtitle">Tap your profile to start</p>
+
+        <div class="profiles-grid">
+          <!-- Profile 1 -->
+          <div class="profile-card">
+            <div class="profile-avatar">🦁</div>
+            <div class="profile-name">Arjun</div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <span class="stat-icon">⭐</span>
+                <span>Level 5</span>
+              </div>
+              <div class="profile-stat">
+                <span class="stat-icon">🔥</span>
+                <span>3 days</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile 2 -->
+          <div class="profile-card">
+            <div class="profile-avatar">🦄</div>
+            <div class="profile-name">Priya</div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <span class="stat-icon">⭐</span>
+                <span>Level 8</span>
+              </div>
+              <div class="profile-stat">
+                <span class="stat-icon">🔥</span>
+                <span>12 days</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile 3 -->
+          <div class="profile-card">
+            <div class="profile-avatar">🐼</div>
+            <div class="profile-name">Rohan</div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <span class="stat-icon">⭐</span>
+                <span>Level 3</span>
+              </div>
+              <div class="profile-stat">
+                <span class="stat-icon">🔥</span>
+                <span>1 day</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Profile 4 -->
+          <div class="profile-card">
+            <div class="profile-avatar">🦊</div>
+            <div class="profile-name">Ananya</div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <span class="stat-icon">⭐</span>
+                <span>Level 6</span>
+              </div>
+              <div class="profile-stat">
+                <span class="stat-icon">🔥</span>
+                <span>7 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add New Player Button -->
+        <a class="add-profile-button" href="onboarding-avatar.mockup.html" style="text-decoration:none">
+          <div class="add-profile-icon">➕</div>
+          <div class="add-profile-text">Add New Player</div>
+        </a>
+
+        <!-- Parent/Teacher Link -->
+        <div class="parent-link">
+          <a href="#">👨‍👩‍👧 Are you a parent or teacher? Sign in here</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen 2: Add New Player -->
+    <div class="screen">
+      <div class="screen-header">
+        <div class="screen-label">Screen 2: Add New Player</div>
+        <div class="logo">
+          <div class="logo-icon">🎮</div>
+          <div class="logo-text">AceQuest</div>
+        </div>
+      </div>
+
+      <div class="screen-content">
+        <a class="back-button">← Back</a>
+
+        <h2 class="page-title">Let's get started! 🚀</h2>
+        <p class="page-subtitle">Tell us a bit about yourself</p>
+
+        <!-- Avatar Selection -->
+        <div class="form-section">
+          <div class="section-title">Pick your avatar</div>
+          <div class="avatar-selector">
+            <div class="avatar-option selected">🦁</div>
+            <div class="avatar-option">🦄</div>
+            <div class="avatar-option">🐼</div>
+            <div class="avatar-option">🦊</div>
+            <div class="avatar-option">🐸</div>
+            <div class="avatar-option">🦉</div>
+            <div class="avatar-option">🐯</div>
+            <div class="avatar-option">🦖</div>
+            <div class="avatar-option">🐙</div>
+            <div class="avatar-option">🦅</div>
+            <div class="avatar-option">🐺</div>
+            <div class="avatar-option">🦈</div>
+          </div>
+        </div>
+
+        <!-- Name Input -->
+        <div class="form-section">
+          <div class="section-title">What's your name?</div>
+          <div class="name-input-wrapper">
+            <input
+              type="text"
+              class="name-input"
+              placeholder="Enter your name"
+              maxlength="20"
+            />
+          </div>
+        </div>
+
+        <!-- Grade Selection -->
+        <div class="form-section">
+          <div class="section-title">Which grade are you in?</div>
+          <div class="grade-selector">
+            <div class="grade-option">Grade 3</div>
+            <div class="grade-option">Grade 4</div>
+            <div class="grade-option selected">Grade 5</div>
+            <div class="grade-option">Grade 6</div>
+            <div class="grade-option">Grade 7</div>
+            <div class="grade-option">Grade 8</div>
+          </div>
+        </div>
+
+        <!-- Start Button -->
+        <button class="btn btn-primary">
+          START PLAYING! 🎮
+        </button>
+
+        <!-- Info Message -->
+        <div class="info-message">
+          💡 You can add email and connect to your school later in Settings
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

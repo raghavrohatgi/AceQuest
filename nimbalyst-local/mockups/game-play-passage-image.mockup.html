@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Image Passage</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700&family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans+Gujarati:wght@400;600;700&family=Noto+Sans+Gurmukhi:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans Devanagari', 'Noto Sans Gujarati', 'Noto Sans Gurmukhi', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* HUD */
+  .hud {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px 10px;
+    flex-shrink: 0;
+  }
+  .pause-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .progress-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .progress-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 600;
+    text-align: center;
+  }
+  .progress-track {
+    height: 7px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 63.2%;
+    background: #fff;
+    border-radius: 999px;
+  }
+  .xp-badge {
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Streak banner */
+  .streak-banner {
+    margin: 0 16px 10px;
+    background: linear-gradient(135deg, #F59E0B, #D97706);
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* White card — scrollable */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 20px;
+    margin: 0 16px 0;
+    padding: 14px 14px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+  }
+  .card::-webkit-scrollbar { width: 4px; }
+  .card::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 2px; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topic-badge {
+    background: #ECFDF5;
+    color: #065F46;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+  }
+
+  .q-label {
+    font-size: 10px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .passage-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+  }
+  .source-row { font-size: 11px; color: #6B7280; }
+  .hint-row { font-size: 11px; color: #9CA3AF; font-style: italic; }
+
+  /* Infographic */
+  .infographic {
+    position: relative;
+    height: 260px;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 2px solid #E5E7EB;
+    flex-shrink: 0;
+    user-select: none;
+  }
+  .infographic-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, #BFDBFE 0%, #93C5FD 60%, #DBEAFE 100%);
+  }
+  .sun {
+    position: absolute;
+    top: 10px; right: 14px;
+    font-size: 32px;
+    line-height: 1;
+  }
+  .cloud {
+    position: absolute;
+    top: 14px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 32px;
+    line-height: 1;
+  }
+  .ocean-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 40px;
+    background: linear-gradient(180deg, #3B82F6, #1D4ED8);
+    border-radius: 0 0 12px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .mountains {
+    position: absolute;
+    bottom: 40px; right: 20px;
+    font-size: 28px;
+    line-height: 1;
+  }
+
+  /* Arrow indicators for water cycle */
+  .arrow-up {
+    position: absolute;
+    bottom: 70px; left: 30px;
+    width: 2px;
+    height: 50px;
+    background: rgba(59,130,246,0.5);
+    border-radius: 1px;
+  }
+  .arrow-up::after {
+    content: '';
+    position: absolute;
+    top: -6px; left: -4px;
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 8px solid rgba(59,130,246,0.7);
+  }
+  .arrow-down {
+    position: absolute;
+    top: 80px; right: 55px;
+    width: 2px;
+    height: 50px;
+    background: rgba(99,102,241,0.5);
+    border-radius: 1px;
+  }
+  .arrow-down::before {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: -4px;
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 8px solid rgba(99,102,241,0.7);
+  }
+
+  /* Label pills */
+  .label-pill {
+    position: absolute;
+    background: white;
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    cursor: pointer;
+    color: #374151;
+    z-index: 5;
+    transition: transform 0.1s, box-shadow 0.1s;
+    white-space: nowrap;
+  }
+  .label-pill:hover { transform: scale(1.05); box-shadow: 0 3px 10px rgba(0,0,0,0.2); }
+  .label-pill.active { background: #6366F1; color: #fff; box-shadow: 0 3px 10px rgba(99,102,241,0.4); }
+
+  .tooltip {
+    position: absolute;
+    background: white;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #374151;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 10;
+    max-width: 160px;
+    line-height: 1.4;
+    pointer-events: none;
+    display: none;
+  }
+
+  .caption { font-size: 11px; color: #9CA3AF; font-style: italic; text-align: center; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    color: #374151;
+  }
+  .legend-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* Bottom section */
+  .bottom {
+    background: transparent;
+    padding: 10px 16px 20px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+  }
+  .btn-primary {
+    flex: 1;
+    padding: 14px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: block;
+    text-align: center;
+  }
+  .btn-secondary {
+    flex: 0 0 auto;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-radius: 13px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- HUD -->
+<div class="hud">
+  <button class="pause-btn">⏸</button>
+  <div class="progress-wrap">
+    <div class="progress-label">Q 24 / 38</div>
+    <div class="progress-track"><div class="progress-fill"></div></div>
+  </div>
+  <div class="xp-badge">⚡ 300 XP</div>
+</div>
+
+<!-- Streak Banner -->
+<div class="streak-banner">🔥 3x Combo!</div>
+
+<!-- White Card (scrollable) -->
+<div class="card">
+  <div class="card-top">
+    <span class="topic-badge">🔬 Science</span>
+  </div>
+
+  <div class="q-label">IMAGE PASSAGE</div>
+  <div class="passage-title">The Water Cycle</div>
+  <div class="source-row">🏷️ Source: NASA Education</div>
+  <div class="hint-row">👆 Tap any label to learn more</div>
+
+  <!-- Infographic -->
+  <div class="infographic" id="infographic" onclick="handleBgClick(event)">
+    <div class="infographic-bg"></div>
+    <div class="sun">☀️</div>
+    <div class="cloud">☁️</div>
+    <div class="arrow-up"></div>
+    <div class="arrow-down"></div>
+    <div class="mountains">⛰️</div>
+    <div class="ocean-bar">Ocean / Lake</div>
+
+    <!-- Label pills -->
+    <div class="label-pill" id="labelEvap" style="bottom:50px;left:14px" onclick="showTooltip(event,'evap','⬆ Evaporation')">⬆ Evaporation</div>
+    <div class="label-pill" id="labelCond" style="top:60px;left:14px" onclick="showTooltip(event,'cond','☁ Condensation')">☁ Condensation</div>
+    <div class="label-pill" id="labelPrec" style="top:60px;right:14px" onclick="showTooltip(event,'prec','⬇ Precipitation')">⬇ Precipitation</div>
+    <div class="label-pill" id="labelRun"  style="bottom:50px;right:14px" onclick="showTooltip(event,'run','↘ Runoff')">↘ Runoff</div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+
+  <div class="caption">Figure 1: The Water Cycle</div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot" style="background:#3B82F6"></div> Evaporation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#93C5FD"></div> Condensation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6366F1"></div> Precipitation</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#92400E"></div> Runoff</div>
+  </div>
+</div>
+
+<!-- Bottom Section -->
+<div class="bottom">
+  <a class="btn-secondary" href="game-play-passage-cover.mockup.html">← Back</a>
+  <a class="btn-primary" href="game-play-passage-question.mockup.html?type=image">Go to Questions →</a>
+</div>
+
+<script>
+  const definitions = {
+    evap: "Water turns into vapor and rises into the atmosphere when heated by the sun.",
+    cond: "Water vapor cools and forms tiny droplets, creating clouds.",
+    prec: "Water falls from clouds as rain, snow, sleet, or hail.",
+    run: "Water flows across the land surface back into rivers, lakes, and oceans."
+  };
+  const labelIds = { evap: 'labelEvap', cond: 'labelCond', prec: 'labelPrec', run: 'labelRun' };
+
+  let activeLabel = null;
+
+  function showTooltip(e, key, title) {
+    e.stopPropagation();
+
+    // Reset all pills
+    Object.values(labelIds).forEach(id => document.getElementById(id).classList.remove('active'));
+
+    if (activeLabel === key) {
+      activeLabel = null;
+      document.getElementById('tooltip').style.display = 'none';
+      return;
+    }
+
+    activeLabel = key;
+    document.getElementById(labelIds[key]).classList.add('active');
+
+    const tooltip = document.getElementById('tooltip');
+    tooltip.innerHTML = '<strong style="font-size:11px;color:#6366F1">' + title + '</strong><br>' + definitions[key];
+    tooltip.style.display = 'block';
+
+    // Position tooltip - try to keep it visible
+    const infographic = document.getElementById('infographic');
+    const rect = infographic.getBoundingClientRect();
+    const pill = document.getElementById(labelIds[key]);
+    const pillRect = pill.getBoundingClientRect();
+
+    let top = pillRect.top - rect.top + 28;
+    let left = pillRect.left - rect.left;
+
+    // Keep within bounds
+    if (left + 165 > rect.width) left = rect.width - 170;
+    if (left < 5) left = 5;
+    if (top + 80 > rect.height) top = pillRect.top - rect.top - 85;
+
+    tooltip.style.top = top + 'px';
+    tooltip.style.left = left + 'px';
+  }
+
+  function handleBgClick(e) {
+    if (e.target.classList.contains('label-pill')) return;
+    activeLabel = null;
+    Object.values(labelIds).forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById('tooltip').style.display = 'none';
+  }
+</script>
+</body>
+</html>

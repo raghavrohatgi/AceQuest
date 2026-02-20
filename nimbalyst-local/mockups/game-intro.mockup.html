@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Game Intro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(160deg, #1e1b4b 0%, #3730a3 50%, #6366F1 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Stars background */
+  .star {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    animation: twinkle ease-in-out infinite alternate;
+  }
+  @keyframes twinkle {
+    from { opacity: 0.2; transform: scale(0.8); }
+    to   { opacity: 1;   transform: scale(1.2); }
+  }
+
+  /* Skip */
+  .skip-row {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+    z-index: 2;
+  }
+  .skip-btn {
+    background: rgba(255,255,255,0.15);
+    border: none; border-radius: 999px;
+    color: rgba(255,255,255,0.8);
+    font-size: 12px; font-weight: 700;
+    padding: 6px 14px; cursor: pointer;
+    text-decoration: none;
+  }
+
+  /* Scene area */
+  .scene {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 24px;
+    gap: 0;
+    z-index: 2;
+    position: relative;
+  }
+
+  /* Planet / world illustration */
+  .planet-wrap {
+    position: relative;
+    width: 180px;
+    height: 180px;
+    margin-bottom: 8px;
+  }
+  .planet {
+    width: 160px;
+    height: 160px;
+    background: radial-gradient(circle at 35% 35%, #818CF8, #4338CA 60%, #1e1b4b);
+    border-radius: 50%;
+    position: absolute;
+    top: 10px; left: 10px;
+    box-shadow: 0 0 40px rgba(99,102,241,0.6), inset -20px -20px 40px rgba(0,0,0,0.3);
+    animation: floatPlanet 3s ease-in-out infinite alternate;
+  }
+  @keyframes floatPlanet {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-8px); }
+  }
+  /* Ring */
+  .planet-ring {
+    position: absolute;
+    width: 200px; height: 30px;
+    border: 8px solid rgba(253,230,138,0.4);
+    border-radius: 50%;
+    top: 75px; left: -10px;
+    transform: rotateX(70deg);
+  }
+  /* Mascot on planet */
+  .mascot-on-planet {
+    position: absolute;
+    font-size: 40px;
+    top: 20px; left: 60px;
+    animation: wave 1s ease-in-out infinite alternate;
+  }
+  @keyframes wave {
+    from { transform: rotate(-5deg); }
+    to   { transform: rotate(10deg); }
+  }
+
+  /* Story panel */
+  .story-panel {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 20px;
+    padding: 18px 20px;
+    max-width: 340px;
+    width: 100%;
+    text-align: center;
+    backdrop-filter: blur(8px);
+  }
+  .story-from {
+    font-size: 10px;
+    font-weight: 800;
+    color: #FDE68A;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .story-text {
+    font-size: 15px;
+    color: #fff;
+    line-height: 1.6;
+    font-weight: 600;
+  }
+  .story-text strong { color: #FDE68A; }
+
+  /* Dot indicators */
+  .slide-dots {
+    display: flex;
+    gap: 6px;
+    margin-top: 14px;
+    justify-content: center;
+  }
+  .sdot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+  .sdot.active { background: #FDE68A; width: 18px; border-radius: 3px; }
+
+  /* Bottom card */
+  .bottom-card {
+    background: rgba(255,255,255,0.08);
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding: 20px 24px 36px;
+    flex-shrink: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Game info row */
+  .game-info-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .game-icon {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, #FDE68A, #F59E0B);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .game-meta { flex: 1; }
+  .game-title { font-size: 16px; font-weight: 800; color: #fff; }
+  .game-sub { font-size: 12px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+  .game-chips { display: flex; gap: 6px; margin-top: 6px; }
+  .chip {
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+  }
+
+  .btn-primary {
+    width: 100%; height: 52px;
+    background: linear-gradient(135deg, #FDE68A, #F59E0B);
+    color: #1e1b4b;
+    font-size: 16px; font-weight: 800;
+    border: none; border-radius: 13px; cursor: pointer;
+    box-shadow: 0 4px 20px rgba(253,230,138,0.4);
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Stars -->
+<div class="star" style="width:3px;height:3px;top:8%;left:15%;animation-duration:2.1s;animation-delay:0s;"></div>
+<div class="star" style="width:2px;height:2px;top:15%;left:70%;animation-duration:3s;animation-delay:0.5s;"></div>
+<div class="star" style="width:4px;height:4px;top:25%;left:40%;animation-duration:2.5s;animation-delay:1s;"></div>
+<div class="star" style="width:2px;height:2px;top:5%;left:85%;animation-duration:1.8s;animation-delay:0.3s;"></div>
+<div class="star" style="width:3px;height:3px;top:35%;left:90%;animation-duration:2.8s;animation-delay:0.8s;"></div>
+<div class="star" style="width:2px;height:2px;top:40%;left:5%;animation-duration:3.2s;animation-delay:0.2s;"></div>
+
+<div class="skip-row">
+  <a class="skip-btn" href="game-play.mockup.html">Skip intro →</a>
+</div>
+
+<div class="scene">
+  <div class="planet-wrap">
+    <div class="planet-ring"></div>
+    <div class="planet"></div>
+    <div class="mascot-on-planet">🎓</div>
+  </div>
+
+  <div class="story-panel">
+    <div class="story-from">🎓 Professor Ace says…</div>
+    <div class="story-text">
+      Welcome back, <strong>Arjun!</strong> The Kingdom of Numbers is in trouble — the evil <strong>Confusion Dragon</strong> has mixed up all the fractions! Only you can solve the puzzles and restore order. Are you ready?
+    </div>
+    <div class="slide-dots">
+      <div class="sdot active"></div>
+      <div class="sdot"></div>
+      <div class="sdot"></div>
+    </div>
+  </div>
+</div>
+
+<div class="bottom-card">
+  <div class="game-info-row">
+    <div class="game-icon">📐</div>
+    <div class="game-meta">
+      <div class="game-title">Fractions — Grade 5</div>
+      <div class="game-sub">20 questions · ~8 minutes</div>
+      <div class="game-chips">
+        <div class="chip">⭐ Easy–Medium</div>
+        <div class="chip">🏆 Up to 500 XP</div>
+      </div>
+    </div>
+  </div>
+  <a class="btn-primary" href="game-loading.mockup.html">Let's Go! ⚡</a>
+</div>
+
+</body>
+</html>

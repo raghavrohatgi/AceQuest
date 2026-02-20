@@ -1,0 +1,573 @@
+---
+subject: "Science"
+grade: 6
+chapter_number: 9
+chapter_title: "Methods of Separation in Everyday life"
+source_pdf: "CBSE Books Science/Class 6/Chapter 9 - Methods of Separation in Everyday life.pdf"
+ocr_tool: "mistral-ocr-latest"
+---
+
+000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+
+9
+
+Methods of Separation in Everyday Life
+
+66
+
+साधु ऐसा चाहिए जैसा सूप सुभाय ।
+सार सार को गहि रहै थोथा दई उड़ाय ॥
+
+—कबीर
+
+Just like winnowing makes the husk blow away while retaining the grains, similarly, sages let the virtues stay while discarding the vices.
+
+—Kabir
+
+![img-0.jpeg](img-0.jpeg)
+6677CH09
+
+Malli and his sister Valli are excited for their summer vacations. Their parents have planned a trip to visit their relatives and friends living across India. They always stay in touch with their relatives and friends. Do you also keep in touch with your loved ones?
+
+Their first halt is at their Nani's (maternal grandmother's) house in Haryana. It is surrounded by large fields. Malli and Valli are fascinated by the variety of grains piled up in the courtyard. Their Mami (maternal aunt) and Mama (maternal uncle), along with other community members, are busy separating small stones and husk from the grains with their hands.
+
+![img-1.jpeg](img-1.jpeg)
+
+Malli and Valli are curious to know why this is being done. Their Nani notices their curiosity and explains, "We are removing these stones so that the grains are fit for cooking."
+
+Reprint 2025-26
+
+They go around the house to see the fields and the cattle. To keep them busy, Nani gives them a challenge of handpicking small stones from grains while keeping their eyes closed.
+
+The method of picking by hand from a mixture (when two or more substances are mixed) such as small stones and husk from wheat and rice is called handpicking. It is done on the basis of differences in size, colour and shape of the particles. If the particles to be removed are present in small quantities and can easily be picked by hand, handpicking proves to be a convenient method.
+
+At lunch, Malli and Valli are served steaming hot vegetable pulao. While eating the pulao, Nani observes that Malli is separating whole black peppers from the pulao and is placing them aside on his plate (Fig. 9.1). Valli playfully teases, "Wow! This is a handpicking method, nice one!"
+
+Nani tells them about the benefits of black pepper and encourages Malli to eat it.
+
+Later in the day, their Mama takes them to the fields where they observe bundles of harvested wheat stalks lying in the fields. Some stalks are spread in the sun for drying. Both of them pick up a stalk each and notice numerous grains attached to it. A group of farmers are beating the stalks on a large wooden log. Curiously, Valli asks Mama, "Why are they doing this?"
+
+Mama explains, "They are beating the stalks to separate the grains" (Fig. 9.2). This process of separating grains from the stalks is known as threshing. Farmers work hard, yet they enjoy their work. From time to time, they sing folk songs while working.
+
+Explore folk songs of your region and try to sing along with your friends.
+
+![img-2.jpeg](img-2.jpeg)
+Fig. 9.1: Handpicking
+
+![img-3.jpeg](img-3.jpeg)
+Fig. 9.2: Threshing
+
+![img-4.jpeg](img-4.jpeg)
+
+Have fun while you learn
+
+Reprint 2025-26
+
+The separated grains get mixed with piles of husk.
+
+Valli whispers to Malli, "Will the farmers handpick the grains to remove them from so much husk?" She wonders, "How much time will the farmers take to separate these?"
+
+Let us perform an activity to find out the answer to the questions raised by Valli.
+
+A small amount of puffed rice is mixed with chana dal. Can you think of separating the mixture by any method other than handpicking?
+
+# Activity 9.1: Let us explore
+
+- Take a handful of roasted peanuts and rub them between your palms. What happens?
+- Is it possible to separate the removed skin and the peanuts?
+- Now, try blowing it. What do you observe?
+
+Which of these components—removed peanut skins or peanuts are blown away?
+
+You observe that blowing air separates the heavier and the lighter components.
+
+How do you think farmers separate so many grains from husk?
+
+Traditionally, a soop (bamboo tray) is used for separating heavier and lighter components of a mixture (Fig. 9.3).
+
+Next day, their Nana takes them to the fields to show this process at work.
+
+Malli and Valli observe a farmer standing on a raised platform. The farmer is moving the bamboo tray which contains threshed wheat grains in the direction of air or wind (Fig. 9.4).
+
+![img-5.jpeg](img-5.jpeg)
+Fig. 9.3: Bamboo tray
+
+![img-6.jpeg](img-6.jpeg)
+
+What do you infer from Fig. 9.4? Do both the components, wheat grains and husk, fall at the same place? Which of the two components get blown away? Can the wind separate the two components?
+
+Reprint 2025-26
+
+![img-7.jpeg](img-7.jpeg)
+Fig. 9.4: Winnowing
+
+Valli is unable to separate husk from rice in a closed room. How can you help her?
+
+? .
+
+This method of separating heavier and lighter components of a mixture by wind or by blowing air is called winnowing. Have you seen any similar kind of activity being done at your home?
+
+? More to know!
+
+Technological developments have resulted in developing of threshing machines called threshers. These machines are used for separating grains from the stalks and husk. They perform both the tasks of threshing and winnowing simultaneously.
+
+![img-8.jpeg](img-8.jpeg)
+
+Next day, Malli and Valli board a train to Ahmedabad to visit their father's friend Ghanshyam bhai. Before leaving, Valli requests her Mami to prepare meethi puri (sweet Indian bread made from wheat flour) for their journey.
+
+Valli: Shall I help you knead the wheat flour?
+
+Mami: To prepare a dish with flour, first we need to remove bran that may be present in the flour.
+
+Valli: How do we do it?
+
+Reprint 2025-26
+
+Mami: We use a sieve for this purpose.
+
+Sieving allows the fine flour particles to pass through the holes of the sieve as shown in Fig. 9.5. The bigger particles such as bran and small stones remain on the sieve.
+
+Carefully observe a sieve. Are all the holes of the sieve the same size? Will sieving work if the holes of the sieve are larger than the substances? Is there any difference in the size between the particles that pass through the sieve and the particles that remain on the sieve? Sieving is used when components of a solid-solid mixture have different sizes.
+
+Upon reaching Ahmedabad, they visit Sabarmati Ashram along with Ghanshyam bhai where they learn about the Namak Satyagrah (Dandi March).
+
+![img-9.jpeg](img-9.jpeg)
+Fig. 9.5: Sieving
+
+Have you ever observed sieves being used at construction sites to separate pebbles and stones from the sand?
+
+![img-10.jpeg](img-10.jpeg)
+
+What is Sabarmati Ashram famous for?
+
+Draw a poster showing Dandi March and discuss why it was organised.
+
+![img-11.jpeg](img-11.jpeg)
+
+Malli asks, "Where is namak (common salt) obtained from?"
+
+"From seawater", replies Ghanshyam bhai.
+
+Seawater is a mixture of salts and some other substances dissolved in water. To obtain salt, the seawater is kept in shallow pits and exposed to sunlight and air. In a few days, the water
+
+![img-12.jpeg](img-12.jpeg)
+Fig. 9.6: Obtaining salt from seawater
+
+Reprint 2025-26
+
+evaporates completely, leaving behind the solid mixture (Fig. 9.6). Common salt is then obtained from this mixture by further purification.
+
+Find out about some water bodies in India that contain common salt. One such source is Sambhar Lake in Rajasthan.
+
+![img-13.jpeg](img-13.jpeg)
+More to do!
+
+Let us explore how salt can be separated from a salt solution.
+
+## Activity 9.2: Let us observe and create
+
+Have you ever observed white patches on the dark coloured clothes you wear during hot summers? How are these patches formed?
+
+- Take a bowl or any container and fill it half with water.
+- Add 2–3 teaspoons of salt into it and stir till the salt dissolves to form a solution.
+- Take a small piece of black or dark coloured thick paper and spread a few drops of the salt solution on it (Fig. 9.7a).
+- You can also create any art of your choice with this salt solution.
+- Allow it to dry and then observe it (Fig. 9.7b and Fig. 9.7c).
+
+![img-14.jpeg](img-14.jpeg)
+(a) Before drying
+
+![img-15.jpeg](img-15.jpeg)
+(b) After drying
+
+![img-16.jpeg](img-16.jpeg)
+(c) Art created
+
+Fig. 9.7: A few drops of salt solution spread on thick black paper
+
+Do you observe some patches on the paper? What do you think is left on the paper? You can feel the presence of salt by touching the paper. Where has the water disappeared? Recall the chapter ‘A Journey through States of Water’.
+
+Let us probe further to get the answer.
+
+Reprint 2025-26
+
+In the traditional Indian system of holistic health and medicine called Ayurveda, the herbs or parts of plants are prescribed as remedies. These ingredients like roots, leaves, flowers or seeds of various medicinal plants are often dried in the shade. This practice facilitates the evaporation of excess water, leaving behind the important part of the medicine.
+
+![img-17.jpeg](img-17.jpeg)
+
+Do you know?
+
+## Activity 9.3: Let us investigate
+
+This activity may be demonstrated by the teacher.
+
+- Take some salt solution (prepared in Activity 9.2) in a china dish. If a china dish is not available, another suitable vessel may be used.
+- Heat and let the water boil away as shown in Fig. 9.8.
+- Allow the china dish to cool down.
+- What do you observe? What is left in the china dish?
+
+![img-18.jpeg](img-18.jpeg)
+Fig. 9.8: Heating of china dish containing salt solution
+
+Did you get the salt back? You can feel the presence of salt in the china dish by touching the salt with your fingers.
+
+![img-19.jpeg](img-19.jpeg)
+
+Is there any method through which I can get back both salt and water?
+
+Observe the figure. Does it answer the question? Can you name the process involved?
+
+![img-20.jpeg](img-20.jpeg)
+
+It is now time for Malli and Valli to visit Dada and Dadi (paternal grandparents) residing in Puducherry, located in southern India. They are excited to meet their old neighbourhood friend, Balan. After reaching Puducherry, they start talking about the old times and do not realise that it is already evening, Dadi's tea time.
+
+Reprint 2025-26
+
+![img-21.jpeg](img-21.jpeg)
+Fig. 9.9: Decantation
+
+![img-22.jpeg](img-22.jpeg)
+Curiosity | Textbook of Science | Grade 6
+
+Dada: I shall prepare tea for you.
+
+Children: We will also help you.
+
+As Dada makes the tea, he shares tips on how to make a cup of tea.
+
+Balan: After preparing tea, how do you remove the tea leaves?
+
+Dada: Obviously, with a strainer. You know if we do not have a strainer, we can still remove most of the tea leaves.
+
+Valli: How?
+
+Dada: Leave the sauce pan (vessel) containing tea undisturbed for some time and gently pour the tea in a cup (Fig. 9.9).
+
+Valli: Oh Yes! And then the tea leaves will be settled at the bottom.
+
+The process of settling down of heavier insoluble component at the bottom of a liquid is called sedimentation. When the water (liquid) is removed by tilting the vessel, the process is called decantation.
+
+![img-23.jpeg](img-23.jpeg)
+
+Dada: But I can still get a few tea leaves in my mouth because decantation does not completely separate all the tea leaves from the tea.
+
+Balan: Oh! It means it is not a proper method of separation.
+
+Dada: Yes, you are right. The tea is ready now.
+
+Malli picks up the tea-strainer from the shelf and gives it to his Dada.
+
+Dada: Let me pour the tea through this strainer. You can see all the tea leaves collected in the strainer.
+
+This process of separating tea leaves from tea is called filtration.
+
+Balan asks Malli if he could use a tea strainer to filter muddy water. Let us try and find out.
+
+Dada: Also, try to filter the muddy water through a piece of cloth and observe the difference.
+
+Reprint 2025-26
+
+Malli: Why should we use a piece of cloth?
+
+Dada: In a piece of cloth, there are very small holes or pores between the woven threads. These pores in the cloth can be used as a filter. People in ancient times also followed this practice.
+
+But if the water is still muddy, impurities can be separated using a filter with even smaller holes or pores. A filter paper is one such filter that has very fine pores in it.
+
+![img-24.jpeg](img-24.jpeg)
+How many layers of cloth do I need to use to get clear water?
+
+## Activity 9.4: Let us experiment
+
+- Try to fold the filter paper yourself and make a cone as shown in Fig. 9.10.
+
+![img-25.jpeg](img-25.jpeg)
+A filter paper
+
+![img-26.jpeg](img-26.jpeg)
+One-fold
+
+![img-27.jpeg](img-27.jpeg)
+Two-folds
+
+![img-28.jpeg](img-28.jpeg)
+Cone
+
+Fig. 9.10: Folding a filter paper to form a cone
+
+- Place it inside a funnel kept on a conical flask and pour muddy water into it (Fig. 9.11).
+
+![img-29.jpeg](img-29.jpeg)
+Fig. 9.11: Filtration
+
+![img-30.jpeg](img-30.jpeg)
+
+- What do you observe? Do the mud particles pass through the filter paper?
+- The water coming from the funnel will be collected in the conical flask.
+
+Reprint 2025-26
+
+You will get mud as a residue on the filter paper and clear water as filtrate in the conical flask.
+
+![img-31.jpeg](img-31.jpeg)
+
+More to know!
+
+Other than the filter paper, many materials such as cotton, charcoal, and sand can be used as filters. The choice of filter depends upon the size of the particles of the materials to be removed.
+
+## Activity 9.5: Let us design and create
+
+Valli goes for a nature walk with her Dadi and collects some water from a pond in a container. She observes some unwanted substances in it. Design and create a working model of water filter using low-cost materials.
+
+![img-32.jpeg](img-32.jpeg)
+
+Do you know?
+
+Tea bags were initially made of soft cloth, like silk, because it could hold the tea leaves and let water pass through. Silk was strong and did not fall apart when it touched hot water. Later, people started using gauze or muslin. Eventually they began using filter paper, which is what most tea bags are made of today.
+
+![img-33.jpeg](img-33.jpeg)
+
+Malli and Valli go on a boat ride in a nearby river with their Dada and his friend, Otukkam. Otukkam is a fisherman. As they cast the fishing net, water drains out through the mesh. Valli recalls the filtration method she had learnt and realises that this method of catching the fish is somewhat similar.
+
+Malli is taken aback when he sees plastic bags, broken bottles, a large fish with a straw stuck in its mouth, and food wrappers along with the other fish trapped in the net.
+
+Reprint 2025-26
+
+Let us raise awareness about the issues related to river and ocean pollution by composing a poem.
+
+A few lines have been written here, add more lines—
+
+Piece of plastic in my neck,
+
+As in pain I cry,
+
+Koilas, Koilas...where are you dear?
+
+Papa fish cries and Mama fish has tears.
+
+![img-34.jpeg](img-34.jpeg)
+
+Aware of the harm, yet they let it flow,
+
+Koilas faintly hears mother’s sorrow,
+
+Stop plastic pollution at source,
+
+Rivers are our huge resource.
+
+## Discuss with your parents
+
+A bowl of milk in your home has gone sour. Discuss with your parents how you can use it in another way. Also, which method of separation will you use in the process?
+
+Malli and Valli take blessings from their Dada and Dadi, bid goodbye to Balan and travel to Madhya Pradesh.
+
+The train reaches Bhopal in Madhya Pradesh. The sun is rising and it is getting hot. On their way to Maasi’s (maternal aunt’s) home, they drink chhach (buttermilk) in the dhaba (roadside eatery). Malli asks the shopkeeper about the big painting, hanging on the wall of the dhaba. The shopkeeper explains that the picture shows a lady performing
+
+![img-35.jpeg](img-35.jpeg)
+Methods of Separation in Everyday Life
+Churning
+
+Reprint 2025-26
+
+Curiosity | Textbook of Science | Grade 6
+174
+
+Can you name one kitchen appliance which runs on electricity that is used to prepare buttermilk?
+
+![img-36.jpeg](img-36.jpeg)
+
+the process of churning curd using a big mathni (churner) to separate butter. In this process, the butter being lighter floats at the top, while the buttermilk is left behind.
+
+Their stay at Maasi's place has become enjoyable and they are looking forward to
+
+share all their memories with their friends upon returning home. Now, it is time for them to reach their final destination of the trip, Shillong, the capital of Meghalaya.
+
+On their arrival at their Bua's (paternal aunt's) house in Shillong, they notice a carpenter making a wooden door. While working, he accidentally drops a few iron nails in the sawdust.
+
+![img-37.jpeg](img-37.jpeg)
+Fig. 9.12: Magnetic separation
+
+The carpenter starts handpicking the iron nails. The children tell the carpenter to wait. They get a magnet from their Bua. They ask the carpenter to move the magnet through the sawdust. All the nails get attracted to it (Fig. 9.12). Which method of separation did the carpenter use? Recall the chapter 'Exploring Magnets'.
+
+The substances which are attracted towards a magnet are called magnetic substances. Iron is a common example
+
+Reprint 2025-26
+
+of a magnetic substance. Separation of magnetic and non-magnetic substances by using a magnet is called magnetic separation.
+
+Nowadays, recyclers use magnets to separate iron articles from a heap of waste.
+
+In many industries, the waste material often contains scrap iron. This is separated from the heap of waste materials using magnets fitted to a crane.
+
+![img-38.jpeg](img-38.jpeg)
+
+More to know!
+
+The scrap iron can be recycled and reused.
+
+![img-39.jpeg](img-39.jpeg)
+Magnetic separation
+
+Malli and Valli had delightful holidays and the 'Bharat ki Yatra' (tour of India) filled with fun will be an ever lasting memory for them.
+
+They not only enjoyed exploring different regions of India but also gained a lot of knowledge about various methods of separation of substances.
+
+## Activity 9.6: Let us play
+
+Write the following phrases on small slips of paper—
+
+1. Separating small stones from pulses.
+2. Churning curd to obtain butter.
+3. Taking out green chillies from cooked dalia (dish made of broken wheat) or poha (dish made of flattened rice).
+4. Taking out seeds from watermelon.
+5. Sorting piles of sawdust and iron nails from a mixed heap of building material.
+6. Picking marigold flowers from a heap of other flowers to make a garland.
+7. Separating pebbles from sand.
+8. Separating coconut pieces from rice flour.
+9. Separating oil from water.
+10. Separating salt from salt solution.
+
+Reprint 2025-26
+
+Now, take two baskets, each representing one of the two purposes for which we separate substances. Form two teams and see who will get the maximum correct entries.
+
+![img-40.jpeg](img-40.jpeg)
+Think and start
+
+![img-41.jpeg](img-41.jpeg)
+
+This activity helps in assessing your understanding as to why we separate substances.
+
+![img-42.jpeg](img-42.jpeg)
+
+![img-43.jpeg](img-43.jpeg)
+
+Reprint 2025-26
+
+Summary Key Points
+
+- Handpicking is used for separating solid materials on the basis of differences in size, colour and shape from a mixture.
+- The process in which the stalks are beaten to separate grains from them is called threshing.
+- The method of separating lighter husk from heavier grains by wind or blowing air is called winnowing.
+- The process of separating solids from a mixture based on variations in particle size using a sieve is called sieving.
+- Evaporation is the process in which a liquid gets converted into its vapour. It can be used to separate a solid dissolved in a liquid.
+- The process of settling down of heavier insoluble component at the bottom of a liquid is called sedimentation. When the liquid is removed by tilting the vessel, the process is called decantation.
+- Filtration can be used to separate insoluble solid components from a liquid.
+- Churning is used to extract butter from curd.
+- Separation of magnetic and non-magnetic substances by using a magnet is called magnetic separation.
+
+# Play a Game—WISE FISH
+
+Prepare your own fishing rod with locally available eco-friendly materials. Tie a thread to one end of the rod and a magnet to the free end of the thread. The Tank 1 has red cardboard fish and Tank 2 has blue cardboard slips attached to iron clips. Fish out a red fish representing the method of separation first and then fish out one blue slip related to the red one.
+
+Watch out for your friends. Are they fishing out correctly?
+
+Reprint 2025-26
+
+Curiosity | Textbook of Science | Grade 6
+178
+
+# Catch me first!
+
+![img-44.jpeg](img-44.jpeg)
+
+# Then me!
+
+![img-45.jpeg](img-45.jpeg)
+
+# Let us enhance our learning
+
+1. What purpose does handpicking serve in the process of separation?
+(i) Filtration
+(ii) Sorting
+(iii) Evaporation
+(iv) Decantation
+
+2. Which of the following substances are commonly separated using the churning method?
+(i) Oil from water
+(ii) Sand from water
+(iii) Cream from milk
+(iv) Oxygen from air
+
+Reprint 2025-26
+
+3. Which factor is usually essential for the filtration?
+(i) Apparatus size
+(ii) Presence of air
+(iii) Pore size
+(iv) Temperature of the mixture
+
+4. State with reason(s) whether the following statements are True [T] or False [F]. Also, correct the False statement(s).
+(i) Salt can be separated from salt solution by keeping it under the Sun. [ ]
+(ii) Handpicking should be used only when the quantity of one component is less. [ ]
+(iii) A mixture of puffed rice and rice grains can be separated by threshing. [ ]
+(iv) A mixture of mustard oil and lemon water can be separated by decantation. [ ]
+(v) Sieving is used to separate a mixture of rice flour and water. [ ]
+
+5. Match the mixtures in Column I with their method of separation in Column II.
+
+|  Column I | Column II  |
+| --- | --- |
+|  (i) Gram flour mixed with black gram | (a) Handpicking  |
+|  (ii) Chalk powder mixed with water | (b) Magnetic separation  |
+|  (iii) Corn mixed with potatoes | (c) Decantation  |
+|  (iv) Iron powder mixed with sawdust | (d) Sieving  |
+|  (v) Oil mixed with water | (e) Filtration  |
+
+6. In what situations would you use decantation instead of filtration to separate solids from liquids?
+7. Can you relate the presence of nasal hair to any separation process?
+8. During the COVID-19 pandemic, all of us wore masks. Generally, what material are they made of? What is the role of these masks?
+
+Reprint 2025-26
+
+9. A mixture containing potatoes, salt and sawdust has been given to you. Outline a stepwise procedure for separating each component from this mixture.
+
+10. Read the following story titled ‘Intelligent Leela’ and tick the most appropriate options. Provide a suitable title of your choice for the paragraph.
+
+Leela was working in the farm with her father when she realised that they left their drinking water at home. Before her father felt thirsty/hungry, she went to the nearby pond to fetch some water/grains. After obtaining some water in the container, she noticed that the water was muddy and fit/unfit for drinking. To purify the water, she kept it for some time and then she filtered/churned the muddy water using a piece of paper/muslin cloth. Leela, then, cooled/boiled the water for about 10 minutes in a covered pan. After cooling/boiling, she filtered/churned it again and made it fit/unfit for drinking. She served this water to her father while having food, who blessed her and appreciated her efforts.
+
+## Learning further
+
+- Fun with parents: We are proud of our Indian heritage. Under supervision of your elders, try to prepare some herbal remedies using various parts of plants. For example—tulsi kadha. Which methods of separation will you use while preparing herbal kadha?
+- Stage play: Imagine you and your friend are Malli and Valli. Write dialogues of a play presenting their entire ‘Bharat ki Yatra’, highlighting the different methods of separation of substances that they observed. Enact the play in your school assembly.
+- Group activity: Observe and list separation methods you employed and noticed in your surroundings throughout a week. Explain the reasons behind using these methods and compile the ones you utilised or observed the most. Compare your observations with your group members.
+- Be a stalwart of your community: Interview a ragpicker(s) and prepare a case study about the method(s) of separation he/she uses in his/her daily life. Encourage children of your community below the age of 14 to join a neighbourhood school.
+
+Reprint 2025-26
+
+Reprint 2025-26
+
+Be a reporter: (i) Gather newspaper clippings and articles related to various methods of separation implemented in your society, such as in agricultural fields or at construction sites. (ii) Conduct interviews with local farmers to explore the latest agricultural separation methods that they use.
+
+- Think like a scientist: You are provided with a mixture of iron nails, sand, black pepper, stones, common salt and water. Which steps will you follow to separate each component of a mixture?
+
+The given steps may help you to think like a scientist.
+
+## Reflection Steps
+
+I observe _______________. I wonder _______________.
+
+You might have wondered about questions such as—
+
+- Which component should I separate first?
+- What method of separation should I use first?
+- How can we separate these components effectively?
+- Will some of the components be soluble in water?
+- What properties of the components can help us in their separation?
+- What is the most appropriate sequence?
+
+## Activity Steps
+
+- Some possible answers to the questions which occurred in my mind are _______________.
+- I performed the following methods of separation—
+- My findings are _______________.
+
+Hint: A mixture that has more than two components requires a combination of several methods of separation.
+
+Methods of Separation in Everyday Life
+181
+
+Report 2025-26
+
+# Notes
+
+- Not to be republished

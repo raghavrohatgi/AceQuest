@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none; border-radius: 50%;
+    color: #fff; font-size: 16px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; flex-shrink: 0;
+  }
+  .nav-title { flex: 1; text-align: center; font-size: 16px; font-weight: 800; color: #fff; }
+  .nav-spacer { width: 34px; }
+
+  /* Filter tabs */
+  .filter-tabs {
+    display: flex;
+    gap: 8px;
+    padding: 14px 20px 0;
+    flex-shrink: 0;
+    overflow-x: auto;
+  }
+  .filter-tabs::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 7px 16px;
+    border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .tab.active {
+    background: #fff;
+    color: #6366F1;
+    border-color: #fff;
+  }
+
+  /* Podium */
+  .podium-section {
+    padding: 20px 20px 0;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 12px;
+  }
+  .podium-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .podium-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar-circle {
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    background: rgba(255,255,255,0.15);
+  }
+  .avatar-circle.first { width: 60px; height: 60px; font-size: 28px; border-color: #FDE68A; }
+  .avatar-circle.second { width: 50px; height: 50px; }
+  .avatar-circle.third { width: 50px; height: 50px; }
+
+  .crown { position: absolute; top: -14px; font-size: 20px; }
+  .podium-name { font-size: 12px; font-weight: 700; color: #fff; text-align: center; }
+  .podium-xp { font-size: 11px; color: rgba(255,255,255,0.8); }
+  .podium-block {
+    border-radius: 10px 10px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.8);
+  }
+  .podium-block.first  { width: 80px; height: 52px; background: rgba(255,255,255,0.25); }
+  .podium-block.second { width: 70px; height: 38px; background: rgba(255,255,255,0.15); }
+  .podium-block.third  { width: 70px; height: 28px; background: rgba(255,255,255,0.1); }
+
+  /* White card with list */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .card-title { font-size: 14px; font-weight: 800; color: #111827; }
+  .refresh-btn {
+    font-size: 12px;
+    color: #6366F1;
+    font-weight: 700;
+    cursor: pointer;
+    background: none; border: none;
+  }
+
+  .list-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 0;
+  }
+
+  /* Row */
+  .lb-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    transition: background 0.1s;
+    cursor: pointer;
+  }
+  .lb-row:hover { background: #F9FAFB; }
+  .lb-row.you { background: #EEF2FF; }
+  .lb-row.you:hover { background: #E0E7FF; }
+
+  .rank-num {
+    width: 24px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #9CA3AF;
+    flex-shrink: 0;
+  }
+  .rank-num.top3 { font-size: 18px; color: #111827; }
+
+  .lb-avatar { font-size: 26px; flex-shrink: 0; }
+
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-name { font-size: 14px; font-weight: 700; color: #111827; }
+  .lb-name.you-name { color: #4F46E5; }
+  .lb-sub { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+
+  .lb-right { text-align: right; flex-shrink: 0; }
+  .lb-xp { font-size: 14px; font-weight: 800; color: #111827; }
+  .lb-xp.you-xp { color: #4F46E5; }
+  .lb-games { font-size: 11px; color: #9CA3AF; margin-top: 1px; }
+
+  .you-tag {
+    background: #6366F1;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+
+  /* Bottom strip: your rank sticky */
+  .your-rank-strip {
+    background: #fff;
+    border-top: 1px solid #E5E7EB;
+    padding: 12px 20px 32px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .yr-label { font-size: 12px; color: #9CA3AF; font-weight: 600; }
+  .yr-rank { font-size: 20px; font-weight: 800; color: #6366F1; }
+  .yr-xp { flex: 1; font-size: 13px; color: #374151; font-weight: 700; }
+  .yr-progress { font-size: 12px; color: #9CA3AF; text-align: right; }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="game-results.mockup.html">←</a>
+  <div class="nav-title">🏆 Leaderboard</div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- Filter tabs -->
+<div class="filter-tabs">
+  <div class="tab active">This Week</div>
+  <div class="tab">This Month</div>
+  <div class="tab">All Time</div>
+  <div class="tab">📐 Math</div>
+  <div class="tab">📖 English</div>
+</div>
+
+<!-- Podium -->
+<div class="podium-section">
+  <!-- 2nd -->
+  <div class="podium-item">
+    <div class="podium-avatar">
+      <div class="avatar-circle second">🐼</div>
+    </div>
+    <div class="podium-name">Rohan</div>
+    <div class="podium-xp">2,850 XP</div>
+    <div class="podium-block second">🥈</div>
+  </div>
+  <!-- 1st -->
+  <div class="podium-item">
+    <div class="podium-avatar">
+      <div class="crown">👑</div>
+      <div class="avatar-circle first">🦄</div>
+    </div>
+    <div class="podium-name">Priya</div>
+    <div class="podium-xp">3,200 XP</div>
+    <div class="podium-block first">🥇</div>
+  </div>
+  <!-- 3rd -->
+  <div class="podium-item">
+    <div class="podium-avatar">
+      <div class="avatar-circle third">🐯</div>
+    </div>
+    <div class="podium-name">Sneha</div>
+    <div class="podium-xp">2,480 XP</div>
+    <div class="podium-block third">🥉</div>
+  </div>
+</div>
+
+<!-- White card list -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">Full Rankings — 128 players</div>
+    <button class="refresh-btn">↻ Refresh</button>
+  </div>
+
+  <div class="list-scroll">
+
+    <div class="lb-row">
+      <div class="rank-num top3">🥇</div>
+      <div class="lb-avatar">🦄</div>
+      <div class="lb-info">
+        <div class="lb-name">Priya</div>
+        <div class="lb-sub">Grade 5 · 🔥 12 streak</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">3,200 XP</div>
+        <div class="lb-games">18 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num top3">🥈</div>
+      <div class="lb-avatar">🐼</div>
+      <div class="lb-info">
+        <div class="lb-name">Rohan</div>
+        <div class="lb-sub">Grade 5 · 🔥 8 streak</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">2,850 XP</div>
+        <div class="lb-games">15 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num top3">🥉</div>
+      <div class="lb-avatar">🐯</div>
+      <div class="lb-info">
+        <div class="lb-name">Sneha</div>
+        <div class="lb-sub">Grade 5 · 🔥 5 streak</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">2,480 XP</div>
+        <div class="lb-games">13 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num">4</div>
+      <div class="lb-avatar">🦊</div>
+      <div class="lb-info">
+        <div class="lb-name">Kavya</div>
+        <div class="lb-sub">Grade 5</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">2,120 XP</div>
+        <div class="lb-games">11 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num">5</div>
+      <div class="lb-avatar">🐻</div>
+      <div class="lb-info">
+        <div class="lb-name">Dev</div>
+        <div class="lb-sub">Grade 5</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">1,980 XP</div>
+        <div class="lb-games">10 games</div>
+      </div>
+    </div>
+
+    <!-- YOU -->
+    <div class="lb-row you">
+      <div class="rank-num" style="color:#6366F1;font-weight:800">6</div>
+      <div class="lb-avatar">🦁</div>
+      <div class="lb-info">
+        <div class="lb-name you-name">Arjun <span class="you-tag">YOU</span></div>
+        <div class="lb-sub">Grade 5 · 🔥 6 streak</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp you-xp">1,860 XP</div>
+        <div class="lb-games">9 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num">7</div>
+      <div class="lb-avatar">🐰</div>
+      <div class="lb-info">
+        <div class="lb-name">Anika</div>
+        <div class="lb-sub">Grade 5</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">1,740 XP</div>
+        <div class="lb-games">8 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num">8</div>
+      <div class="lb-avatar">🦋</div>
+      <div class="lb-info">
+        <div class="lb-name">Meera</div>
+        <div class="lb-sub">Grade 5</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">1,620 XP</div>
+        <div class="lb-games">8 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num">9</div>
+      <div class="lb-avatar">🐸</div>
+      <div class="lb-info">
+        <div class="lb-name">Kiran</div>
+        <div class="lb-sub">Grade 5</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">1,480 XP</div>
+        <div class="lb-games">7 games</div>
+      </div>
+    </div>
+
+    <div class="lb-row">
+      <div class="rank-num">10</div>
+      <div class="lb-avatar">🦅</div>
+      <div class="lb-info">
+        <div class="lb-name">Ravi</div>
+        <div class="lb-sub">Grade 5</div>
+      </div>
+      <div class="lb-right">
+        <div class="lb-xp">1,350 XP</div>
+        <div class="lb-games">7 games</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Your rank sticky -->
+  <div class="your-rank-strip">
+    <div>
+      <div class="yr-label">Your rank</div>
+      <div class="yr-rank">#6</div>
+    </div>
+    <div class="yr-xp">⚡ 1,860 XP this week</div>
+    <div class="yr-progress">+340 XP to reach #5</div>
+  </div>
+</div>
+
+</body>
+</html>

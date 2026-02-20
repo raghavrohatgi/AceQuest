@@ -1,0 +1,36 @@
+# fly.toml — ARI API deployment config
+# Deploy: fly deploy --config ari/api/fly.toml
+
+app = "ari-acequest"
+primary_region = "bom"   # Mumbai — closest to Indian teachers
+
+[build]
+  dockerfile = "ari/api/Dockerfile"
+
+[env]
+  ARI_DEV_MODE = "false"
+
+# Set via: fly secrets set TURNSTILE_SECRET=<your_secret>
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0   # free tier: sleep when idle
+
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 50
+    soft_limit = 25
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1
+
+# Persistent volume for SQLite DB
+[[mounts]]
+  source = "ari_feedback_data"
+  destination = "/data"
+  initial_size = "1gb"

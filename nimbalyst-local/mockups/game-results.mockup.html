@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AceQuest - Game Results</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Confetti */
+    .confetti-piece {
+      position: fixed;
+      width: 9px; height: 9px;
+      border-radius: 2px;
+      animation: fall linear infinite;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Card */
+    .card {
+      background: #fff;
+      border-radius: 24px;
+      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.15), 0 10px 10px -5px rgba(0,0,0,0.08);
+      width: 100%;
+      max-width: 440px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Hero — compact */
+    .hero {
+      background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%);
+      padding: 18px 20px 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .hero-trophy { font-size: 40px; line-height: 1; flex-shrink: 0; }
+    .hero-text { flex: 1; }
+    .hero-title { font-size: 18px; font-weight: 800; color: #fff; }
+    .hero-sub { font-size: 12px; color: rgba(255,255,255,0.75); margin-top: 2px; }
+    .xp-badge-hero {
+      background: rgba(255,255,255,0.2);
+      border: 1.5px solid rgba(255,255,255,0.4);
+      border-radius: 12px;
+      padding: 8px 12px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+    .xp-badge-hero .xp-num { font-size: 18px; font-weight: 800; color: #FCD34D; display: block; }
+    .xp-badge-hero .xp-label { font-size: 10px; color: rgba(255,255,255,0.75); font-weight: 600; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #F3F4F6;
+    }
+    .tab {
+      flex: 1;
+      padding: 11px 8px;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #9CA3AF;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab.active { color: #6366F1; border-bottom-color: #6366F1; }
+
+    /* Tab panels */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: flex; flex-direction: column; }
+
+    /* ── RESULTS TAB ── */
+    .results-body { padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+    /* Level bar */
+    .level-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .level-label { font-size: 11px; font-weight: 700; color: #6B7280; white-space: nowrap; }
+    .level-track { flex: 1; height: 8px; background: #E5E7EB; border-radius: 999px; overflow: hidden; }
+    .level-fill { height: 100%; width: 80%; background: linear-gradient(90deg, #6366F1, #818CF8); border-radius: 999px; }
+    .level-pct { font-size: 11px; font-weight: 700; color: #6366F1; white-space: nowrap; }
+
+    /* Stat chips */
+    .stats-row { display: flex; gap: 8px; }
+    .stat-chip {
+      flex: 1; background: #F9FAFB; border-radius: 12px;
+      padding: 10px 6px; text-align: center;
+    }
+    .stat-icon { font-size: 18px; }
+    .stat-value { font-size: 16px; font-weight: 800; color: #111827; display: block; margin-top: 3px; }
+    .stat-label { font-size: 10px; color: #9CA3AF; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+
+    /* Progress meter */
+    .progress-section {}
+    .progress-title { font-size: 11px; font-weight: 700; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
+    .meter-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+    .meter-row-label { font-size: 11px; font-weight: 600; color: #6B7280; width: 38px; flex-shrink: 0; }
+    .mini-meter { flex: 1; display: flex; gap: 3px; height: 24px; }
+    .mini-seg {
+      flex: 1; border-radius: 5px; background: #E5E7EB;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; color: #9CA3AF;
+    }
+    .mini-seg.active-orange { background: linear-gradient(135deg, #F59E0B, #D97706); color: #fff; }
+    .mini-seg.active-green  { background: linear-gradient(135deg, #10B981, #059669); color: #fff; }
+    .progress-note { font-size: 12px; color: #16A34A; font-weight: 600; text-align: center; margin-top: 4px; }
+
+    /* Buttons */
+    .buttons { padding: 0 18px 16px; display: flex; flex-direction: column; gap: 8px; }
+    .btn-primary {
+      padding: 14px; background: linear-gradient(135deg, #6366F1, #4F46E5);
+      color: #fff; font-size: 15px; font-weight: 700; border: none;
+      border-radius: 14px; cursor: pointer; text-align: center;
+      box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    }
+    .btn-row { display: flex; gap: 8px; }
+    .btn-secondary {
+      flex: 1; padding: 12px; background: #fff; color: #6366F1;
+      font-size: 13px; font-weight: 700; border: 2px solid #6366F1;
+      border-radius: 12px; cursor: pointer; text-align: center;
+    }
+    .btn-ghost {
+      flex: 1; padding: 12px; background: none; color: #9CA3AF;
+      font-size: 13px; border: 2px solid #E5E7EB; border-radius: 12px;
+      cursor: pointer; text-align: center;
+    }
+
+    /* ── AWARDS TAB ── */
+    .awards-body { padding: 14px 18px 16px; display: flex; flex-direction: column; gap: 14px; }
+
+    /* Badge */
+    .badge-card {
+      background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+      border: 1.5px solid #F59E0B;
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-icon { font-size: 40px; flex-shrink: 0; }
+    .badge-name { font-size: 15px; font-weight: 800; color: #92400E; }
+    .badge-desc { font-size: 12px; color: #78350F; margin-top: 3px; }
+    .badge-new {
+      background: #F59E0B; color: #fff; font-size: 9px; font-weight: 700;
+      padding: 2px 7px; border-radius: 999px; display: inline-block; margin-bottom: 3px;
+    }
+
+    /* Leaderboard */
+    .lb-header {
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+    }
+    .lb-title { font-size: 12px; font-weight: 700; color: #374151; text-transform: uppercase; letter-spacing: 0.07em; }
+    .lb-pill {
+      background: #EEF2FF; color: #6366F1; font-size: 11px;
+      font-weight: 600; padding: 3px 10px; border-radius: 999px;
+    }
+    .lb-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 10px; border-radius: 10px; margin-bottom: 3px;
+    }
+    .lb-row.gold { background: #FFFBEB; }
+    .lb-row.you  { background: #EEF2FF; }
+    .lb-rank { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+    .lb-name { flex: 1; font-size: 13px; font-weight: 600; color: #374151; }
+    .lb-row.you .lb-name { color: #4338CA; }
+    .lb-xp { font-size: 12px; font-weight: 700; color: #6B7280; }
+    .lb-row.gold .lb-xp { color: #D97706; }
+    .lb-row.you  .lb-xp { color: #6366F1; }
+    .lb-note { font-size: 10px; color: #9CA3AF; text-align: center; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <!-- Confetti -->
+  <div class="confetti-piece" style="left:8%;background:#6366F1;animation-duration:3.2s;animation-delay:0s;border-radius:50%;"></div>
+  <div class="confetti-piece" style="left:20%;background:#F59E0B;animation-duration:2.8s;animation-delay:0.3s;"></div>
+  <div class="confetti-piece" style="left:35%;background:#10B981;animation-duration:3.5s;animation-delay:0.6s;border-radius:50%;"></div>
+  <div class="confetti-piece" style="left:50%;background:#EF4444;animation-duration:2.5s;animation-delay:0.1s;"></div>
+  <div class="confetti-piece" style="left:65%;background:#8B5CF6;animation-duration:3.8s;animation-delay:0.8s;border-radius:50%;"></div>
+  <div class="confetti-piece" style="left:80%;background:#F59E0B;animation-duration:2.9s;animation-delay:0.4s;"></div>
+  <div class="confetti-piece" style="left:92%;background:#10B981;animation-duration:2.7s;animation-delay:0.2s;border-radius:50%;"></div>
+
+  <div class="card">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-trophy">&#127942;</div>
+      <div class="hero-text">
+        <div class="hero-title">Game Complete!</div>
+        <div class="hero-sub">Multiplication Master</div>
+      </div>
+      <div class="xp-badge-hero">
+        <span class="xp-num">+150</span>
+        <span class="xp-label">XP Earned</span>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('results')">&#127919; Results</div>
+      <div class="tab" onclick="switchTab('awards')">&#127942; Badge &amp; Rank</div>
+    </div>
+
+    <!-- RESULTS TAB -->
+    <div class="tab-panel active" id="tab-results">
+      <div class="results-body">
+        <!-- Level bar -->
+        <div class="level-row">
+          <div class="level-label">Level 4</div>
+          <div class="level-track"><div class="level-fill"></div></div>
+          <div class="level-pct">80% to Lvl 5</div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-chip">
+            <div class="stat-icon">&#9989;</div>
+            <span class="stat-value">32/38</span>
+            <div class="stat-label">Correct</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-icon">&#127919;</div>
+            <span class="stat-value">84%</span>
+            <div class="stat-label">Accuracy</div>
+          </div>
+          <div class="stat-chip">
+            <div class="stat-icon">&#128293;</div>
+            <span class="stat-value">6x</span>
+            <div class="stat-label">Best Combo</div>
+          </div>
+        </div>
+
+        <!-- Knowledge progress -->
+        <div class="progress-section">
+          <div class="progress-title">Knowledge Progress</div>
+          <div class="meter-row">
+            <div class="meter-row-label">Before</div>
+            <div class="mini-meter">
+              <div class="mini-seg">Start</div>
+              <div class="mini-seg active-orange">There</div>
+              <div class="mini-seg">Up!</div>
+            </div>
+          </div>
+          <div class="meter-row">
+            <div class="meter-row-label">After</div>
+            <div class="mini-meter">
+              <div class="mini-seg">Start</div>
+              <div class="mini-seg">There</div>
+              <div class="mini-seg active-green">Up! &#10003;</div>
+            </div>
+          </div>
+          <div class="progress-note">You've leveled up your knowledge! &#127775;</div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="buttons">
+        <button class="btn-primary" onclick="window.location.href='game-pre-game.mockup.html'">Try Next Game &#8594;</button>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="window.location.href='game-pre-game.mockup.html'">Play Again</button>
+          <button class="btn-ghost" onclick="window.location.href='student-home-dashboard.mockup.html'">Back to Home</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- AWARDS TAB -->
+    <div class="tab-panel" id="tab-awards">
+      <div class="awards-body">
+        <!-- Badge -->
+        <div class="badge-card">
+          <div class="badge-icon">&#129351;</div>
+          <div>
+            <div class="badge-new">NEW BADGE</div>
+            <div class="badge-name">Multiplication Master!</div>
+            <div class="badge-desc">Mastered 2-digit multiplication</div>
+          </div>
+        </div>
+
+        <!-- Leaderboard -->
+        <div>
+          <div class="lb-header">
+            <div class="lb-title">&#127885; Class Leaderboard</div>
+            <div class="lb-pill">This Week</div>
+          </div>
+          <div class="lb-row gold">
+            <div class="lb-rank">&#129351;</div>
+            <div class="lb-name">Sarah K.</div>
+            <div class="lb-xp">820 XP</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank">&#129352;</div>
+            <div class="lb-name">Arjun M.</div>
+            <div class="lb-xp">750 XP</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank">&#129353;</div>
+            <div class="lb-name">Emma L.</div>
+            <div class="lb-xp">680 XP</div>
+          </div>
+          <div class="lb-row you">
+            <div class="lb-rank">&#11088;</div>
+            <div class="lb-name">You (Rahul)</div>
+            <div class="lb-xp">560 XP</div>
+          </div>
+          <div class="lb-row">
+            <div class="lb-rank">5</div>
+            <div class="lb-name">Priya S.</div>
+            <div class="lb-xp">490 XP</div>
+          </div>
+          <div class="lb-note">Rankings update daily</div>
+        </div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="buttons">
+        <button class="btn-primary" onclick="window.location.href='game-pre-game.mockup.html'">Try Next Game &#8594;</button>
+        <div class="btn-row">
+          <button class="btn-secondary" onclick="window.location.href='game-pre-game.mockup.html'">Play Again</button>
+          <button class="btn-ghost" onclick="window.location.href='student-home-dashboard.mockup.html'">Back to Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(name) {
+      document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', (i === 0 && name === 'results') || (i === 1 && name === 'awards'));
+      });
+      document.getElementById('tab-results').classList.toggle('active', name === 'results');
+      document.getElementById('tab-awards').classList.toggle('active', name === 'awards');
+    }
+  </script>
+</body>
+</html>

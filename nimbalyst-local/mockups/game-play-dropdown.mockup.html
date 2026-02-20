@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Dropdown Question</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Top nav */
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+    gap: 10px;
+  }
+  .pause-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none; border-radius: 50%;
+    color: #fff; font-size: 14px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 55%;
+    background: linear-gradient(90deg, #FDE68A, #F59E0B);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+  .q-counter {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+  }
+
+  /* Stats strip */
+  .stats-strip {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px 0;
+    flex-shrink: 0;
+  }
+  .stat-chip {
+    background: rgba(255,255,255,0.15);
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 16px;
+    padding: 24px 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow-y: auto;
+  }
+
+  /* Question type label */
+  .q-type-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #EEF2FF;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: #6366F1;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+
+  /* Question text with inline dropdowns */
+  .question-block {
+    flex-shrink: 0;
+  }
+  .q-text {
+    font-size: 16px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 2.1;
+  }
+
+  /* Inline dropdown */
+  .inline-select {
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    margin: 0 4px;
+  }
+  .select-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 36px;
+    padding: 0 12px;
+    border: 2px dashed #6366F1;
+    border-radius: 10px;
+    background: #EEF2FF;
+    font-size: 14px;
+    font-weight: 700;
+    color: #4F46E5;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+    min-width: 100px;
+  }
+  .select-pill.answered {
+    border-style: solid;
+    background: #EEF2FF;
+  }
+  .select-pill.correct {
+    border-color: #10B981;
+    background: #D1FAE5;
+    color: #065F46;
+  }
+  .select-pill.wrong {
+    border-color: #EF4444;
+    background: #FEE2E2;
+    color: #991B1B;
+  }
+  .select-caret { font-size: 10px; opacity: 0.7; }
+
+  /* Dropdown panel */
+  .dropdown-panel {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #fff;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 100;
+    min-width: 160px;
+    overflow: hidden;
+    display: none;
+  }
+  .dropdown-panel.open { display: block; }
+  .dropdown-option {
+    padding: 12px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+    border-bottom: 1px solid #F9FAFB;
+    transition: background 0.1s;
+  }
+  .dropdown-option:last-child { border-bottom: none; }
+  .dropdown-option:hover { background: #F3F4F6; }
+  .dropdown-option.selected { color: #6366F1; background: #EEF2FF; }
+
+  /* Hint */
+  .hint-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .hint-icon { font-size: 16px; }
+  .hint-text { font-size: 12px; color: #9CA3AF; }
+  .hint-link { font-size: 12px; color: #6366F1; font-weight: 700; cursor: pointer; text-decoration: none; }
+
+  /* Bottom */
+  .bottom {
+    background: #fff;
+    padding: 12px 20px 36px;
+    flex-shrink: 0;
+    border-top: 1px solid #F3F4F6;
+  }
+  .btn-primary {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .btn-primary.ready { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <button class="pause-btn">⏸</button>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <div class="q-counter">11 / 20</div>
+</div>
+
+<!-- Stats -->
+<div class="stats-strip">
+  <div class="stat-chip">🔥 6 streak</div>
+  <div class="stat-chip">⚡ 540 XP</div>
+  <div class="stat-chip">⏱ 1:48</div>
+</div>
+
+<!-- White card -->
+<div class="card">
+
+  <div class="q-type-label">▾ Select the correct word</div>
+
+  <!-- Question with inline dropdowns -->
+  <div class="question-block">
+    <div class="q-text">
+      The water cycle begins when water
+      <span class="inline-select" id="sel1">
+        <span class="select-pill" onclick="toggleDropdown('dd1', this)">
+          <span class="sel-val">choose…</span>
+          <span class="select-caret">▾</span>
+        </span>
+        <div class="dropdown-panel" id="dd1">
+          <div class="dropdown-option" onclick="selectOption('sel1','dd1',this,'evaporates')">evaporates</div>
+          <div class="dropdown-option" onclick="selectOption('sel1','dd1',this,'condenses')">condenses</div>
+          <div class="dropdown-option" onclick="selectOption('sel1','dd1',this,'precipitates')">precipitates</div>
+          <div class="dropdown-option" onclick="selectOption('sel1','dd1',this,'freezes')">freezes</div>
+        </div>
+      </span>
+      from oceans and rivers, rises as vapour, then
+      <span class="inline-select" id="sel2">
+        <span class="select-pill" onclick="toggleDropdown('dd2', this)">
+          <span class="sel-val">choose…</span>
+          <span class="select-caret">▾</span>
+        </span>
+        <div class="dropdown-panel" id="dd2">
+          <div class="dropdown-option" onclick="selectOption('sel2','dd2',this,'condenses')">condenses</div>
+          <div class="dropdown-option" onclick="selectOption('sel2','dd2',this,'evaporates')">evaporates</div>
+          <div class="dropdown-option" onclick="selectOption('sel2','dd2',this,'melts')">melts</div>
+          <div class="dropdown-option" onclick="selectOption('sel2','dd2',this,'sublimes')">sublimes</div>
+        </div>
+      </span>
+      to form clouds.
+    </div>
+  </div>
+
+  <!-- Hint -->
+  <div class="hint-row">
+    <div class="hint-icon">💡</div>
+    <div class="hint-text">Stuck? </div>
+    <a class="hint-link" onclick="showHint()">Use a hint (−10 XP)</a>
+  </div>
+  <div id="hint-box" style="display:none;background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;padding:10px 14px;font-size:12px;color:#78350F;flex-shrink:0;">
+    💡 Think about what happens to water when it gets warm — it turns into gas.
+  </div>
+
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom">
+  <button class="btn-primary" id="submitBtn" onclick="submitAnswer()">Check Answer</button>
+</div>
+
+<script>
+  const answers = { sel1: null, sel2: null };
+  const correct = { sel1: 'evaporates', sel2: 'condenses' };
+
+  function toggleDropdown(ddId, pill) {
+    // Close all first
+    document.querySelectorAll('.dropdown-panel').forEach(d => {
+      if (d.id !== ddId) d.classList.remove('open');
+    });
+    document.getElementById(ddId).classList.toggle('open');
+  }
+
+  function selectOption(selId, ddId, el, value) {
+    answers[selId] = value;
+    // Update pill
+    const pill = document.querySelector(`#${selId} .select-pill`);
+    pill.querySelector('.sel-val').textContent = value;
+    pill.classList.add('answered');
+    // Close dropdown
+    document.getElementById(ddId).classList.remove('open');
+    // Mark selected
+    el.parentNode.querySelectorAll('.dropdown-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+    // Enable submit if all answered
+    if (answers.sel1 && answers.sel2) {
+      document.getElementById('submitBtn').classList.add('ready');
+    }
+  }
+
+  function submitAnswer() {
+    if (!answers.sel1 || !answers.sel2) return;
+    // Show correct/wrong
+    ['sel1','sel2'].forEach(selId => {
+      const pill = document.querySelector(`#${selId} .select-pill`);
+      pill.classList.remove('answered');
+      pill.classList.add(answers[selId] === correct[selId] ? 'correct' : 'wrong');
+    });
+    document.getElementById('submitBtn').textContent = 'Next Question →';
+    document.getElementById('submitBtn').onclick = () => { window.location.href = 'game-play.mockup.html'; };
+  }
+
+  function showHint() {
+    document.getElementById('hint-box').style.display = 'block';
+  }
+
+  // Close dropdowns on outside click
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.inline-select')) {
+      document.querySelectorAll('.dropdown-panel').forEach(d => d.classList.remove('open'));
+    }
+  });
+</script>
+</body>
+</html>

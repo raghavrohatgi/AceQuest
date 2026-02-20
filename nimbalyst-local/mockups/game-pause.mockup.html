@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Paused</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Dimmed game background */
+  .game-bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    filter: blur(2px) brightness(0.5);
+    z-index: 0;
+  }
+  /* Fake game content behind */
+  .game-bg-content {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 20px 20px;
+    gap: 12px;
+    pointer-events: none;
+  }
+  .fake-bar { height: 8px; background: rgba(255,255,255,0.3); border-radius: 4px; width: 80%; }
+  .fake-card {
+    background: rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 16px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .fake-line { height: 10px; background: rgba(255,255,255,0.2); border-radius: 4px; }
+
+  /* Overlay */
+  .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  /* Pause sheet */
+  .pause-sheet {
+    width: 100%;
+    background: #fff;
+    border-radius: 28px 28px 0 0;
+    padding: 0 0 36px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Handle */
+  .sheet-handle {
+    display: flex;
+    justify-content: center;
+    padding: 12px 0 8px;
+  }
+  .handle { width: 36px; height: 4px; background: #E5E7EB; border-radius: 2px; }
+
+  /* Header */
+  .sheet-header {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 16px;
+    border-bottom: 1px solid #F3F4F6;
+    gap: 12px;
+  }
+  .pause-icon { font-size: 28px; }
+  .pause-title { font-size: 20px; font-weight: 800; color: #111827; flex: 1; }
+  .timer { font-size: 16px; font-weight: 800; color: #6366F1; }
+
+  /* Progress summary */
+  .progress-summary {
+    padding: 16px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .progress-label { font-size: 11px; font-weight: 800; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.06em; }
+  .stats-row { display: flex; gap: 10px; }
+  .stat-box {
+    flex: 1;
+    background: #F9FAFB;
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+  }
+  .stat-val { font-size: 20px; font-weight: 800; color: #111827; }
+  .stat-label { font-size: 10px; color: #9CA3AF; font-weight: 600; margin-top: 2px; }
+  .stat-box.green .stat-val { color: #10B981; }
+  .stat-box.indigo .stat-val { color: #6366F1; }
+
+  /* Progress bar */
+  .q-progress-bar {
+    height: 6px;
+    background: #F3F4F6;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .q-progress-fill { height: 100%; width: 55%; background: linear-gradient(90deg, #6366F1, #4F46E5); border-radius: 3px; }
+  .q-progress-label { font-size: 11px; color: #9CA3AF; font-weight: 600; margin-top: 4px; }
+
+  /* Actions */
+  .actions { padding: 16px 20px 0; display: flex; flex-direction: column; gap: 10px; }
+
+  .btn-resume {
+    width: 100%; height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff; font-size: 16px; font-weight: 800;
+    border: none; border-radius: 13px; cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+
+  .secondary-row { display: flex; gap: 10px; }
+  .btn-secondary {
+    flex: 1; height: 46px;
+    background: #F3F4F6;
+    color: #374151; font-size: 13px; font-weight: 700;
+    border: none; border-radius: 12px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    text-decoration: none;
+  }
+  .btn-secondary.red { background: #FEE2E2; color: #991B1B; }
+
+  .btn-quit {
+    width: 100%; height: 44px;
+    background: none;
+    color: #9CA3AF; font-size: 13px; font-weight: 700;
+    border: none; cursor: pointer;
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- Dimmed game background -->
+<div class="game-bg"></div>
+<div class="game-bg-content">
+  <div class="fake-bar"></div>
+  <div class="fake-card">
+    <div class="fake-line" style="width:70%"></div>
+    <div class="fake-line" style="width:90%"></div>
+    <div class="fake-line" style="width:55%"></div>
+  </div>
+</div>
+
+<!-- Overlay -->
+<div class="overlay">
+  <div class="pause-sheet">
+
+    <div class="sheet-handle"><div class="handle"></div></div>
+
+    <!-- Header -->
+    <div class="sheet-header">
+      <div class="pause-icon">⏸</div>
+      <div class="pause-title">Game Paused</div>
+      <div class="timer">⏱ 3:42</div>
+    </div>
+
+    <!-- Progress summary -->
+    <div class="progress-summary">
+      <div class="progress-label">Your progress so far</div>
+      <div class="stats-row">
+        <div class="stat-box">
+          <div class="stat-val">11</div>
+          <div class="stat-label">Questions done</div>
+        </div>
+        <div class="stat-box green">
+          <div class="stat-val">9</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-box indigo">
+          <div class="stat-val">⚡ 540</div>
+          <div class="stat-label">XP earned</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">🔥 6</div>
+          <div class="stat-label">Streak</div>
+        </div>
+      </div>
+      <div class="q-progress-bar"><div class="q-progress-fill"></div></div>
+      <div class="q-progress-label">11 of 20 questions · 9 remaining</div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <a class="btn-resume" href="game-play.mockup.html">▶ Resume Game</a>
+      <div class="secondary-row">
+        <a class="btn-secondary" href="settings.mockup.html">⚙️ Settings</a>
+        <button class="btn-secondary" onclick="alert('Sound toggled')">🔇 Mute</button>
+      </div>
+      <a class="btn-quit red" href="student-home-dashboard.mockup.html">Quit Game (progress will be lost)</a>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

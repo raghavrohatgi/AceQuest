@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Log In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .top-nav {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px 0;
+    flex-shrink: 0;
+  }
+  .back-btn {
+    width: 34px; height: 34px;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none;
+    flex-shrink: 0;
+  }
+  .nav-title {
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.9);
+  }
+  .nav-spacer { width: 34px; flex-shrink: 0; }
+
+  /* Hero */
+  .hero-text {
+    padding: 28px 24px 0;
+    flex-shrink: 0;
+    text-align: center;
+  }
+  .mascot {
+    width: 72px; height: 72px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 38px;
+    margin: 0 auto 14px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  }
+  .hero-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 4px; }
+  .hero-sub { font-size: 13px; color: rgba(255,255,255,0.75); }
+
+  /* White card */
+  .card {
+    flex: 1;
+    background: #fff;
+    border-radius: 24px 24px 0 0;
+    margin-top: 24px;
+    padding: 28px 20px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  /* Tabs: Mobile / Email */
+  .auth-tabs {
+    display: flex;
+    background: #F3F4F6;
+    border-radius: 10px;
+    padding: 3px;
+    flex-shrink: 0;
+  }
+  .auth-tab {
+    flex: 1;
+    height: 36px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    background: transparent;
+    color: #6B7280;
+    transition: all 0.15s;
+  }
+  .auth-tab.active { background: #fff; color: #111827; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+
+  /* Social */
+  .social-row { display: flex; gap: 10px; flex-shrink: 0; }
+  .social-btn {
+    flex: 1;
+    height: 46px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    cursor: pointer;
+  }
+  .social-icon { font-size: 18px; }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+  }
+  .divider-line { flex: 1; height: 1px; background: #E5E7EB; }
+  .divider-text { font-size: 12px; color: #9CA3AF; font-weight: 600; white-space: nowrap; }
+
+  /* Field */
+  .field-group { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+  .field-label { font-size: 12px; font-weight: 700; color: #374151; }
+  .phone-row { display: flex; gap: 8px; }
+  .country-code {
+    height: 48px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    background: #F9FAFB;
+    display: flex; align-items: center; gap: 4px;
+    white-space: nowrap; flex-shrink: 0; cursor: pointer;
+  }
+  .field-input {
+    height: 48px;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 12px;
+    padding: 0 14px;
+    font-size: 14px;
+    color: #111827;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+    background: #F9FAFB;
+    width: 100%;
+  }
+  .field-input:focus { border-color: #6366F1; background: #fff; }
+  .field-input::placeholder { color: #9CA3AF; }
+
+  /* OTP hint */
+  .otp-hint {
+    font-size: 11px;
+    color: #9CA3AF;
+    line-height: 1.5;
+    flex-shrink: 0;
+  }
+
+  /* Returning players section */
+  .section-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #9CA3AF;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .profiles-row {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    padding-bottom: 4px;
+    overflow-x: auto;
+  }
+  .profile-chip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .profile-avatar {
+    width: 52px; height: 52px;
+    background: linear-gradient(135deg, #EEF2FF, #FEF3C7);
+    border-radius: 50%;
+    border: 2px solid #E5E7EB;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    transition: border-color 0.15s;
+  }
+  .profile-chip:hover .profile-avatar { border-color: #6366F1; }
+  .profile-name { font-size: 11px; font-weight: 600; color: #374151; }
+
+  /* Bottom */
+  .bottom {
+    background: #fff;
+    padding: 12px 20px 36px;
+    flex-shrink: 0;
+    border-top: 1px solid #F3F4F6;
+  }
+  .btn-primary {
+    width: 100%;
+    height: 52px;
+    background: linear-gradient(135deg, #6366F1, #4F46E5);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 800;
+    border: none;
+    border-radius: 13px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+    margin-bottom: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .signup-row {
+    text-align: center;
+    font-size: 13px;
+    color: #6B7280;
+  }
+  .signup-row a { color: #6366F1; font-weight: 700; text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- Top nav -->
+<div class="top-nav">
+  <a class="back-btn" href="onboarding-welcome.mockup.html">←</a>
+  <div class="nav-title">Log In</div>
+  <div class="nav-spacer"></div>
+</div>
+
+<!-- Hero -->
+<div class="hero-text">
+  <div class="mascot">👋</div>
+  <div class="hero-title">Welcome back!</div>
+  <div class="hero-sub">Pick up right where you left off</div>
+</div>
+
+<!-- White card -->
+<div class="card">
+
+  <!-- Auth method tabs -->
+  <div class="auth-tabs">
+    <button class="auth-tab active" onclick="switchTab('mobile', this)">📱 Mobile</button>
+    <button class="auth-tab" onclick="switchTab('email', this)">✉️ Email</button>
+  </div>
+
+  <!-- Social login -->
+  <div class="social-row">
+    <button class="social-btn"><span class="social-icon">🔵</span> Google</button>
+    <button class="social-btn"><span class="social-icon">🍎</span> Apple</button>
+  </div>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-text">or with OTP</div>
+    <div class="divider-line"></div>
+  </div>
+
+  <!-- Mobile number (default shown) -->
+  <div class="field-group" id="mobileField">
+    <div class="field-label">Mobile Number</div>
+    <div class="phone-row">
+      <div class="country-code">🇮🇳 +91 ▾</div>
+      <input class="field-input" type="tel" placeholder="Enter mobile number" style="flex:1">
+    </div>
+  </div>
+
+  <!-- Email field (hidden by default) -->
+  <div class="field-group" id="emailField" style="display:none">
+    <div class="field-label">Email Address</div>
+    <input class="field-input" type="email" placeholder="you@example.com">
+  </div>
+
+  <div class="otp-hint">We'll send you a one-time password to log in — no password to remember!</div>
+
+  <!-- Returning profiles -->
+  <div class="section-label">Recent Players</div>
+  <div class="profiles-row">
+    <div class="profile-chip">
+      <div class="profile-avatar">🦁</div>
+      <div class="profile-name">Arjun</div>
+    </div>
+    <div class="profile-chip">
+      <div class="profile-avatar">🦄</div>
+      <div class="profile-name">Priya</div>
+    </div>
+    <div class="profile-chip">
+      <div class="profile-avatar">🐼</div>
+      <div class="profile-name">Rohan</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Bottom CTA -->
+<div class="bottom">
+  <a class="btn-primary" href="student-home-dashboard.mockup.html">Send OTP →</a>
+  <div class="signup-row">New here? <a href="onboarding-signup.mockup.html">Create an account</a></div>
+</div>
+
+<script>
+  function switchTab(type, el) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('mobileField').style.display = type === 'mobile' ? 'flex' : 'none';
+    document.getElementById('emailField').style.display = type === 'email' ? 'flex' : 'none';
+  }
+  // init
+  document.getElementById('mobileField').style.display = 'flex';
+  document.getElementById('mobileField').style.flexDirection = 'column';
+  document.getElementById('mobileField').style.gap = '4px';
+</script>
+</body>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AceQuest — Loading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Floating bubbles background */
+  .bubble {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    animation: floatUp linear infinite;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) scale(0); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-20vh) scale(1); opacity: 0; }
+  }
+
+  /* Center content */
+  .center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    z-index: 1;
+  }
+
+  /* Mascot */
+  .mascot {
+    font-size: 72px;
+    animation: bounce 1.2s ease-in-out infinite alternate;
+    margin-bottom: 20px;
+  }
+  @keyframes bounce {
+    from { transform: translateY(0px); }
+    to   { transform: translateY(-12px); }
+  }
+
+  /* Logo text */
+  .logo-text {
+    font-size: 32px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.01em;
+    margin-bottom: 6px;
+  }
+  .logo-quest {
+    background: linear-gradient(135deg, #FDE68A, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Subject badge */
+  .subject-badge {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 999px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 36px;
+    letter-spacing: 0.02em;
+  }
+
+  /* Loading bar */
+  .loading-bar-wrap {
+    width: 220px;
+    height: 6px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .loading-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #FDE68A, #F59E0B);
+    border-radius: 3px;
+    animation: loadFill 2.4s ease-in-out infinite;
+  }
+  @keyframes loadFill {
+    0%   { width: 0%; }
+    60%  { width: 85%; }
+    80%  { width: 90%; }
+    100% { width: 100%; }
+  }
+
+  .loading-text {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    font-weight: 600;
+    animation: pulse 1.2s ease-in-out infinite alternate;
+  }
+  @keyframes pulse {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+  }
+
+  /* Fun tip */
+  .tip-strip {
+    position: absolute;
+    bottom: 48px;
+    left: 20px; right: 20px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 14px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    z-index: 1;
+  }
+  .tip-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .tip-content { flex: 1; }
+  .tip-label { font-size: 10px; font-weight: 800; color: #FDE68A; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+  .tip-text { font-size: 12px; color: rgba(255,255,255,0.9); line-height: 1.5; }
+
+  /* Dots loader (alternative style) */
+  .dots { display: flex; gap: 6px; margin-top: 10px; }
+  .dot {
+    width: 8px; height: 8px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 50%;
+    animation: dotBounce 1.2s ease-in-out infinite;
+  }
+  .dot:nth-child(2) { animation-delay: 0.2s; }
+  .dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes dotBounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40%           { transform: scale(1);   opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Background bubbles -->
+<div class="bubble" style="width:60px;height:60px;left:10%;animation-duration:6s;animation-delay:0s;"></div>
+<div class="bubble" style="width:40px;height:40px;left:30%;animation-duration:8s;animation-delay:1s;"></div>
+<div class="bubble" style="width:80px;height:80px;left:60%;animation-duration:7s;animation-delay:2s;"></div>
+<div class="bubble" style="width:30px;height:30px;left:80%;animation-duration:5s;animation-delay:0.5s;"></div>
+<div class="bubble" style="width:50px;height:50px;left:50%;animation-duration:9s;animation-delay:3s;"></div>
+
+<!-- Center content -->
+<div class="center">
+  <div class="mascot">🎓</div>
+  <div class="logo-text">Ace<span class="logo-quest">Quest</span></div>
+  <div class="subject-badge">📐 Mathematics · Grade 5</div>
+
+  <div class="loading-bar-wrap">
+    <div class="loading-bar-fill"></div>
+  </div>
+  <div class="loading-text">Preparing your questions…</div>
+
+  <div class="dots">
+    <div class="dot"></div>
+    <div class="dot"></div>
+    <div class="dot"></div>
+  </div>
+</div>
+
+<!-- Fun tip -->
+<div class="tip-strip">
+  <div class="tip-icon">💡</div>
+  <div class="tip-content">
+    <div class="tip-label">Did you know?</div>
+    <div class="tip-text">Reviewing mistakes right after a game helps you remember 3× longer!</div>
+  </div>
+</div>
+
+<script>
+  // Auto-redirect after 2.5 seconds (simulating load complete)
+  setTimeout(() => {
+    window.location.href = 'game-pre-game.mockup.html';
+  }, 2500);
+</script>
+</body>
+</html>
