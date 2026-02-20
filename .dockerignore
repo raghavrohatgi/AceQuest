@@ -1,9 +1,27 @@
-# Exclude training data and unnecessary files
+# Exclude large training data directories
+Books/
 Books-MD/
 ari/augmentation/
-ari/data/*.csv
-ari/data/*.jsonl
-ari/data/corpus-features.csv
+ari/data/
 ari/scripts/
 
-# Keep everything else (API, features, models)
+# Exclude development/planning directories
+nimbalyst-local/
+skills/
+context/
+agents/
+plans/
+Competitors/
+docs/
+
+# Exclude git and other metadata
+.git/
+.github/
+*.md
+!README.md
+
+# Keep only what's needed for the API:
+# - ari/api/ (FastAPI application)
+# - ari/features.py (feature extraction)
+# - ari/models/ (trained model)
+# - ari/__init__.py (package marker)
