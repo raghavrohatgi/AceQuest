@@ -38,7 +38,7 @@ from ari.api.db import (
 
 # --- Model ---
 MODEL_PATH = Path(__file__).parent.parent / "models" / "ari-model-v1.pkl"
-_pipeline = joblib.load(MODEL_PATH)
+_pipeline = None  # Loaded on startup
 
 FEATURE_COLS = [
     "mean_word_frequency_rank",
@@ -88,6 +88,10 @@ app.add_middleware(
 
 @app.on_event("startup")
 def startup():
+    global _pipeline
+    print("[ARI] Loading model from disk...")
+    _pipeline = joblib.load(MODEL_PATH)
+    print("[ARI] Model loaded successfully")
     init_db()
 
 
