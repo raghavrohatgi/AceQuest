@@ -1,18 +1,9 @@
-# Exclude everything except what's needed for the API
-*
-
-# Include only these directories/files
-!ari/
-!README.md
-
-# But exclude from ari/:
+# Exclude training data and unnecessary files
+Books-MD/
 ari/augmentation/
 ari/data/*.csv
 ari/data/*.jsonl
+ari/data/corpus-features.csv
 ari/scripts/
 
-# Keep only what's needed
-!ari/features.py
-!ari/models/
-!ari/api/
-!ari/__init__.py
+# Keep everything else (API, features, models)
