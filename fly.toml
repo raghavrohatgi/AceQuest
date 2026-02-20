@@ -7,8 +7,7 @@ app = 'ari-acequest'
 primary_region = 'bom'
 
 [build]
-  dockerfile = './ari/api/Dockerfile'
-  ignorefile = '.dockerignore'
+  dockerfile = 'ari/api/Dockerfile'
 
 [env]
   ARI_DEV_MODE = 'false'
