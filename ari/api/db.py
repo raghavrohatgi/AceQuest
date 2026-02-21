@@ -54,8 +54,9 @@ def init_db() -> None:
             CREATE TABLE IF NOT EXISTS nps (
                 id         TEXT PRIMARY KEY,
                 created_at TEXT NOT NULL,
-                score      INTEGER NOT NULL,
-                comment    TEXT
+                score      INTEGER,
+                comment    TEXT,
+                status     TEXT NOT NULL DEFAULT 'submitted'
             );
         """)
 
@@ -120,13 +121,21 @@ def log_rate_limit(ip: str, endpoint: str) -> None:
         )
 
 
-def insert_nps(score: int, comment: str) -> str:
+def update_reason(feedback_id: str, reason: str) -> None:
+    with get_conn() as conn:
+        conn.execute(
+            "UPDATE feedback SET reason = ? WHERE id = ?",
+            (reason, feedback_id),
+        )
+
+
+def insert_nps(score: int, comment: str, status: str = "submitted") -> str:
     nps_id = str(uuid.uuid4())
     now = datetime.now(timezone.utc).isoformat()
     with get_conn() as conn:
         conn.execute(
-            "INSERT INTO nps (id, created_at, score, comment) VALUES (?,?,?,?)",
-            (nps_id, now, score, comment),
+            "INSERT INTO nps (id, created_at, score, comment, status) VALUES (?,?,?,?,?)",
+            (nps_id, now, score, comment, status),
         )
     return nps_id
 

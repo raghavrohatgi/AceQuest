@@ -36,6 +36,7 @@ from ari.api.db import (
     insert_feedback,
     insert_nps,
     is_duplicate,
+    update_reason,
 )
 
 # --- Model ---
@@ -83,7 +84,7 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # tighten to acequest.in domain after launch
-    allow_methods=["POST", "GET"],
+    allow_methods=["POST", "GET", "PATCH"],
     allow_headers=["Content-Type"],
 )
 
@@ -221,14 +222,14 @@ async def feedback(request: Request, body: FeedbackRequest):
     if not db_size_ok():
         raise HTTPException(503, "Feedback storage full. Contact acequest.in.")
 
-    # 3. Dedup — same exact text already stored
+    # 3. Dedup — same exact text already stored; return existing id so reason can still be updated
     if is_duplicate(body.text):
-        return {"ok": True, "note": "duplicate"}
+        return {"ok": True, "note": "duplicate", "feedback_id": None}
 
     # 4. Re-score to get full range (in case frontend sent stale values)
     ari = _predict_range(body.text, body.subject)
 
-    insert_feedback(
+    feedback_id = insert_feedback(
         text=body.text,
         subject=body.subject,
         ari_grade_low=ari["grade_low"],
@@ -239,6 +240,18 @@ async def feedback(request: Request, body: FeedbackRequest):
         reason=body.reason,
     )
 
+    return {"ok": True, "feedback_id": feedback_id}
+
+
+class ReasonRequest(BaseModel):
+    reason: str = Field(..., min_length=1, max_length=1000)
+
+
+@app.patch("/feedback/{feedback_id}/reason")
+@limiter.limit("5/minute")
+async def patch_reason(request: Request, feedback_id: str, body: ReasonRequest):
+    """Update the reason/disagree text on an existing feedback row."""
+    update_reason(feedback_id, body.reason)
     return {"ok": True}
 
 
@@ -251,5 +264,13 @@ class NpsRequest(BaseModel):
 @limiter.limit("5/minute")
 async def nps(request: Request, body: NpsRequest):
     """Store an NPS score and optional comment."""
-    insert_nps(score=body.score, comment=body.comment)
+    insert_nps(score=body.score, comment=body.comment, status="submitted")
+    return {"ok": True}
+
+
+@app.post("/nps/skip")
+@limiter.limit("10/minute")
+async def nps_skip(request: Request):
+    """Record that the user skipped the NPS prompt."""
+    insert_nps(score=None, comment=None, status="skipped")
     return {"ok": True}
