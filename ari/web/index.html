@@ -317,6 +317,31 @@
       border: none; border-top: 1px solid var(--gray-bd); margin: 16px 0;
     }
 
+    /* ── NPS ── */
+    .nps-question {
+      font-size: 14px; font-weight: 600; color: var(--dark);
+      margin-bottom: 14px; line-height: 1.4;
+    }
+    .nps-scale {
+      display: flex; gap: 5px; margin-bottom: 6px;
+    }
+    .nps-btn {
+      flex: 1; min-width: 0; height: 40px;
+      border: 1.5px solid var(--gray-bd); border-radius: 8px;
+      background: var(--white); font-size: 13px; font-weight: 600;
+      color: var(--mid); cursor: pointer; transition: all .15s;
+    }
+    .nps-btn:hover { border-color: var(--indigo); color: var(--indigo); background: var(--indigo-lt); }
+    .nps-btn.selected {
+      background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-mid) 100%);
+      border-color: var(--indigo); color: var(--white);
+      box-shadow: 0 2px 8px rgba(79,70,229,.3);
+    }
+    .nps-labels {
+      display: flex; justify-content: space-between;
+      font-size: 10px; color: var(--gray-mid); margin-bottom: 14px;
+    }
+
     /* ── Footer ── */
     footer {
       text-align: center; padding: 20px 16px;
@@ -385,8 +410,6 @@
         <option value="Maths">Maths</option>
         <option value="Science">Science</option>
         <option value="EVS">EVS</option>
-        <option value="Hindi">Hindi</option>
-        <option value="Other">Other</option>
       </select>
       <button class="btn btn-primary" id="btn-check" onclick="checkPassage()" disabled>
         Check Reading Level →
@@ -459,6 +482,23 @@
       onclick="reset()">← Check Another Passage</button>
   </div>
 
+  <!-- ── NPS Card (shown after result) ── -->
+  <div class="card hidden" id="card-nps">
+    <div class="card-title">Quick Feedback</div>
+    <p class="nps-question">How likely are you to recommend PassageCheck to a colleague?</p>
+    <div class="nps-scale" id="nps-scale"></div>
+    <div class="nps-labels">
+      <span>Not likely</span>
+      <span>Very likely</span>
+    </div>
+    <textarea class="disagree-input" id="nps-comment" style="margin-bottom:10px;"
+      placeholder="What could we improve? (optional)"></textarea>
+    <button class="btn btn-primary" id="btn-nps" onclick="submitNps()" disabled style="width:100%;">
+      Submit Feedback
+    </button>
+    <div id="msg-nps" class="hidden" style="margin-top:8px;"></div>
+  </div>
+
 </main>
 
 <footer>
@@ -487,6 +527,7 @@
     ari: null,
     teacherGrade: null,
     turnstileToken: null,
+    npsScore: null,
   };
 
   // ── Turnstile ──
@@ -650,6 +691,53 @@
     }
   }
 
+  // ── NPS ──
+  function renderNpsScale() {
+    const container = document.getElementById('nps-scale');
+    container.innerHTML = '';
+    for (let i = 0; i <= 10; i++) {
+      const btn = document.createElement('button');
+      btn.className = 'nps-btn' + (state.npsScore === i ? ' selected' : '');
+      btn.textContent = i;
+      btn.onclick = () => {
+        state.npsScore = i;
+        renderNpsScale();
+        document.getElementById('btn-nps').disabled = false;
+      };
+      container.appendChild(btn);
+    }
+  }
+
+  async function submitNps() {
+    if (state.npsScore === null) return;
+    const comment = document.getElementById('nps-comment').value.trim();
+    const btn = document.getElementById('btn-nps');
+    btn.disabled = true;
+    btn.textContent = 'Submitting…';
+    try {
+      const resp = await fetch(`${API_BASE}/nps`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ score: state.npsScore, comment }),
+      });
+      if (resp.ok) {
+        showMsg('msg-nps', 'success', 'Thank you for your feedback!');
+        btn.textContent = 'Sent ✓';
+        document.getElementById('nps-comment').disabled = true;
+        // Disable all NPS buttons
+        document.querySelectorAll('.nps-btn').forEach(b => b.disabled = true);
+      } else {
+        showMsg('msg-nps', 'error', 'Could not save feedback. Please try again.');
+        btn.disabled = false;
+        btn.textContent = 'Submit Feedback';
+      }
+    } catch (e) {
+      showMsg('msg-nps', 'error', 'Network error. Please try again.');
+      btn.disabled = false;
+      btn.textContent = 'Submit Feedback';
+    }
+  }
+
   // ── Reveal result ──
   function revealResult() {
     const { grade_low, grade_mid, grade_high, label } = state.ari;
@@ -683,6 +771,9 @@
 
     hide('card-rate');
     show('card-result');
+    show('card-nps');
+    state.npsScore = null;
+    renderNpsScale();
     setStep(3);
   }
 
@@ -732,19 +823,24 @@
 
   // ── Reset ──
   function reset() {
-    state = { text:'', subject:'English', ari:null, teacherGrade:null, turnstileToken:null };
+    state = { text:'', subject:'English', ari:null, teacherGrade:null, turnstileToken:null, npsScore:null };
     document.getElementById('passage').value = '';
     document.getElementById('word-count').textContent = '0 words';
     document.getElementById('btn-check').disabled = true;
     const disagreeInput = document.getElementById('disagree-input');
     disagreeInput.value = '';
     disagreeInput.disabled = false;
+    const npsComment = document.getElementById('nps-comment');
+    npsComment.value = '';
+    npsComment.disabled = false;
+    document.getElementById('btn-nps').disabled = true;
+    document.getElementById('btn-nps').textContent = 'Submit Feedback';
     // Reset agree strip styles
     const stripEl = document.getElementById('agree-strip');
     stripEl.style.cssText = '';
     const iconEl = document.getElementById('agree-icon');
     iconEl.style.cssText = '';
-    hide('card-rate'); hide('card-result'); hide('disagree-section');
+    hide('card-rate'); hide('card-result'); hide('card-nps'); hide('disagree-section');
     show('card-input');
     setStep(1);
     if (_turnstileWidgetId !== null && window.turnstile) {

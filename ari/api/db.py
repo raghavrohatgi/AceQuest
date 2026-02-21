@@ -50,6 +50,13 @@ def init_db() -> None:
                 ip         TEXT NOT NULL,
                 endpoint   TEXT NOT NULL
             );
+
+            CREATE TABLE IF NOT EXISTS nps (
+                id         TEXT PRIMARY KEY,
+                created_at TEXT NOT NULL,
+                score      INTEGER NOT NULL,
+                comment    TEXT
+            );
         """)
 
 
@@ -111,6 +118,17 @@ def log_rate_limit(ip: str, endpoint: str) -> None:
             "INSERT INTO rate_limit_log (created_at, ip, endpoint) VALUES (?,?,?)",
             (now, ip, endpoint),
         )
+
+
+def insert_nps(score: int, comment: str) -> str:
+    nps_id = str(uuid.uuid4())
+    now = datetime.now(timezone.utc).isoformat()
+    with get_conn() as conn:
+        conn.execute(
+            "INSERT INTO nps (id, created_at, score, comment) VALUES (?,?,?,?)",
+            (nps_id, now, score, comment),
+        )
+    return nps_id
 
 
 def feedback_count() -> int:

@@ -34,6 +34,7 @@ from ari.api.db import (
     feedback_count,
     init_db,
     insert_feedback,
+    insert_nps,
     is_duplicate,
 )
 
@@ -238,4 +239,17 @@ async def feedback(request: Request, body: FeedbackRequest):
         reason=body.reason,
     )
 
+    return {"ok": True}
+
+
+class NpsRequest(BaseModel):
+    score: int = Field(..., ge=0, le=10)
+    comment: str = Field("", max_length=1000)
+
+
+@app.post("/nps")
+@limiter.limit("5/minute")
+async def nps(request: Request, body: NpsRequest):
+    """Store an NPS score and optional comment."""
+    insert_nps(score=body.score, comment=body.comment)
     return {"ok": True}
