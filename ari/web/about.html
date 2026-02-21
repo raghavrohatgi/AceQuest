@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — PassageCheck</title>
+  <meta name="description" content="Learn how PassageCheck helps Indian teachers find the right reading level for any passage." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .about-hero {
+      max-width: 620px; margin: 0 auto; padding: 40px 16px 0;
+      text-align: center;
+    }
+    .about-hero h2 {
+      font-size: 28px; font-weight: 800; color: var(--dark);
+      letter-spacing: -0.3px; margin-bottom: 12px;
+    }
+    .about-hero p {
+      font-size: 15px; color: var(--gray-text); line-height: 1.7; max-width: 480px; margin: 0 auto;
+    }
+
+    .about-content { max-width: 620px; margin: 0 auto; padding: 28px 16px 60px; }
+
+    .about-section { margin-bottom: 28px; }
+    .about-section h3 {
+      font-size: 13px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.8px; color: var(--indigo);
+      display: flex; align-items: center; gap: 6px;
+      margin-bottom: 10px;
+    }
+    .about-section h3::before {
+      content: ''; width: 3px; height: 14px;
+      background: var(--indigo); border-radius: 2px;
+    }
+    .about-section p {
+      font-size: 14px; color: var(--mid); line-height: 1.75;
+    }
+
+    .steps-visual {
+      display: flex; flex-direction: column; gap: 12px; margin-top: 12px;
+    }
+    .step-card {
+      display: flex; align-items: flex-start; gap: 14px;
+      background: var(--white); border: 1px solid var(--gray-bd);
+      border-radius: var(--radius-sm); padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, var(--indigo), var(--indigo-mid));
+      color: var(--white); font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-card-text strong { font-size: 14px; color: var(--dark); display: block; margin-bottom: 2px; }
+    .step-card-text span  { font-size: 13px; color: var(--gray-text); }
+
+    .why-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+    }
+    .why-item {
+      background: var(--white); border: 1px solid var(--gray-bd);
+      border-radius: var(--radius-sm); padding: 14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .why-item-icon { font-size: 20px; margin-bottom: 6px; }
+    .why-item strong { font-size: 13px; color: var(--dark); display: block; margin-bottom: 3px; }
+    .why-item span   { font-size: 12px; color: var(--gray-text); line-height: 1.5; }
+
+    .cta-box {
+      background: linear-gradient(135deg, var(--indigo-lt), #E0E7FF);
+      border: 1.5px solid #C7D2FE; border-radius: var(--radius);
+      padding: 24px; text-align: center; margin-top: 8px;
+    }
+    .cta-box p { font-size: 14px; color: var(--mid); margin-bottom: 14px; line-height: 1.6; }
+
+    @media (max-width: 480px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .about-hero h2 { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-wrap">
+      <span class="logo-badge">PassageCheck</span>
+      <h1>About</h1>
+    </div>
+    <p>Know if a passage is right for your students — instantly</p>
+  </div>
+</header>
+
+<div class="about-hero">
+  <h2>Reading levels, made simple for Indian classrooms</h2>
+  <p>PassageCheck helps teachers quickly find out whether a passage is appropriate for their students — no guesswork, no lookup tables.</p>
+</div>
+
+<div class="about-content">
+
+  <!-- How it works -->
+  <div class="card about-section">
+    <h3>How it works</h3>
+    <div class="steps-visual">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-card-text">
+          <strong>Paste any passage</strong>
+          <span>A story, textbook paragraph, worksheet, or any text you want to check.</span>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-card-text">
+          <strong>Share your own rating</strong>
+          <span>You pick a grade first — your expertise matters and helps improve the model.</span>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-card-text">
+          <strong>See PassageCheck's answer</strong>
+          <span>We show the predicted grade range, calibrated for CBSE, ICSE, and State Board curricula.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- What it measures -->
+  <div class="card about-section">
+    <h3>What it measures</h3>
+    <p>
+      PassageCheck analyses a passage across multiple dimensions of language difficulty:
+      <strong>sentence length</strong>, <strong>word complexity</strong>, <strong>vocabulary richness</strong>,
+      and <strong>syllable density</strong>. These features are combined using a machine learning model
+      trained on graded reading material from Indian textbooks and children's literature —
+      so the predictions reflect what Indian students actually read at each grade level.
+    </p>
+  </div>
+
+  <!-- Why we built it -->
+  <div class="card about-section">
+    <h3>Why we built it</h3>
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-item-icon">📚</div>
+        <strong>Indian context</strong>
+        <span>Western readability tools don't account for Indian English patterns and curriculum norms.</span>
+      </div>
+      <div class="why-item">
+        <div class="why-item-icon">⚡</div>
+        <strong>Instant answers</strong>
+        <span>No login, no waiting. Paste a passage and get a grade range in seconds.</span>
+      </div>
+      <div class="why-item">
+        <div class="why-item-icon">🎯</div>
+        <strong>Teacher-in-the-loop</strong>
+        <span>Your rating comes first — so the model learns from your expertise over time.</span>
+      </div>
+      <div class="why-item">
+        <div class="why-item-icon">🔒</div>
+        <strong>Private by default</strong>
+        <span>Passages are stored anonymously and never linked to you personally.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <p>PassageCheck is a free tool by <strong>AceQuest</strong>, built to support teachers across India in choosing the right reading material for every student.</p>
+    <a href="/" class="btn btn-primary" style="display:inline-block; text-decoration:none; padding: 12px 28px;">
+      Try PassageCheck →
+    </a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-row">
+    <span>No login needed</span>
+    <span class="footer-dot">·</span>
+    <a href="about.html">About</a>
+    <span class="footer-dot">·</span>
+    <a href="https://acequest.in" target="_blank">acequest.in</a>
+  </div>
+</footer>
+
+</body>
+</html>
