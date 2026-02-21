@@ -88,10 +88,7 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 
-# Mount static files (web interface)
 WEB_DIR = Path(__file__).parent.parent / "web"
-if WEB_DIR.exists():
-    app.mount("/static", StaticFiles(directory=WEB_DIR), name="static")
 
 
 @app.on_event("startup")
@@ -181,13 +178,6 @@ class FeedbackRequest(BaseModel):
 # Routes
 # ---------------------------------------------------------------------------
 
-@app.get("/")
-def root():
-    """Serve the web interface"""
-    index_path = WEB_DIR / "index.html"
-    if index_path.exists():
-        return FileResponse(index_path)
-    return {"message": "ARI API is running. Visit /docs for API documentation."}
 
 
 @app.get("/health")
@@ -274,3 +264,8 @@ async def nps_skip(request: Request):
     """Record that the user skipped the NPS prompt."""
     insert_nps(score=None, comment=None, status="skipped")
     return {"ok": True}
+
+
+# Mount static files AFTER all API routes so it doesn't intercept API calls
+if WEB_DIR.exists():
+    app.mount("/", StaticFiles(directory=WEB_DIR, html=True), name="static")
