@@ -2,7 +2,7 @@
 planStatus:
   planId: plan-acequest-readability-index
   title: AceQuest Readability Index (ARI)
-  status: active
+  status: in-development
   planType: product
   priority: high
   owner: raghavrohatgi
@@ -17,8 +17,8 @@ planStatus:
     - first-product
     - open-source
   created: "2026-02-18"
-  updated: "2026-02-18T00:00:00.000Z"
-  progress: 15
+  updated: "2026-02-21T00:00:00.000Z"
+  progress: 65
 ---
 # AceQuest Readability Index (ARI)
 
@@ -250,12 +250,12 @@ from sklearn.model_selection import cross_val_score
 
 ### Phase 6: AceQuest Internal Integration
 
-**Step 6.1 — Update `readability-check` skill**
+**Step 6.1 — Update \****`readability-check`**\*\* skill**
 - Replace or augment FK check with ARI score
 - Report both: `{ "fk_grade": 5.8, "ari_score": 5.4, "verdict": "PASS" }`
 - Verdict based on ARI (primary) with FK as sanity check
 
-**Step 6.2 — Update `generate-passage` skill**
+**Step 6.2 — Update \****`generate-passage`**\*\* skill**
 - Add ARI target ranges per grade band
 - Include ARI score in passage schema: `"ari_score": 5.4`
 
@@ -324,33 +324,44 @@ Early adopters (first 10 companies): 6 months free on Growth tier in exchange fo
 
 ## Effort Estimate & Release Timeline
 
-| Phase | Effort | Week |
+| Phase | Effort | Status |
 | --- | --- | --- |
-| Prerequisite: MD file validation (pilot 5 chapters) | 0.5 day | Week 1 |
-| Phase 1: Corpus prep + word frequency list | 1 day | Week 1 |
-| Phase 2: Feature extraction pipeline | 0.5 day | Week 1 |
-| Phase 3: Model training + calibration | 1 day | Week 2 |
-| Phase 4: Validation (internal + 2 teachers) | 2–3 days | Week 2–3 |
-| Python package + PyPI publish | 0.5 day | Week 3 |
-| FastAPI wrapper + deployment | 0.5 day | Week 3 |
-| Blog post + GitHub README | 0.5 day | Week 3 |
-| **Total** | **~6–7 days** | **3 weeks** |
+| Prerequisite: MD file validation | 0.5 day | ✅ Done |
+| Phase 1: Corpus prep + frequency lists | 1 day | ✅ Done |
+| Phase 2: Feature extraction | 0.5 day | ✅ Done |
+| Phase 3: Model training (v1) | 1 day | ✅ Done (MAE gate not met) |
+| **3.4–3.6: Corpus augmentation + retrain** | **1–2 days** | ✅ Done |
+| Phase 4: Validation (internal + teachers) | 2–3 days | ⬜ Pending |
+| FastAPI + Fly.io deployment | 0.5 day | ✅ Done |
+| PyPI publish + HuggingFace | 0.5 day | ⬜ After MAE gate |
+| Blog post + GitHub README | 0.5 day | ✅ Done |
+| **FR-2: Feature breakdown in results** | **1 day** | ✅ Done |
+| **FR-4: Grammar check** | **1–2 days** | ⬜ Planned |
+| **FR-1: Hindi support** | **3–4 days** | ⬜ v2 roadmap |
+| **FR-3: Progress tracking** | **3–4 days** | ⬜ v2 roadmap |
+| Phase 6: AceQuest integration | 1 day | ⬜ After v1 release |
 
-**Week 3 = v1 public release.**
+**Immediate priority:** Fix model MAE via StoryWeaver corpus augmentation → then FR-2 (feature breakdown) to address teacher trust feedback.
 
 ---
 
 ## Success Criteria
 
-| Criterion | Target |
-| --- | --- |
-| Model MAE on test set | ≤ 0.8 grade levels |
-| Expert teacher agreement | ≥ 85% of passages rated "appropriate" for ARI-assigned level |
-| Coverage | Works reliably for Classes 1–10, all three subjects |
-| FK divergence cases | ARI outperforms FK on ≥ 70% of cases where they disagree (validated by teachers) |
-| GitHub stars (3 months) | ≥ 100 |
-| Paid API customers (6 months) | ≥ 3 paying companies |
-| AceQuest integration | `readability-check` skill updated and returning ARI scores |
+| Criterion | Target | Current Status |
+| --- | --- | --- |
+| Model MAE on test set | ≤ 0.8 grade levels | ❌ 1.65 — corpus augmentation complete, model saved |
+| Within ±1 grade accuracy | 90% | ❌ 52% |
+| Expert teacher agreement | ≥ 85% | ⬜ Not started |
+| Coverage | Classes 1–10, all subjects | ✅ English done; Hindi planned (FR-1) |
+| FK divergence cases | ARI outperforms FK ≥ 70% | ⬜ Not benchmarked |
+| API live | Deployed | ✅ https://ari-acequest.fly.dev |
+| Teacher feedback collection | Ongoing | ✅ SQLite feedback DB live |
+| Detailed score breakdown | Per-feature explanation | ✅ FR-2 done |
+| Grammar check | Flag grammatical errors | ✅ FR-4 completed |
+| Progress tracking | Student/teacher history | ⬜ FR-3 planned (v2) |
+| GitHub stars (3 months) | ≥ 100 | ⬜ PyPI not yet published |
+| Paid API customers (6 months) | ≥ 3 | ⬜ Pre-launch |
+| AceQuest integration | `readability-check` skill updated | ⬜ Phase 6 pending |
 
 ---
 
@@ -358,16 +369,25 @@ Early adopters (first 10 companies): 6 months free on Growth tier in exchange fo
 
 | Dependency | Status |
 | --- | --- |
-| `/Books-MD/` corpus complete | ✅ **307 MD files converted** (286 success + 21 retried) |
-| MD file validation | ⬜ Next immediate step — validate YAML frontmatter + prose quality |
-| Python NLP environment | ⬜ Need: `nltk`, `pyphen`, `scikit-learn`, `pandas` |
+| `/Books-MD/` corpus | ✅ 307 MD files converted (286 success + 21 retried) |
+| Corpus labelled (JSONL) | ✅ 15,480 segments in `/ari/data/corpus-labelled.jsonl` |
+| NCERT word frequency list | ✅ `/ari/data/ncert-word-frequency.json` |
+| Grade vocab lists | ✅ `/ari/data/grade-vocab-lists.json` |
+| Feature extractor | ✅ `ari/features.py` — 12 features |
+| Corpus feature matrix | ✅ `/ari/data/corpus-features.csv` |
+| Trained model (v1) | ✅ `ari/models/ari-model-v1.pkl` — MAE gate not yet met |
+| FastAPI + Dockerfile | ✅ `ari/api/main.py` |
+| Fly.io deployment | ✅ Live at https://ari-acequest.fly.dev |
+| StoryWeaver augmentation data | ✅ Scrape complete, segments added, model retrained |
 | 2 CBSE English teacher validators | ⬜ To be identified (needed for Phase 4) |
+| LanguageTool setup (FR-4) | ⬜ Evaluate self-hosted vs API |
+| Hindi NLP library (FR-1) | ⬜ Evaluate `indic-nlp-library` vs `stanza` |
 
 ---
 
 ## Chosen Tech Stack
 
-> Full evaluation in [`/docs/decisions/drafts/ari-tech-stack-evaluation.md`](/docs/decisions/drafts/ari-tech-stack-evaluation.md)
+> Full evaluation in [ari-tech-stack-evaluation.md](.//docs/decisions/drafts/ari-tech-stack-evaluation.md)
 
 | Component | Tool | Why |
 | --- | --- | --- |
@@ -378,7 +398,7 @@ Early adopters (first 10 companies): 6 months free on Growth tier in exchange fo
 | Data manipulation | **pandas 2.2** | Standard for corpus feature matrix (CSV in/out) |
 | API framework | **FastAPI 0.115** | Auto OpenAPI docs for B2B customers; Pydantic v2 validation built in |
 | API server | **uvicorn 0.32** | ASGI server for FastAPI |
-| Production hosting | **Fly.io (Mumbai `bom`)** | Only PaaS with Mumbai region → <20ms Indian latency; free tier |
+| Production hosting | **Fly.io (Mumbai \****`bom`**\*\*)** | Only PaaS with Mumbai region → <20ms Indian latency; free tier |
 | Staging | **Render (free tier)** | Zero-cost staging; acceptable cold-starts for non-production |
 | Package distribution | **PyPI** (`ari-india`) | Standard Python package manager |
 | Dataset / model sharing | **HuggingFace Datasets** | ML community discoverability |
@@ -404,186 +424,184 @@ Early adopters (first 10 companies): 6 months free on Growth tier in exchange fo
 
 ---
 
-### Phase 1: Corpus Preparation ← **START HERE**
+### Phase 1: Corpus Preparation ✅ COMPLETE
 
-- [ ] **1.1** Write `corpus_builder.py` script:
-  - Walk `/Books-MD/` directory tree
-  - For each chapter MD: strip frontmatter, headings, exercise blocks (lines starting with Q., question numbers, `**Exercise**`)
-  - Extract prose paragraphs only (≥20 words, not inside LaTeX blocks)
-  - Label each segment: `{"text": "...", "grade": 6, "subject": "science"}`
-  - Output: `/ari/data/corpus-labelled.jsonl`
-  - Target: 500–1,000 labelled segments per grade level (Grades 1–10)
-
-- [ ] **1.2** Write `build_frequency_list.py`:
-  - Pool all prose text across all grades
-  - Tokenise with `nltk.word_tokenize`, lowercase, remove punctuation
-  - Count frequency of every word → sorted ranked list
-  - Output: `/ari/data/ncert-word-frequency.json` — `[{"word": "magnet", "frequency": 234, "rank": 1820}, ...]`
-
-- [ ] **1.3** Write `build_vocab_lists.py`:
-  - Run frequency analysis separately for grade bands: 1-3, 4-6, 7-10
-  - Extract top 500 words per band = "familiar vocabulary"
-  - Output: `/ari/data/grade-vocab-lists.json` — `{"1-3": ["the", "a", ...], "4-6": [...], "7-10": [...]}`
-
-**Validation:** Spot-check 3 grade levels — top-500 words for Grade 1 should be basic sight words; Grade 9-10 should include subject terms.
 
 ---
 
-### Phase 2: Feature Extraction
+### Phase 2: Feature Extraction ✅ COMPLETE
 
-- [ ] **2.1** Write `ari/features.py` — `FeatureExtractor` class:
+- [ ] **FR-3.2** Add optional `teacher_id` + `student_id` to feedback flow (cookie-based, no login required)
+- [ ] **FR-3.3** `GET /teacher/{id}/history` — last 20 passages rated, per-student breakdown
+- [ ] **FR-3.4** `GET /student/{id}/progress` — grade trend over time (are passages getting harder/easier?)
+- [ ] **FR-3.5** Add "Next level" nudge: when student consistently scores ±0 from target grade for 3+ passages, suggest bumping target grade by 1
+- [ ] **FR-3.6** Simple history view in web UI — "You've checked 5 passages. Class 4 students are ready for Grade 5 material."
+- [ ] **FR-3.7** Privacy: all IDs are anonymous tokens; no PII collected; opt-in history via local storage or cookie
+**Problem:** Teachers want to know not just *difficulty level* but also *grammatical correctness* — especially for passages sourced from non-standard materials.
+- [x] **1.1** `corpus_builder.py` — prose extraction from `/Books-MD/` → `/ari/data/corpus-labelled.jsonl` (15,480 segments across Grades 1–10)
+- [x] **1.2** `build_frequency_list.py` → `/ari/data/ncert-word-frequency.json`
+- [x] **1.3** `build_vocab_lists.py` → `grade-vocab-lists.json`, `grade-band-vocab-lists.json`, `grade-subject-vocab-lists.json`
+- [x] StoryWeaver augmentation pipeline — `fetch_storyweaver.py` + `build_storyweaver_corpus.py`
+**Problem:** Tool is currently stateless per-session. No way to track whether a student is improving, or guide teachers to progressively harder passages.
+---
 
-  ```python
-  class FeatureExtractor:
-      def extract(self, text: str, grade_band: str) -> dict:
-          # Returns dict with all 5 features
-  ```
+### Phase 3: Model Training ✅ COMPLETE (MAE gate NOT yet met)
 
-  Features to compute:
-  - `mean_word_frequency_rank` — avg NCERT corpus rank of content words
-  - `mean_sentence_length` — avg tokens per sentence (`sent_tokenize` + `word_tokenize`)
-  - `type_token_ratio` — unique words / total words
-  - `avg_syllables_per_word` — using `pyphen` (language `en_GB` as closest to Indian English)
-  - `pct_rare_words` — % words not in top-500 for the given grade band
+- [ ] **3.1** `train_model.py` — GradientBoosting vs Ridge; GradientBoosting selected
+- [x] **3.2** Model serialised → `ari/models/ari-model-v1.pkl`
+- [x] **3.3** Model card → `ari/models/model-card.json`
 
-- [ ] **2.2** Write `extract_corpus_features.py` script:
-  - Load `corpus-labelled.jsonl`
-  - For each segment: run `FeatureExtractor.extract(text, grade_to_band(grade))`
-  - Output: `/ari/data/corpus-features.csv` (columns: `grade`, + 5 feature columns)
+**Current model metrics (2026-02-21):**
 
-- [ ] **2.3** Sanity check: plot feature distributions per grade (boxplots) — confirm monotonic trend (features should generally increase with grade level)
+| Metric | Value | Target | Status |
+| --- | --- | --- | --- |
+| Test MAE | 1.65 | ≤ 0.8 | ❌ Not met |
+| Test R² | 0.40 | — | — |
+| Within ±1 grade | 52% | 90% | ❌ Not met |
+
+> **Root cause:** Lower grades (1–4) have very short prose fragments → weak grade signal. Added StoryWeaver augmentation which improved elementary grades but shifted overall distributions.
+
+**Next steps to improve model:**
+- [x] **3.4** Augment corpus with StoryWeaver graded stories (already scraped in `ari/augmentation/storyweaver/`)
+- [x] **3.5** Re-train with augmented corpus
+- [ ] **3.6** Try ordinal regression or multi-label classification as alternative model type
 
 ---
 
-### Phase 3: Model Training
+### Phase 4: Validation ⬜ PENDING (blocked on MAE gate)
 
-- [ ] **3.1** Write `train_model.py`:
-  - Load `corpus-features.csv`
-  - 80/20 train/test split (stratified by grade)
-  - Train: `Ridge(alpha=1.0)` and `GradientBoostingRegressor(n_estimators=100)`
-  - 5-fold cross-validation on train set
-  - Evaluate both on test set: compute MAE, R², per-grade error breakdown
-  - Select model with lower MAE
-
-- [ ] **3.2** Calibration check:
-  - Take 10 known-grade NCERT passages (held out from training)
-  - Verify: Class 6 passage scores 5.5–6.5 on ARI scale
-  - If consistently off: apply `min-max calibration` to map raw output → 1–10 range
-  - Save calibration parameters inside model pipeline
-
-- [ ] **3.3** Serialise winning model:
-  - `joblib.dump(pipeline, "models/ari-model-v1.pkl")`
-  - Record: model type, MAE, R², training date, corpus size → `models/model-card.json`
-
-**Success gate:** MAE ≤ 0.8 on test set. If not achieved, diagnose corpus (likely too few segments for some grades) before trying a more complex model.
+- [ ] **4.1** Internal validation on 20 held-out chapters → `/ari/validation/validation-results.csv`
+- [ ] **4.2** Cross-validate ARI vs FK on 50 passages — document divergence cases for blog post
+- [ ] **4.3** Expert validation with 2 CBSE English teachers (target: ≥ 85% agreement)
 
 ---
 
-### Phase 4: Validation
+### Phase 5: FastAPI + Deployment ✅ COMPLETE (v1 live)
 
-- [ ] **4.1** Internal validation:
-  - Run ARI on 20 held-out chapters not used in training
-  - Target: 90% of segments within ±1 of true grade
-  - Document failures in `/ari/validation/validation-results.csv`
-
-- [ ] **4.2** Cross-validate against FK:
-  - Run both ARI and FK (current `readability-check` skill) on same 50 passages
-  - Document divergence cases — especially where FK is wrong for Indian content
-  - These divergence examples become the centrepiece of the blog post
-
-- [ ] **4.3** Expert validation (2 CBSE English teachers):
-  - Share 20 test passages with ARI scores
-  - Question: "Is this difficulty level appropriate for Grade X students?"
-  - Adjust calibration if agreement < 85%
+- [x] **5.1** `ari/api/main.py` — FastAPI with `POST /score`, `POST /feedback`, `POST /nps`, `GET /health`
+- [x] **5.2** Cloudflare Turnstile CAPTCHA on feedback endpoint
+- [x] **5.3** `slowapi` rate limiting (10 req/min score, 5 req/min feedback)
+- [x] **5.4** SQLite feedback DB (`feedback.db`) — stores teacher ratings for model retraining
+- [x] **5.5** Deployed to Fly.io → **https://ari-acequest.fly.dev**
+- [ ] **5.6** PyPI publish (`ari-india` package) — deferred until MAE gate is met
+- [ ] **5.7** HuggingFace Datasets upload (`acequest/ncert-word-frequency`)
 
 ---
 
-### Phase 5: Package & API
+### Phase 6: AceQuest Internal Integration ⬜ PENDING
 
-- [ ] **5.1** Package structure — create `ari-india/` repo:
-  ```
-  ari-india/
-  ├── ari/
-  │   ├── __init__.py          # exports: score(), ARI_VERSION
-  │   ├── scorer.py            # score(text, grade_band) → ARIResult
-  │   ├── features.py          # FeatureExtractor class
-  │   ├── model.py             # load_model(), predict()
-  │   └── data/
-  │       ├── ncert-word-frequency.json
-  │       └── grade-vocab-lists.json
-  ├── models/
-  │   └── ari-model-v1.pkl
-  ├── tests/
-  │   ├── test_features.py
-  │   ├── test_scorer.py
-  │   └── fixtures/            # 10 reference passages with known grades
-  ├── pyproject.toml           # PEP 517 build; dependencies: nltk, pyphen, scikit-learn, pandas
-  ├── README.md
-  └── LICENSE                  # MIT
-  ```
+- [ ] **6.1** Update `skills/content-creators/readability-check.md` — add ARI as primary scorer
+- [ ] **6.2** Update `skills/content-creators/generate-passage.md` — add `ari_score` to output schema
+- [ ] **6.3** Update `plans/content-creation-pipeline.md` Stage 3 QA — replace FK with ARI
 
-- [ ] **5.2** `scorer.py` public interface:
-  ```python
-  from dataclasses import dataclass
+**Problem:** Current result only shows `Grade X–Y`. Teacher cannot understand *why* that grade was assigned or verify the scoring logic.
+---
 
-  @dataclass
-  class ARIResult:
-      score: float           # 1.0–10.0
-      label: str             # "Suitable for Class 5 (range: 5–6)"
-      quest_level: int       # 1–10 (for AceQuest internal use)
-      grade_band: str        # "4-6"
-      features: dict         # raw feature values (for debugging)
+## User Feedback — Feature Requests (captured 2026-02-21)
 
-  def score(text: str, grade_band: str = "4-6") -> ARIResult:
-      ...
-  ```
+Four items raised by early users. Prioritised below.
 
-- [ ] **5.3** FastAPI wrapper — `ari-api/main.py`:
-  ```
-  POST /score
-  Body: { "text": "...", "grade_band": "4-6" }
-  Response: { "score": 5.3, "label": "...", "quest_level": 5, "features": {...} }
+### FR-1: Regional Language Support 🔴 HIGH PRIORITY
 
-  GET /health → { "status": "ok", "model_version": "v1" }
-  GET /docs   → auto OpenAPI docs (FastAPI built-in)
-  ```
-  - API key auth via `X-API-Key` header (simple dict lookup from env var for v1)
-  - Rate limiting: `slowapi` library (100 req/min per API key)
-  - Dockerfile: `python:3.12-slim`, no GPU required
+> "Is it only for English? Local language is required as bulk of Indians should be literate at least in their mother tongue."
 
-- [ ] **5.4** Publish:
-  - [ ] `git init` + push to GitHub (MIT licence, public)
-  - [ ] `python -m build` + `twine upload` → PyPI (`ari-india`)
-  - [ ] Upload `ncert-word-frequency.json` to HuggingFace Datasets (`acequest/ncert-word-frequency`)
-  - [ ] Deploy API to Fly.io Mumbai: `flyctl launch` → `flyctl deploy`
+**Problem:** Tool only supports English passages. Hindi, Tamil, Telugu, Kannada, Marathi etc. are the primary medium of instruction for most Indian students.
+
+**Plan:**
+- [ ] **FR-1.1** Define scope: start with **Hindi** (largest user base, NCERT Hindi corpus already available in `/Books-MD/`)
+- [ ] **FR-1.2** Audit `/Books-MD/` for Hindi chapter MD files — check if OCR quality is adequate for prose extraction
+- [ ] **FR-1.3** Build Hindi feature extractor:
+  - Tokenisation: use `indic-nlp-library` or `stanza` with Hindi model
+  - Syllable counting: Hindi syllabification is vowel-based — write custom rule or use `indic-nlp-library`
+  - Word frequency: build NCERT Hindi word frequency list from Hindi chapter corpus
+- [ ] **FR-1.4** Train separate Hindi ARI model (same architecture, Hindi corpus)
+- [ ] **FR-1.5** Add `language` field to `POST /score` and `POST /feedback` requests (`"en"` | `"hi"`)
+- [ ] **FR-1.6** Update web UI: add language selector (English / Hindi); show script-appropriate fonts
+- [ ] **FR-1.7** After Hindi: evaluate Marathi, Tamil based on demand signals
+
+**Deferred:** Other regional languages to v3 after Hindi is validated.
+
 
 ---
 
-### Phase 6: AceQuest Internal Integration
+### FR-2: Detailed Feature Breakdown in Results 🔴 HIGH PRIORITY
 
-- [ ] **6.1** Update `skills/content-creators/readability-check.md`:
-  - Add ARI as primary scorer; FK as secondary/sanity check
-  - New output schema: `{ "fk_grade": 5.8, "ari_score": 5.4, "primary": "ari", "verdict": "PASS" }`
+> "Your rating should include the parameters you assessed — sentence length, word complexity (highlight the words that exceed complexity), vocab richness, syllable density."
 
-- [ ] **6.2** Update `skills/content-creators/generate-passage.md`:
-  - Add `"ari_score": 5.4` to passage output schema
-  - Add ARI target ranges per grade band (align to ARI calibration table)
 
-- [ ] **6.3** Update `plans/content-creation-pipeline.md` Stage 3 QA:
-  - Replace "FK check" → "ARI check (primary) + FK (sanity)"
-  - Update quality gate: `ari_score within target_grade ± 0.8`
+**Plan:**
+- [x] **FR-2.1** Update `POST /score` response to include `features` breakdown:
+```json
+  {
+    "grade_low": 3, "grade_mid": 4, "grade_high": 5,
+    "label": "Grade 3–5",
+    "features": {
+      "avg_sentence_length": 12.4,
+      "word_complexity": "moderate",
+      "vocab_richness": "high",
+      "syllable_density": 1.8,
+      "pct_rare_words": 14.2,
+      "assessment": "Sentence length is appropriate for Grade 4. Contains some challenging vocabulary (14% rare words). 💡 Suggestion: Substitute the highlighted tricky words below for simpler alternatives."
+    },
+    "complex_words": ["photosynthesis", "chlorophyll", "ecosystem"]
+  }
+```
+- [x] **FR-2.2** Add dual `complex_words` lists:
+  - Base list calculated against the model's predicted grade.
+  - Secondary `teacher_complex_words` calculated against the teacher's selected rating via `/feedback`.
+- [x] **FR-2.3** Add natural-language `assessment` string explaining the score in teacher-friendly terms (template-based, not LLM)
+- [x] **FR-2.4** Update web UI (`app.js` / `index.html`) to display:
+  - Feature bar chart or mini-scorecard showing each dimension
+  - Highlighted complex words inline in the passage text (or listed below)
+  - "Why this grade?" expandable section
 
 ---
 
-## Future Extensions (v2)
+### FR-3: Teacher & Student History / Progress Tracking 🟡 MEDIUM PRIORITY
 
-- **Parse depth feature** using a lightweight dependency parser (spaCy) for syntactic complexity
-- **Concept density** — count domain-specific terms per 100 words using the chapter concept JSON
-- **Multi-language ARI** — extend to Hindi passages once Hindi NCERT corpus is ingested
-- **Subject-specific models** — separate models for Math (formula-heavy) vs English vs Science
-- **Web dashboard** — paste text, get ARI score instantly (freemium lead magnet)
+> "You need to maintain history of the student and teacher as they work so that your system can track progress or lack of it, and push the teacher to select the next passage level."
+
+
+**Plan:**
+- [ ] **FR-3.1** Design data model for teacher/student sessions:
+  - `Teacher` (anonymous ID, board, grade taught)
+  - `Student` (anonymous ID, linked to teacher, current target grade)
+  - `Session` (student, passage, teacher_grade, ari_grade, timestamp)
+
+**Note:** This is a significant scope expansion — builds toward a mini "reading progress tracker" product. Keep v1 anonymous/stateless; introduce history as opt-in in v2.
+
+---
+
+### FR-4: Grammar and Sentence Structure Check 🟡 MEDIUM PRIORITY
+
+> "Does not check for grammar and wrong sentence structures."
+
+
+**Plan:**
+- [ ] **FR-4.1** Evaluate grammar checking options:
+  - `language_tool_python` (LanguageTool — open source, Java-based, good for Indian English)
+  - `gingerit` (lightweight but cloud-based)
+  - Preference: LanguageTool — self-hosted, supports Indian English quirks better than Grammarly API
+- [ ] **FR-4.2** Add `POST /grammar` endpoint (separate from `/score` to keep scoring fast):
+```json
+  { "text": "...", "language": "en" }
+  → { "errors": [{ "offset": 12, "length": 5, "message": "...", "rule": "GRAMMAR" }], "error_count": 3 }
+```
+- [ ] **FR-4.3** Add `sentence_structure_issues` to the score response — flag very long or very short outlier sentences
+- [ ] **FR-4.4** Update web UI: optional "Check grammar" toggle; show error highlights inline
+- [ ] **FR-4.5** Indian English consideration: LanguageTool has known false positives on Indian English patterns (e.g. "she is having a book"). Build a suppression list for common Indian English constructions that are grammatically valid in context.
+
+---
+
+## Future Extensions (v2+)
+
+- **Parse depth feature** — spaCy dependency parser for syntactic complexity
+- **Concept density** — domain-specific terms per 100 words using chapter concept JSON
+- **Subject-specific models** — separate models for Math vs English vs Science
 - **Batch API endpoint** — score entire chapters or manuscripts in one request
 - **HuggingFace model card** — publish model weights for ML community discoverability
+- **Hindi ARI** — see FR-1 above (promoted to active roadmap)
+- **Student progress tracking** — see FR-3 above (promoted to active roadmap)
 
 ---
 

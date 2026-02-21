@@ -38,6 +38,7 @@ from ari.api.db import (
     is_duplicate,
     update_reason,
 )
+from ari.grammar import check_grammar
 
 # --- Model ---
 MODEL_PATH = Path(__file__).parent.parent / "models" / "ari-model-v1.pkl"
@@ -104,6 +105,41 @@ def startup():
 # Helpers
 # ---------------------------------------------------------------------------
 
+def _generate_assessment(f: dict, predicted_grade: int) -> str:
+    """Generate a natural-language description of why the passage got this score."""
+    parts = []
+    
+    # Sentence Length Analysis
+    sl = f.get("mean_sentence_length", 0)
+    if sl > 20:
+        parts.append("Sentence length is very high (long, complex sentences).")
+    elif sl > 14:
+        parts.append("Sentence length is moderately high.")
+    else:
+        parts.append("Sentence length is manageable.")
+        
+    # Vocabulary Analysis
+    rw = f.get("pct_rare_words", 0)
+    if rw > 20:
+        parts.append(f"Vocabulary richness ({rw:.1f}% rare words) significantly pushes the difficulty up.")
+    elif rw > 10:
+        parts.append(f"Contains some challenging vocabulary ({rw:.1f}% rare words).")
+    else:
+        parts.append("Vocabulary is mostly familiar and straightforward.")
+        
+    # Actionable Suggestion
+    actions = []
+    if sl > 16:
+        actions.append("Try breaking longer sentences into shorter chunks.")
+    if rw > 10:
+        actions.append("Substitute the highlighted tricky words below for simpler alternatives.")
+    
+    if actions:
+        parts.append("💡 Suggestion: " + " ".join(actions))
+        
+    return " ".join(parts)
+
+
 def _predict_range(text: str, subject: str) -> dict:
     """Run the ARI model and return a grade range."""
     features = _fe.extract(text, grade=5, subject=subject)  # grade=5 neutral baseline
@@ -113,12 +149,18 @@ def _predict_range(text: str, subject: str) -> dict:
     mid = round(mid_raw)
     low = max(1, mid - 1)
     high = min(10, mid + 1)
+    
+    assessment = _generate_assessment(features, mid)
+    complex_words = _fe.get_rare_words(text, mid, subject)
 
     return {
         "grade_low": low,
         "grade_mid": mid,
         "grade_high": high,
         "label": f"Grade {low}–{high}" if low != high else f"Grade {mid}",
+        "features": features,
+        "complex_words": complex_words,
+        "assessment": assessment
     }
 
 
@@ -156,6 +198,9 @@ class ScoreRequest(BaseModel):
             return "Other"
         return v
 
+
+class GrammarRequest(BaseModel):
+    text: str = Field(..., min_length=10, max_length=5000)
 
 class FeedbackRequest(BaseModel):
     text: str = Field(..., min_length=20, max_length=5000)
@@ -197,6 +242,18 @@ def score(request: Request, body: ScoreRequest):
     return result
 
 
+@app.post("/grammar")
+@limiter.limit("15/minute")
+def grammar(request: Request, body: GrammarRequest):
+    """Check grammar against the LanguageTool public API."""
+    words = body.text.split()
+    if len(words) < 5:
+        return {"ok": True, "issues": []}
+        
+    issues = check_grammar(body.text)
+    return {"ok": True, "issues": issues}
+
+
 @app.post("/feedback")
 @limiter.limit("5/minute")
 async def feedback(request: Request, body: FeedbackRequest):
@@ -214,7 +271,8 @@ async def feedback(request: Request, body: FeedbackRequest):
 
     # 3. Dedup — same exact text already stored; return existing id so reason can still be updated
     if is_duplicate(body.text):
-        return {"ok": True, "note": "duplicate", "feedback_id": None}
+        teacher_complex_words = _fe.get_rare_words(body.text, body.teacher_grade, body.subject)
+        return {"ok": True, "note": "duplicate", "feedback_id": None, "teacher_complex_words": teacher_complex_words}
 
     # 4. Re-score to get full range (in case frontend sent stale values)
     ari = _predict_range(body.text, body.subject)
@@ -230,7 +288,10 @@ async def feedback(request: Request, body: FeedbackRequest):
         reason=body.reason,
     )
 
-    return {"ok": True, "feedback_id": feedback_id}
+    # Calculate complex words based on the teacher's selected grade
+    teacher_complex_words = _fe.get_rare_words(body.text, body.teacher_grade, body.subject)
+
+    return {"ok": True, "feedback_id": feedback_id, "teacher_complex_words": teacher_complex_words}
 
 
 class ReasonRequest(BaseModel):
