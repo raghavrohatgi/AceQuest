@@ -10,7 +10,7 @@
   <script>
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       const script = document.createElement('script');
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js';
+      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=onTurnstileLoad';
       script.async = true;
       script.defer = true;
       document.head.appendChild(script);
@@ -246,12 +246,7 @@
 
     <!-- Cloudflare Turnstile CAPTCHA (only in production) -->
     <div class="captcha-wrap" id="captcha-wrap">
-      <div class="cf-turnstile"
-           data-sitekey="0x4AAAAAACfwc5dvbP3OGmXs"
-           data-callback="onTurnstileSuccess"
-           data-expired-callback="onTurnstileExpired"
-           data-theme="light">
-      </div>
+      <div id="turnstile-container"></div>
     </div>
 
     <div id="msg-rate" class="hidden"></div>
@@ -329,7 +324,23 @@
     feedbackId: null,
   };
 
-  // ── Turnstile callbacks ──
+  // ── Turnstile: called when script is loaded and ready ──
+  function onTurnstileLoad() {
+    window.turnstile.render('#turnstile-container', {
+      sitekey: '0x4AAAAAACfwc5dvbP3OGmXs',
+      theme: 'light',
+      callback: function(token) {
+        state.turnstileToken = token;
+        updateSubmitBtn();
+      },
+      'expired-callback': function() {
+        state.turnstileToken = null;
+        updateSubmitBtn();
+      },
+    });
+  }
+
+  // ── Turnstile callbacks (also used by explicit render above) ──
   function onTurnstileSuccess(token) {
     state.turnstileToken = token;
     updateSubmitBtn();
