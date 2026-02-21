@@ -325,8 +325,20 @@
   };
 
   // ── Turnstile: called when script is loaded and ready ──
+  let _turnstileWidgetId = null;
   function onTurnstileLoad() {
-    window.turnstile.render('#turnstile-container', {
+    // Script is ready — widget will be rendered when rating card is shown
+  }
+
+  function renderTurnstile() {
+    if (IS_LOCALHOST || !window.turnstile) return;
+    // Remove old widget if exists
+    if (_turnstileWidgetId !== null) {
+      try { window.turnstile.remove(_turnstileWidgetId); } catch(e) {}
+      _turnstileWidgetId = null;
+    }
+    document.getElementById('turnstile-container').innerHTML = '';
+    _turnstileWidgetId = window.turnstile.render('#turnstile-container', {
       sitekey: '0x4AAAAAACfwc5dvbP3OGmXs',
       theme: 'light',
       callback: function(token) {
@@ -340,7 +352,6 @@
     });
   }
 
-  // ── Turnstile callbacks (also used by explicit render above) ──
   function onTurnstileSuccess(token) {
     state.turnstileToken = token;
     updateSubmitBtn();
@@ -416,6 +427,7 @@
       state.ari = await resp.json();
       show('card-rate');
       renderPills();
+      renderTurnstile(); // Render fresh widget now that card is visible
     } catch (e) {
       alert('Could not reach ARI server. Please try again.');
     } finally {
@@ -554,8 +566,12 @@
     disagreeInput.disabled = false; // Re-enable for next use
     hide('card-rate'); hide('card-result'); hide('disagree-section');
     show('card-input');
-    // Reset Turnstile
-    if (window.turnstile) window.turnstile.reset();
+    // Reset Turnstile widget
+    if (_turnstileWidgetId !== null && window.turnstile) {
+      try { window.turnstile.remove(_turnstileWidgetId); } catch(e) {}
+      _turnstileWidgetId = null;
+    }
+    document.getElementById('turnstile-container').innerHTML = '';
   }
 
   // ── UI helpers ──
